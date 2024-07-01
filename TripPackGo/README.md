@@ -1,6 +1,4 @@
-# Trip-pack-go-FE
-
-## NorthCoders Team Project: Trip Pack Go!
+# NorthCoders Team Project: Trip Pack Go!
 
 
 
