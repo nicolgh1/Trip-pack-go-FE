@@ -4,7 +4,7 @@ import { StyleSheet, Text, View } from 'react-native';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Trip pack go!</Text>
+      <Text>Trip Pack Go!</Text>
       <StatusBar style="auto" />
     </View>
   );
