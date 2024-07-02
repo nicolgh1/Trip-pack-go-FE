@@ -8,10 +8,10 @@ export default function HomePage({ navigation }) {
     
 
     return (
-        <View>
+        <View style={styles.screen}>
             <Header />
-            <View>
-                <text>Hello</text>
+            <View style={styles.body}>
+                <Text>Hello from home</Text>
             </View>
             <Footer navigation={navigation} />
         </View>
@@ -22,8 +22,7 @@ const styles = StyleSheet.create({
     screen: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center'
+        justifyContent: 'space-between'
     },
     body: {
         flex: 8,

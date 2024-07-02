@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text } from "react-native";
+import React from "react";
 
 import Icon from 'react-native-vector-icons/AntDesign';
 
@@ -6,7 +7,7 @@ export default function Footer({ navigation }) {
     return (
         <View style={styles.footer}>
             <Icon 
-                name="travel-explore"
+                name="search1"
                 size={50}
                 color="#141414"
                 onPress={() => navigation.navigate('SearchPage')}
