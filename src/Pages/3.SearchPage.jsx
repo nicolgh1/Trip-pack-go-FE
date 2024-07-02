@@ -49,7 +49,7 @@ const SearchPage = () => {
        style={styles.input}
        placeholder="Location"
        value={searchQuery.location}
-       onChangeText={(text) => setSearchQuery({ ...searchQuery, query: text })}
+       onChangeText={(text) => setSearchQuery({ ...searchQuery, location: text })}
      />
      <Text style={styles.dateQuestion}>When do you want to go?</Text>
       <TripDatePicker
