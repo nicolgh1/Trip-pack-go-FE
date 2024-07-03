@@ -37,7 +37,7 @@ export default function App() {
       <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }}>  
         </Stack.Screen>
 
-        <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: false }}>
+        <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
         <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: false }}>
