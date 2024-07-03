@@ -1,9 +1,10 @@
- 3-SearchPage
-import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
 import TripDatePicker from '../components/TripDatePicker';
+import Header from '../components/Header';
+import Footer from '../components/FooterNavigation';
 
-const SearchPage = () => {
+const SearchPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState({
       location: '',
       startDate: null,
@@ -45,6 +46,7 @@ const SearchPage = () => {
 
   return (
     <View style={styles.container}>
+      <Header />
      <Text style={styles.placeQuestion}>Where do you want to go?</Text>
      <TextInput
        style={styles.input}
@@ -77,6 +79,7 @@ const SearchPage = () => {
       >
         <Text style={styles.buttonText}>Search</Text>
       </TouchableOpacity>
+      <Footer navigation={navigation} />
     </View>
   );
 };
@@ -152,38 +155,5 @@ const styles = StyleSheet.create({
 
 export default SearchPage;
 
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
 
-import Header from '../components/Header';
-import Footer from '../components/FooterNavigation';
 
-export default function SearchPage({ navigation }) {
-    
-
-    return (
-        <View style={styles.screen}>
-            <Header />
-            <View style={styles.body}>
-                <Text>Hello from search</Text>
-            </View>
-            <Footer navigation={navigation} />
-        </View>
-    )
-}
-
-const styles = StyleSheet.create({
-    screen: {
-        flex: 1,
-        backgroundColor: '#fff',
-        justifyContent: 'space-between'
-    },
-    body: {
-        flex: 8,
-        width: '100%',
-        backgroundColor: '#14141410',
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
-})
- main
