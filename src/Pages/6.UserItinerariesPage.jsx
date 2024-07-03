@@ -7,8 +7,8 @@ import {
 } from "react-native";
 import UserItineraryDetailPage from "./6.1.UserItineraryDetailPage";
 
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from 'react';
+
 
 import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
