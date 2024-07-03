@@ -1,31 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
+//import { StatusBar } from 'expo-status-bar';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { db } from './firebaseConfig';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import HomePage from './src/Pages/2.HomePage';
+import SearchPage from './src/Pages/3.SearchPage'
+import UserAccountSettingsPage from './src/Pages/5.UserAccountSettingsPage';
+import UserItinerariesPage from './src/Pages/6.UserItinerariesPage';
+import PackingOptionsPage from './src/Pages/7.PackingOptionsPage';
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
-  const [data, setData] = useState([]);
-  const colRef = collection(db, "test-collection");
+  // const [data, setData] = useState([]);
+  // const colRef = collection(db, "test-collection");
 
-  useEffect(() => {
-    const unsubscribe = onSnapshot(colRef, (snapshot) => {
-      const dbData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      console.log('useEffect');
-      setData(dbData);
-    });
-    return () => unsubscribe();
-  }, []);
+  // useEffect(() => {
+  //   const unsubscribe = onSnapshot(colRef, (snapshot) => {
+  //     const dbData = snapshot.docs.map((doc) => ({
+  //       ...doc.data(),
+  //       id: doc.id,
+  //     }));
+  //     console.log('useEffect');
+  //     setData(dbData);
+  //   });
+  //   return () => unsubscribe();
+  // }, []);
 
   return (
-    <View style={styles.container}>
-      <View><Text>{data[0]?.testColumn || "Loading..."}</Text></View>
-      <Text>Trip Pack Go!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+
+      <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }}>  
+        </Stack.Screen>
+
+        <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: false }}>
+        </Stack.Screen>
+
+        <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: false }}>
+        </Stack.Screen>
+
+        <Stack.Screen name="UserItinerariesPage" component={UserItinerariesPage} options={{ headerShown: false }}>
+        </Stack.Screen>
+
+        <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: false }}>
+        </Stack.Screen>
+
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

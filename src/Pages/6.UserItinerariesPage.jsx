@@ -6,9 +6,16 @@ import {
   TouchableOpacity,
 } from "react-native";
 import UserItineraryDetailPage from "./6.1.UserItineraryDetailPage";
-import { useState } from "react";
 
-export default function UserItinerariesPage({ userItineraries }) {
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity, FlatList } from 'react-native';
+
+import Header from '../components/Header';
+import Footer from '../components/FooterNavigation';
+
+
+
+export default function UserItinerariesPage({ userItineraries, navigation }) {
   userItineraries = [
     {
       id: 1,
@@ -155,6 +162,7 @@ export default function UserItinerariesPage({ userItineraries }) {
 
   return (
     <View>
+       <Header />
       <Text style={styles.header}>Your planned trips!</Text>
       <ScrollView>
         {userItineraries.map((itinerary) => (
@@ -174,6 +182,7 @@ export default function UserItinerariesPage({ userItineraries }) {
           </View>
         ))}
       </ScrollView>
+        <Footer navigation={navigation} />
     </View>
   );
 }
@@ -224,3 +233,4 @@ const styles = StyleSheet.create({
     position: "relative",
   },
 });
+
