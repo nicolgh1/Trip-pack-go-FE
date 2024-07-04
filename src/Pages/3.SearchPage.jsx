@@ -1,20 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import TripDatePicker from '../components/TripDatePicker';
 import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
+import NumberPicker from '../components/NumberPicker';
 
 const SearchPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState({
-      location: '',
-      startDate: null,
-      endDate: null,
-      tripLength: 0,
-      numberOfPeople: 1,
+    location: '',
+    startDate: null,
+    endDate: null,
+    tripLength: 0,
+    numberOfPeople: 1,
   });
 
-  const handleSearch = () => {
-    console.log('Searching for:', searchQuery);
+  const handleSubmit = () => {
+    const formattedSearchQuery = {
+      ...searchQuery,
+      startDate: searchQuery.startDate ? searchQuery.startDate.toLocaleDateString():  'Not specified',
+      endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() :  'Not specified',
+    };
+    console.log('Searching for:', formattedSearchQuery);
+    navigation.navigate('Response', { searchQuery: formattedSearchQuery });
   };
 
   const handleStartDateChange = (startDate) => {
@@ -47,39 +54,43 @@ const SearchPage = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header />
-     <Text style={styles.placeQuestion}>Where do you want to go?</Text>
-     <TextInput
-       style={styles.input}
-       placeholder="Location"
-       value={searchQuery.location}
-       onChangeText={(text) => setSearchQuery({ ...searchQuery, location: text })}
-     />
-     <Text style={styles.dateQuestion}>When do you want to go?</Text>
-      <TripDatePicker
-        startDate={searchQuery.startDate}
-        endDate={searchQuery.endDate}
-        onStartDateChange={handleStartDateChange}
-        onEndDateChange={handleEndDateChange}
-      />
-      <Text style={styles.tripLength}>
-        {`Total ${searchQuery.tripLength} day(s)`}
-      </Text>
-      <Text style={styles.numberQuestion}>How many members of your team?</Text>
-      <TextInput
-        style={styles.numInput}
-        placeholder=""
-        value={searchQuery.numberOfPeople}
-        onChangeText={(text) => setSearchQuery({ ...searchQuery, numberOfPeople: text })}
-        keyboardType="numeric"
-      />
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={handleSearch} 
-        activeOpacity={0.7}
-      >
-        <Text style={styles.buttonText}>Search</Text>
-      </TouchableOpacity>
-      <Footer navigation={navigation} />
+      <View style={styles.content}>
+        <Text style={styles.placeQuestion}>Where do you want to go?</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Location"
+          value={searchQuery.location}
+          onChangeText={(text) => setSearchQuery({ ...searchQuery, location: text })}
+        />
+        <View style={styles.rowContainer}>
+          <Text style={styles.dateQuestion}>When do you want to go?</Text>
+          <Text style={styles.tripLength}>
+            {`Total ${searchQuery.tripLength} day(s)`}
+          </Text>
+        </View>
+          <Text style={styles.dateLimit}>Choose a date range up to 7 days.</Text>
+        <TripDatePicker
+          startDate={searchQuery.startDate}
+          endDate={searchQuery.endDate}
+          onStartDateChange={handleStartDateChange}
+          onEndDateChange={handleEndDateChange}
+        />
+        <Text style={styles.numberQuestion}>How many members of your team?</Text>
+        <NumberPicker
+          selectedValue={searchQuery.numberOfPeople}
+          onValueChange={(itemValue) => setSearchQuery({ ...searchQuery, numberOfPeople: itemValue })}
+        />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={handleSubmit}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.buttonText}>SUBMIT</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.footer}>
+        <Footer navigation={navigation} />
+      </View>
     </View>
   );
 };
@@ -87,9 +98,15 @@ const SearchPage = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 20,
+  },
+  content: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   inputContainer: {
     width: '100%',
@@ -104,17 +121,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 10,
   },
-  dateQuestion: {
+  rowContainer: {
+    flexDirection: 'row',
     alignSelf: 'flex-start', 
-    marginLeft: 5, 
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  numberQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
-    fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 0, 
   },
   input: {
     height: 30,
@@ -126,23 +136,33 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     alignSelf: 'flex-start', 
   },
-  numInput: {
-    height: 30,
-    width: '100%', 
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginBottom: 20,
+  dateQuestion: {
     alignSelf: 'flex-start', 
+    marginLeft: 5, 
+    fontSize: 16,
+    marginBottom: 2,
   },
   tripLength: {
+    fontSize: 16,
+    marginBottom: 2,
+    marginLeft: 6,
+  },
+  dateLimit: {
+    alignSelf: 'flex-start', 
+    marginLeft: 5, 
+    fontSize: 15,
+    marginBottom: 10,
+    color: 'lightgray'
+  },
+  numberQuestion: {
+    alignSelf: 'flex-start', 
+    marginLeft: 5, 
     fontSize: 16,
     marginBottom: 10,
   },
   button: {
     height: 40,
-    width: 100,
+    width: 200,
     borderRadius: 20,
     backgroundColor: 'black',
     justifyContent: 'center',
@@ -151,9 +171,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: 'white',
   },
+  footer: {
+  width: '115%',
+}
 });
 
 export default SearchPage;
-
-
-

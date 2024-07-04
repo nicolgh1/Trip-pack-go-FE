@@ -16,14 +16,53 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
 
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
-    onStartDateChange(currentDate);
-    setShowStartDatePicker(false);
+
+    if (!endDate || currentDate <= endDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (currentDate >= today) {
+        onStartDateChange(currentDate);
+
+        const maxEndDate = new Date(currentDate);
+        maxEndDate.setDate(maxEndDate.getDate() + 7);
+        if (endDate && endDate > maxEndDate) {
+          onEndDateChange(maxEndDate);
+        }
+      } else {
+        console.log("Start date cannot be before today.");
+      }
+      setShowStartDatePicker(false);
+    } else {
+      console.log("Start date cannot be after the end date.");
+    }
   };
 
   const handleEndDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || endDate;
-    onEndDateChange(currentDate);
-    setShowEndDatePicker(false);
+
+    if (!startDate || currentDate >= startDate) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      if (currentDate >= today) {
+        onEndDateChange(currentDate);
+      } else {
+        console.log("End date cannot be before today.");
+      }
+      setShowEndDatePicker(false);
+    } else {
+      console.log("End date cannot be before the start date.");
+    }
+  };
+
+  const getMaxEndDate = () => {
+    if (startDate) {
+      const maxEndDate = new Date(startDate);
+      maxEndDate.setDate(maxEndDate.getDate() + 7);
+      return maxEndDate;
+    }
+    return new Date(new Date().setFullYear(new Date().getFullYear() + 1));
   };
 
   return (
@@ -31,7 +70,7 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
       <TouchableOpacity onPress={showStartDate} style={styles.datePicker}>
         <Text style={styles.dateText}>{startDate ? startDate.toLocaleDateString() : 'Start Date'}</Text>
       </TouchableOpacity>
-      <Text style={styles.dateSeparator}>- </Text>
+      <Text style={styles.dateSeparator}>-</Text>
       <TouchableOpacity onPress={showEndDate} style={styles.datePicker}>
         <Text style={styles.dateText}>{endDate ? endDate.toLocaleDateString() : 'End Date'}</Text>
       </TouchableOpacity>
@@ -42,6 +81,8 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
           mode="date"
           is24Hour={true}
           display="default"
+          minimumDate={new Date()}
+          maximumDate={getMaxEndDate()}
           onChange={handleStartDateChange}
         />
       )}
@@ -52,6 +93,8 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
           mode="date"
           is24Hour={true}
           display="default"
+          minimumDate={startDate || new Date()}
+          maximumDate={getMaxEndDate()}
           onChange={handleEndDateChange}
         />
       )}
@@ -63,7 +106,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 5,
+    marginBottom: 20,
   },
   datePicker: {
     flex: 1,
@@ -78,7 +121,6 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
-    color: 'gray'
   },
   dateSeparator: {
     fontSize: 18,

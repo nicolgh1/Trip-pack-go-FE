@@ -12,6 +12,11 @@ import UserAccountSettingsPage from './src/Pages/5.UserAccountSettingsPage';
 import UserItinerariesPage from './src/Pages/6.UserItinerariesPage';
 import PackingOptionsPage from './src/Pages/7.PackingOptionsPage';
 
+import ResponsePage from './src/Pages/4.ResponsePage'
+
+import PackingListPage from './src/Pages/7.1.PackingListPage';
+
+
 const Stack = createNativeStackNavigator();
 
 export default function App() {
@@ -34,20 +39,27 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
-      <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }}>  
+      <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: true }}>  
         </Stack.Screen>
 
-        <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: false }}>
+        <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: false }}>
+        <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="UserItinerariesPage" component={UserItinerariesPage} options={{ headerShown: false }}>
+        <Stack.Screen name="UserItinerariesPage" component={UserItinerariesPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: false }}>
+        <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: true }}>
         </Stack.Screen>
+
+
+        <Stack.Screen name="Response" component={ResponsePage} />
+
+        <Stack.Screen name="PackingListPage" component={PackingListPage} options={{ headerShown: true }}>
+        </Stack.Screen>
+
 
       </Stack.Navigator>
     </NavigationContainer>
