@@ -13,6 +13,7 @@ import UserItinerariesPage from "./src/Pages/6.UserItinerariesPage";
 import PackingOptionsPage from "./src/Pages/7.PackingOptionsPage";
 import StartPage from "./src/Pages/1.StartPage";
 import { onAuthStateChanged } from "firebase/auth";
+import { UserProvider } from "./src/contexts/UserContext";
 
 const Stack = createNativeStackNavigator();
 
@@ -73,29 +74,30 @@ export default function App() {
 
   useEffect(() => {
     onAuthStateChanged(firebaseAuth, (user) => {
-      console.log("user", user);
       setUser(user);
     });
   }, []);
 
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="StartPage">
-        {user ? (
-          <Stack.Screen
-            name="Inside"
-            component={InsideLayout}
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-        ) : (
-          <Stack.Screen
-            name="StartPage"
-            component={StartPage}
-            options={{ headerShown: false }}
-          ></Stack.Screen>
-        )}
-      </Stack.Navigator>
-    </NavigationContainer>
+    <UserProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="StartPage">
+          {user ? (
+            <Stack.Screen
+              name="Inside"
+              component={InsideLayout}
+              options={{ headerShown: false }}
+            ></Stack.Screen>
+          ) : (
+            <Stack.Screen
+              name="StartPage"
+              component={StartPage}
+              options={{ headerShown: false }}
+            ></Stack.Screen>
+          )}
+        </Stack.Navigator>
+      </NavigationContainer>
+    </UserProvider>
   );
 }
 
