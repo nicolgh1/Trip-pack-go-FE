@@ -11,6 +11,7 @@ import SearchPage from './src/Pages/3.SearchPage'
 import UserAccountSettingsPage from './src/Pages/5.UserAccountSettingsPage';
 import UserItinerariesPage from './src/Pages/6.UserItinerariesPage';
 import PackingOptionsPage from './src/Pages/7.PackingOptionsPage';
+import ResponsePage from './src/Pages/4.ResponsePage'
 
 const Stack = createNativeStackNavigator();
 
@@ -48,6 +49,8 @@ export default function App() {
 
         <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: true }}>
         </Stack.Screen>
+
+        <Stack.Screen name="Response" component={ResponsePage} />
 
       </Stack.Navigator>
     </NavigationContainer>
