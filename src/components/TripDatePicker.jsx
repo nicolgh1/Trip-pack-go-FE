@@ -16,6 +16,7 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
 
   const handleStartDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || startDate;
+    setShowStartDatePicker(false);
 
     if (!endDate || currentDate <= endDate) {
       const today = new Date();
@@ -29,17 +30,13 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
         if (endDate && endDate > maxEndDate) {
           onEndDateChange(maxEndDate);
         }
-      } else {
-        console.log("Start date cannot be before today.");
       }
-      setShowStartDatePicker(false);
-    } else {
-      console.log("Start date cannot be after the end date.");
-    }
+    } 
   };
 
   const handleEndDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || endDate;
+    setShowEndDatePicker(false);
 
     if (!startDate || currentDate >= startDate) {
       const today = new Date();
@@ -47,12 +44,13 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
 
       if (currentDate >= today) {
         onEndDateChange(currentDate);
-      } else {
-        console.log("End date cannot be before today.");
+
+        const minStartDate = new Date(currentDate);
+        minStartDate.setDate(minStartDate.getDate() - 7);
+        if (startDate && startDate < minStartDate) {
+          onStartDateChange(minStartDate);
+        }
       }
-      setShowEndDatePicker(false);
-    } else {
-      console.log("End date cannot be before the start date.");
     }
   };
 
@@ -63,6 +61,15 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
       return maxEndDate;
     }
     return new Date(new Date().setFullYear(new Date().getFullYear() + 1));
+  };
+
+  const getMinStartDate = () => {
+    if (endDate) {
+      const minStartDate = new Date(endDate);
+      minStartDate.setDate(minStartDate.getDate() - 7);
+      return minStartDate;
+    }
+    return new Date();
   };
 
   return (
@@ -81,8 +88,8 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
           mode="date"
           is24Hour={true}
           display="default"
-          minimumDate={new Date()}
-          maximumDate={getMaxEndDate()}
+          minimumDate={getMinStartDate()}
+          maximumDate={endDate || getMaxEndDate()}
           onChange={handleStartDateChange}
         />
       )}
@@ -101,6 +108,7 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
     </View>
   );
 };
+
 
 const styles = StyleSheet.create({
   container: {
