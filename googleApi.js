@@ -19,3 +19,10 @@ export const fetchAttractions = (latLngObj, radiusInMeters, type ) => {
     })
 
 }
+
+export const fetchPlaceSuggestions = (input) => {
+    return googleApi.get(`/place/autocomplete/json?input=${input}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`)
+      .then(({ data }) => {
+        return data.predictions; // returns an array of place predictions
+      });
+  };
