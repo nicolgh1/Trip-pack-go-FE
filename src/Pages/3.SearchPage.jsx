@@ -14,8 +14,14 @@ const SearchPage = ({ navigation }) => {
     numberOfPeople: 1,
   });
 
-  const handleSearch = () => {
-    console.log('Searching for:', searchQuery);
+  const handleSubmit = () => {
+    const formattedSearchQuery = {
+      ...searchQuery,
+      startDate: searchQuery.startDate ? searchQuery.startDate.toLocaleDateString():  'Not specified',
+      endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() :  'Not specified',
+    };
+    console.log('Searching for:', formattedSearchQuery);
+    navigation.navigate('Response', { searchQuery: formattedSearchQuery });
   };
 
   const handleStartDateChange = (startDate) => {
@@ -62,6 +68,7 @@ const SearchPage = ({ navigation }) => {
             {`Total ${searchQuery.tripLength} day(s)`}
           </Text>
         </View>
+          <Text style={styles.dateLimit}>Choose a date range up to 7 days.</Text>
         <TripDatePicker
           startDate={searchQuery.startDate}
           endDate={searchQuery.endDate}
@@ -75,10 +82,10 @@ const SearchPage = ({ navigation }) => {
         />
         <TouchableOpacity
           style={styles.button}
-          onPress={handleSearch}
+          onPress={handleSubmit}
           activeOpacity={0.7}
         >
-          <Text style={styles.buttonText}>Search</Text>
+          <Text style={styles.buttonText}>SUBMIT</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.footer}>
@@ -119,23 +126,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start', 
     marginBottom: 0, 
   },
-  dateQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
-    fontSize: 16,
-    marginBottom: 10,
-  },
-  tripLength: {
-    fontSize: 16,
-    marginBottom: 10,
-    marginLeft: 6,
-  },
-  numberQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
-    fontSize: 16,
-    marginBottom: 10,
-  },
   input: {
     height: 30,
     width: '100%', 
@@ -143,8 +133,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: 'gray',
-    marginBottom: 10,
+    marginBottom: 20,
     alignSelf: 'flex-start', 
+  },
+  dateQuestion: {
+    alignSelf: 'flex-start', 
+    marginLeft: 5, 
+    fontSize: 16,
+    marginBottom: 2,
+  },
+  tripLength: {
+    fontSize: 16,
+    marginBottom: 2,
+    marginLeft: 6,
+  },
+  dateLimit: {
+    alignSelf: 'flex-start', 
+    marginLeft: 5, 
+    fontSize: 15,
+    marginBottom: 10,
+    color: 'lightgray'
+  },
+  numberQuestion: {
+    alignSelf: 'flex-start', 
+    marginLeft: 5, 
+    fontSize: 16,
+    marginBottom: 10,
   },
   button: {
     height: 40,
