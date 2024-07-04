@@ -1,24 +1,41 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import TripDatePicker from '../components/TripDatePicker';
 import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
 import NumberPicker from '../components/NumberPicker';
+import LocationAutocomplete from '../components/LocationAutocomplete';
+import { fetchLatLngOlatLngObj, fetchAttractions } from '../../googleApi';
 
 const SearchPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState({
     location: '',
+    latLng: {},
     startDate: null,
     endDate: null,
     tripLength: 0,
     numberOfPeople: 1,
+    attractions: [],
   });
 
+  const handleLocationSelect = (location) => {
+    fetchLatLngOlatLngObj(location.description)
+      .then((locationDataFromApi) => {
+        const latLng = locationDataFromApi;
+        setSearchQuery(prevState => ({
+          ...prevState,
+          location: location.description,
+          latLng: latLng,
+        }));
+      })
+  };
+
   const handleSubmit = () => {
+    // console.log('Before format:', searchQuery.startDate);
     const formattedSearchQuery = {
       ...searchQuery,
-      startDate: searchQuery.startDate ? searchQuery.startDate.toLocaleDateString():  'Not specified',
-      endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() :  'Not specified',
+      startDate: searchQuery.startDate ? searchQuery.startDate.toLocaleDateString() : 'Not specified',
+      endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() : 'Not specified',
     };
     console.log('Searching for:', formattedSearchQuery);
     navigation.navigate('Response', { searchQuery: formattedSearchQuery });
@@ -56,19 +73,14 @@ const SearchPage = ({ navigation }) => {
       <Header />
       <View style={styles.content}>
         <Text style={styles.placeQuestion}>Where do you want to go?</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Location"
-          value={searchQuery.location}
-          onChangeText={(text) => setSearchQuery({ ...searchQuery, location: text })}
-        />
+        <LocationAutocomplete style={styles.locationInput} onSelectLocation={handleLocationSelect} />
         <View style={styles.rowContainer}>
           <Text style={styles.dateQuestion}>When do you want to go?</Text>
           <Text style={styles.tripLength}>
             {`Total ${searchQuery.tripLength} day(s)`}
           </Text>
         </View>
-          <Text style={styles.dateLimit}>• Choose a date range up to 7 days</Text>
+        <Text style={styles.dateLimit}>• Choose a date range up to 7 days</Text>
         <TripDatePicker
           startDate={searchQuery.startDate}
           endDate={searchQuery.endDate}
@@ -106,39 +118,26 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center',
-  },
-  inputContainer: {
-    width: '100%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    marginTop: 20,
+    alignItems: 'left',
   },
   placeQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5,  
+    alignSelf: 'flex-start',
+    marginLeft: 5,
     fontSize: 16,
     marginBottom: 10,
   },
+  locationInput: {
+    alignSelf: 'flex-start',
+    marginLeft: 5,
+  },
   rowContainer: {
     flexDirection: 'row',
-    alignSelf: 'flex-start', 
-    marginBottom: 0, 
-  },
-  input: {
-    height: 30,
-    width: '100%', 
-    borderRadius: 20,
-    paddingHorizontal: 15,
-    borderWidth: 1,
-    borderColor: 'gray',
-    marginBottom: 20,
-    alignSelf: 'flex-start', 
+    alignSelf: 'flex-start',
+    marginBottom: 0,
   },
   dateQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
+    alignSelf: 'flex-start',
+    marginLeft: 5,
     fontSize: 16,
     marginBottom: 2,
   },
@@ -148,21 +147,22 @@ const styles = StyleSheet.create({
     marginLeft: 6,
   },
   dateLimit: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
+    alignSelf: 'flex-start',
+    marginLeft: 5,
     fontSize: 15,
     marginBottom: 10,
-    color: 'lightgray'
+    color: 'lightgray',
   },
   numberQuestion: {
-    alignSelf: 'flex-start', 
-    marginLeft: 5, 
+    alignSelf: 'flex-start',
+    marginLeft: 5,
     fontSize: 16,
     marginBottom: 10,
   },
   button: {
     height: 40,
     width: 200,
+    width: '100%',
     borderRadius: 20,
     backgroundColor: 'black',
     justifyContent: 'center',
@@ -172,8 +172,8 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   footer: {
-  width: '115%',
-}
+    width: '115%',
+  },
 });
 
 export default SearchPage;
