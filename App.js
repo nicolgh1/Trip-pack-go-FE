@@ -34,19 +34,19 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
 
-      <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: false }}>  
+      <Stack.Screen name="HomePage" component={HomePage} options={{ headerShown: true }}>  
         </Stack.Screen>
 
         <Stack.Screen name="SearchPage" component={SearchPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: false }}>
+        <Stack.Screen name="UserAccountSettingsPage" component={UserAccountSettingsPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="UserItinerariesPage" component={UserItinerariesPage} options={{ headerShown: false }}>
+        <Stack.Screen name="UserItinerariesPage" component={UserItinerariesPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
-        <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: false }}>
+        <Stack.Screen name="PackingOptionsPage" component={PackingOptionsPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
       </Stack.Navigator>

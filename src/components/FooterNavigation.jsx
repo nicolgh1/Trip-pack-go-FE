@@ -19,6 +19,12 @@ export default function Footer({ navigation }) {
                 onPress={() => navigation.navigate('UserAccountSettingsPage')}
             />
             <Icon 
+                name="home"
+                size={50}
+                color="#141414"
+                onPress={() => navigation.navigate('HomePage')}
+            />
+            <Icon 
                 name="book"
                 size={50}
                 color="#141414"
