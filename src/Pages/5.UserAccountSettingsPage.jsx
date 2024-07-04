@@ -13,7 +13,7 @@ export default function UserAccountSettingsPage({ navigation }) {
     <View style={styles.screen}>
       <Header />
       <View style={styles.body}>
-        <Text>{user.email? user.email : null}</Text>
+        {/* <Text>{user.email? user.email : null}</Text> */}
         <Text>Hello from user account</Text>
         <Button onPress={() => firebaseAuth.signOut()} title="LOGOUT" />
       </View>
