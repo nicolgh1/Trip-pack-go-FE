@@ -68,7 +68,7 @@ const SearchPage = ({ navigation }) => {
             {`Total ${searchQuery.tripLength} day(s)`}
           </Text>
         </View>
-          <Text style={styles.dateLimit}>Choose a date range up to 7 days.</Text>
+          <Text style={styles.dateLimit}>• Choose a date range up to 7 days</Text>
         <TripDatePicker
           startDate={searchQuery.startDate}
           endDate={searchQuery.endDate}
