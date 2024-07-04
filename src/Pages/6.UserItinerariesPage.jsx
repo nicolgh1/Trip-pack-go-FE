@@ -4,15 +4,12 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
+  Button,
 } from "react-native";
 import UserItineraryDetailPage from "./6.1.UserItineraryDetailPage";
-
-import React, { useState } from 'react';
-
-
-import Header from '../components/Header';
-import Footer from '../components/FooterNavigation';
-
+import React, { useState } from "react";
+import Footer from "../components/FooterNavigation";
 
 
 export default function UserItinerariesPage({ userItineraries, navigation }) {
@@ -74,26 +71,25 @@ export default function UserItinerariesPage({ userItineraries, navigation }) {
           activity: "Visit La Rambla",
         },
         {
-            day: 6,
-            activity: "Visit Barri Gotic",
+          day: 6,
+          activity: "Visit Barri Gotic",
         },
         {
-            day: 7,
-            activity: "Visit Montjuic",
+          day: 7,
+          activity: "Visit Montjuic",
         },
         {
-            day: 8,
-            activity: "Visit Tibidabo",
+          day: 8,
+          activity: "Visit Tibidabo",
         },
         {
-            day: 9,
-            activity: "Visit Port Vell",
+          day: 9,
+          activity: "Visit Port Vell",
         },
         {
-            day: 10,
-            activity: "Visit Magic Fountain of Montjuic",
-        }
-
+          day: 10,
+          activity: "Visit Magic Fountain of Montjuic",
+        },
       ],
     },
     {
@@ -144,6 +140,8 @@ export default function UserItinerariesPage({ userItineraries, navigation }) {
     },
   ];
 
+  
+
   const [currentItinerary, setCurrentItinerary] = useState(null);
 
   function handleItineraryClick(itineraryId) {
@@ -161,76 +159,80 @@ export default function UserItinerariesPage({ userItineraries, navigation }) {
   }
 
   return (
-    <View>
-       <Header />
-      <Text style={styles.header}>Your planned trips!</Text>
-      <ScrollView>
+    <SafeAreaView style={{ flex: 1 }}>
+      <Text style={{fontSize:24, top: 40}}> Your Upcoming itineraries: </Text>
+      <ScrollView style={styles.scrollContainer}>
         {userItineraries.map((itinerary) => (
-          <View key={itinerary.id} style={styles.userItinerariesStyle}>
-            <Text style={styles.date}>
-              {itinerary.startDate} - {itinerary.endDate}
-            </Text>
+          <View key={itinerary.id} style={styles.itineraryCard}>
 
-            <TouchableOpacity
-              style={styles.link}
-              onPress={() => handleItineraryClick(itinerary.id)}
-            >
-              <Text style={styles.id}>ID : {itinerary.id}</Text>
-              <Text>Destination: {itinerary.destination}</Text>
-              <Text>Name: {itinerary.name}</Text>
+            <Text style={styles.destination}> {itinerary.destination}</Text>
+            <Text style={styles.startDate}>From: {itinerary.startDate}</Text>
+            <Text style={styles.endDate}>To: {itinerary.endDate}</Text>
+
+            <TouchableOpacity>
+              <Text style={styles.editButton}>Edit</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => handleItineraryClick(itinerary.id)}>
+              <Text style={styles.detailsButton}>See Details</Text>
+            </TouchableOpacity>
+            
           </View>
         ))}
       </ScrollView>
         <Footer navigation={navigation} />
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  userItinerariesStyle: {
-    flex: 1,
-    backgroundColor: "#1caccf",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 10,
-    padding: 10,
+  scrollContainer: {
+    flexGrow: 1,
+    top: 40,
+  },
+  itineraryCard: {
     margin: 10,
-    width: 300,
-    height: 250,
     borderColor: "black",
-    borderWidth: 3,
-  },
-
-  header: {
-    backgroundColor: "#1caccf",
-    color: "white",
-    padding: 10,
-    margin: 10,
-    width: 300,
-    border: "1px solid black",
-    fontSize: 20,
-  },
-  id: {
-    fontSize: 10,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    color: "white",
-  },
-  date: {
-    fontSize: 14,
-    position: "absolute",
-    top: 0,
-    left: 0,
-    color: "black",
-  },
-
-  link: {
-    borderColor: "blue",
-    borderWidth: 3,
-    padding: 10,
+    borderWidth: 1,
+    borderRadius: 20,
+    backgroundColor: "#ffffff",
     position: "relative",
+    textAlign: "center",
+    textAlignVertical: "center",
+    height: 250,
+  },
+
+  destination: {
+    fontSize: 25,
+  },
+  startDate: {
+    fontSize: 14,
+    left: 15,
+  },
+  endDate: {
+    fontSize: 14,
+    left: 15,
+  },
+
+  detailsButton: {
+    backgroundColor: "black",
+    color: "white",
+    textAlign: "center",
+    borderRadius: 20,
+    top: 118,
+    left: 20,
+    width: 130,
+    height: 23,
+  },
+
+  editButton: {
+    backgroundColor: "black",
+    color: "white",
+    textAlign: "center",
+    borderRadius: 20,
+    top: 140,
+    left: 180,
+    width: 130,
+    height: 23,
   },
 });
-
