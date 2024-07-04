@@ -30,12 +30,8 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
         if (endDate && endDate > maxEndDate) {
           onEndDateChange(maxEndDate);
         }
-      } else {
-        console.log("Start date cannot be before today.");
       }
-    } else {
-      console.log("Start date cannot be after the end date.");
-    }
+    } 
   };
 
   const handleEndDateChange = (event, selectedDate) => {
@@ -54,11 +50,7 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
         if (startDate && startDate < minStartDate) {
           onStartDateChange(minStartDate);
         }
-      } else {
-        console.log("End date cannot be before today.");
       }
-    } else {
-      console.log("End date cannot be before the start date.");
     }
   };
 
