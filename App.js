@@ -6,6 +6,7 @@ import { db, firebaseAuth } from "./firebaseConfig";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+
 import HomePage from "./src/Pages/2.HomePage";
 import SearchPage from "./src/Pages/3.SearchPage";
 import UserAccountSettingsPage from "./src/Pages/5.UserAccountSettingsPage";
