@@ -1,7 +1,7 @@
 
-const temperatures = ["sunny", "cold", "hot", "rainy", "warm"];
-const destinationTypes = ["city", "beach", "mountain", "desert"];
-const activities = ["Swimming", "Hiking", "Sightseeing", "Safary", "Relaxing", "Dining", "Bars"];
+const temperatures = ["sunny", "cold", "hot", "rainy", "warm"]
+const destinationTypes = ["city", "beach", "mountain", "desert"]
+const activities = ["Swimming", "Hiking", "Sightseeing", "Safary", "Relaxing", "Dining", "Bars"]
 const genders = ["male", "female"];
 
 
