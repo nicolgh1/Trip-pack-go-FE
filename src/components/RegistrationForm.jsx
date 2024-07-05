@@ -63,6 +63,7 @@ export default function RegistrationForm({ setShowLogin }) {
       <Text style={styles.welcome}>Welcome!</Text>
       <Text>Please Create an Account to Continue</Text>
       <KeyboardAvoidingView behavior="padding">
+      <Text>Email Address</Text>
         <TextInput
           value={email}
           style={styles.input}
@@ -73,6 +74,7 @@ export default function RegistrationForm({ setShowLogin }) {
           }}
         ></TextInput>
         {emailErrMsg ? <Text style={styles.errMsg}>{emailErrMsg}</Text> : null}
+        <Text>Password</Text>
         <TextInput
           secureTextEntry={true}
           value={password}
@@ -86,6 +88,7 @@ export default function RegistrationForm({ setShowLogin }) {
         {passwordErrMsg ? (
           <Text style={styles.errMsg}>{passwordErrMsg}</Text>
         ) : null}
+        <Text>Confirm Password</Text>
         <TextInput
           secureTextEntry={true}
           value={passwordCheck}
