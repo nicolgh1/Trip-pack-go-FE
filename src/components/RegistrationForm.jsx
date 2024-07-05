@@ -1,6 +1,5 @@
 import { useState } from "react";
 import {
-  ActivityIndicator,
   Button,
   KeyboardAvoidingView,
   Modal,
@@ -9,51 +8,53 @@ import {
   TextInput,
   View,
 } from "react-native";
-import { firebaseAuth } from "../../firebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import RegistrationFormCont from "./RegistrationFormCont";
 
-export default function RegistrationForm() {
-  const auth = firebaseAuth;
-
+export default function RegistrationForm({ setShowLogin }) {
   const [email, setEmail] = useState("");
   const [emailErrMsg, setEmailErrMsg] = useState("");
   const [password, setPassword] = useState("");
   const [passwordErrMsg, setPasswordErrMsg] = useState("");
-  const [buttonDisabled, setButtonDisabled] = useState(true);
-  const [loading, setLoading] = useState(false);
+  const [passwordCheck, setPasswordCheck] = useState("");
+  const [passwordCheckErrMsg, setPasswordCheckErrMsg] = useState("");
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
-  function signUp() {
-    setLoading(true);
-    createUserWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        setLoading(false);
-        console.log(response);
-      })
-      .catch((err) => {
-        setLoading(false);
-        console.log(err);
-        alert("Sign Up Failed: " + err);
-      });
-  }
+  function createAccount() {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+    let isValid = true;
 
-  function isEmailValid() {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
     if (!email) {
       setEmailErrMsg("Please Enter an Email Address");
-    } else if (!regex.test(email)) {
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
       setEmailErrMsg("Please Enter a Valid Email Address");
+      isValid = false;
     } else {
       setEmailErrMsg("");
-      setButtonDisabled(false);
     }
-  }
 
-  function isPasswordValid() {
     if (!password) {
       setPasswordErrMsg("Please Enter a Password");
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordErrMsg("Password Must be Longer than 6 Characters");
+      isValid = false;
     } else {
       setPasswordErrMsg("");
-      setButtonDisabled(false);
+    }
+
+    if (!passwordCheck) {
+      setPasswordCheckErrMsg("Please Confirm Your Password");
+      isValid = false;
+    } else if (passwordCheck !== password) {
+      setPasswordCheckErrMsg("Passwords do not Match");
+      isValid = false;
+    } else {
+      setPasswordCheckErrMsg("");
+    }
+
+    if (isValid) {
+      setIsModalVisible(true);
     }
   }
 
@@ -70,9 +71,8 @@ export default function RegistrationForm() {
           onChangeText={(text) => {
             setEmail(text);
           }}
-          onBlur={isEmailValid}
         ></TextInput>
-        {emailErrMsg ? <Text>{emailErrMsg}</Text> : null}
+        {emailErrMsg ? <Text style={styles.errMsg}>{emailErrMsg}</Text> : null}
         <TextInput
           secureTextEntry={true}
           value={password}
@@ -82,20 +82,48 @@ export default function RegistrationForm() {
           onChangeText={(text) => {
             setPassword(text);
           }}
-          onBlur={isPasswordValid}
         ></TextInput>
-        {passwordErrMsg ? <Text>{passwordErrMsg}</Text> : null}
-        {loading ? (
-          <ActivityIndicator size="small" color="#0000ff" />
-        ) : (
-          <Button
-            title="Create Account"
-            onPress={signUp}
-            disabled={buttonDisabled}
-          ></Button>
-        )}
+        {passwordErrMsg ? (
+          <Text style={styles.errMsg}>{passwordErrMsg}</Text>
+        ) : null}
+        <TextInput
+          secureTextEntry={true}
+          value={passwordCheck}
+          style={styles.input}
+          placeholder="Confirm Password"
+          autoCapitalize="none"
+          onChangeText={(text) => {
+            setPasswordCheck(text);
+          }}
+        ></TextInput>
+        {passwordCheckErrMsg ? (
+          <Text style={styles.errMsg}>{passwordCheckErrMsg}</Text>
+        ) : null}
+        <Button title="Create Account" onPress={createAccount}></Button>
       </KeyboardAvoidingView>
-
+      <Modal
+        visible={isModalVisible}
+        onRequestClose={() => setIsModalVisible(false)}
+        animationType="slide"
+      >
+        <RegistrationFormCont
+          email={email}
+          password={password}
+          setIsModalVisible={setIsModalVisible}
+        />
+      </Modal>
+      <Text style={styles.text}>
+        Already Have an Account?{" "}
+        <Text
+          onPress={() => {
+            setShowLogin(true);
+          }}
+          style={styles.linkText}
+        >
+          Click Here
+        </Text>{" "}
+        to Log In
+      </Text>
     </View>
   );
 }
@@ -120,5 +148,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     margin: 5,
+  },
+  errMsg: {
+    color: "red",
+  },
+  linkText: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });
