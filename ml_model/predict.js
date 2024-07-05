@@ -77,9 +77,9 @@ const preprocessInput = (inputPreferences) => {
   }
 
   const sampleInput = {
-    temperature: ["warm"],
-    destination_type: ["beach","city"],
-    activities: ["Swimming","Sightseeing", "Dining", "Bars"],
+    temperature: ["cold"],
+    destination_type: ["city"],
+    activities: ["Sightseeing", "Dining", "Bars"],
     gender: "male",
   }
   

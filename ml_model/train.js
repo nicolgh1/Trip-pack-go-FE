@@ -63,7 +63,7 @@ const maxOutputLen = Math.max(...outputData.map(seq => seq.length))
 const inputDataPadded = padSequences(inputData, maxInputLen)
 const outputDataPadded = padSequences(outputData, maxOutputLen)
 
-const xs = tf.tensor2d(inputDataPadded)
+const xs = tf.tensor2d(inputDataPadded) 
 const ys = tf.tensor2d(outputDataPadded)
 
 
