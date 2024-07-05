@@ -5,29 +5,37 @@ import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
 import NumberPicker from '../components/NumberPicker';
 import LocationAutocomplete from '../components/LocationAutocomplete';
-import { fetchLatLngOlatLngObj, fetchAttractions } from '../../googleApi';
+import { fetchLatLngOlatLngObj } from '../../googleApi';
+import { fetchExchangeRate } from '../../currencyApi';
 
 const SearchPage = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState({
+    place_id: '',
     location: '',
     latLng: {},
-    startDate: null,
-    endDate: null,
     tripLength: 0,
     numberOfPeople: 1,
-    attractions: [],
+    startDate: null,
+    endDate: null,
+    exchangeData: null,
   });
 
-  const handleLocationSelect = (location) => {
-    fetchLatLngOlatLngObj(location.description)
-      .then((locationDataFromApi) => {
-        const latLng = locationDataFromApi;
-        setSearchQuery(prevState => ({
-          ...prevState,
-          location: location.description,
-          latLng: latLng,
-        }));
-      })
+  const handleLocationSelect = async (tripLocation) => {
+    console.log("location data:", tripLocation);
+    const latLng = await fetchLatLngOlatLngObj(tripLocation.description);
+    
+    setSearchQuery(prevState => ({
+      ...prevState,
+      location: tripLocation.description,
+      place_id: tripLocation.place_id,
+      latLng: latLng,
+    }));
+
+    const rateDataFromApi = await fetchExchangeRate(tripLocation);
+    setSearchQuery(prevState => ({
+      ...prevState,
+      exchangeData: rateDataFromApi,
+    }));
   };
 
   const handleSubmit = () => {
@@ -63,7 +71,7 @@ const SearchPage = ({ navigation }) => {
     if (startDate && endDate) {
       const diffTime = Math.abs(endDate - startDate);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      return diffDays;
+      return diffDays+1;
     }
     return 0;
   };
@@ -92,13 +100,15 @@ const SearchPage = ({ navigation }) => {
           selectedValue={searchQuery.numberOfPeople}
           onValueChange={(itemValue) => setSearchQuery({ ...searchQuery, numberOfPeople: itemValue })}
         />
-        <TouchableOpacity
+        {searchQuery.location?
+        (<TouchableOpacity
           style={styles.button}
           onPress={handleSubmit}
           activeOpacity={0.7}
         >
           <Text style={styles.buttonText}>SUBMIT</Text>
         </TouchableOpacity>
+        ) :null}
       </View>
       <View style={styles.footer}>
         <Footer navigation={navigation} />
