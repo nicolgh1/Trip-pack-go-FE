@@ -11,49 +11,48 @@ import {
 import { firebaseAuth } from "../../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-export default function LoginForm() {
-  const auth = firebaseAuth;
-
+export default function LoginForm({ setShowLogin }) {
   const [email, setEmail] = useState("");
   const [emailErrMsg, setEmailErrMsg] = useState("");
   const [password, setPassword] = useState("");
   const [passwordErrMsg, setPasswordErrMsg] = useState("");
-  const [buttonsDisabled, setButtonDisabled] = useState(true);
   const [loading, setLoading] = useState(false);
 
   function signIn() {
-    setLoading(true);
-    signInWithEmailAndPassword(auth, email, password)
-      .then((response) => {
-        setLoading(false);
-        console.log(response);
-      })
-      .catch((err) => {
-        console.log(err);
-        alert("Log In Failed: " + err);
-        setLoading(false);
-      });
-  }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
+    let isValid = true;
 
-  function isEmailValid() {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/i;
     if (!email) {
       setEmailErrMsg("Please Enter an Email Address");
-    } else if (!regex.test(email)) {
+      isValid = false;
+    } else if (!emailRegex.test(email)) {
       setEmailErrMsg("Please Enter a Valid Email Address");
+      isValid = false;
     } else {
       setEmailErrMsg("");
-      setButtonDisabled(false);
     }
-  }
 
-  function isPasswordValid() {
     if (!password) {
-      console.log("hi");
       setPasswordErrMsg("Please Enter a Password");
+      isValid = false;
+    } else if (password.length < 6) {
+      setPasswordErrMsg("Password Must be Longer than 6 Characters");
+      isValid = false;
     } else {
       setPasswordErrMsg("");
-      setButtonDisabled(false);
+    }
+
+    if (isValid) {
+      setLoading(true);
+      signInWithEmailAndPassword(firebaseAuth, email, password)
+        .then(() => {
+          setLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          alert("Log In Failed: " + err);
+          setLoading(false);
+        });
     }
   }
 
@@ -70,9 +69,8 @@ export default function LoginForm() {
           onChangeText={(text) => {
             setEmail(text);
           }}
-          onBlur={isEmailValid}
         ></TextInput>
-        {emailErrMsg ? <Text>{emailErrMsg}</Text> : null}
+        {emailErrMsg ? <Text style={styles.errMsg}>{emailErrMsg}</Text> : null}
         <TextInput
           secureTextEntry={true}
           value={password}
@@ -82,19 +80,27 @@ export default function LoginForm() {
           onChangeText={(text) => {
             setPassword(text);
           }}
-          onBlur={isPasswordValid}
         ></TextInput>
-        {passwordErrMsg ? <Text>{passwordErrMsg}</Text> : null}
+        {passwordErrMsg ? (
+          <Text style={styles.errMsg}>{passwordErrMsg}</Text>
+        ) : null}
         {loading ? (
           <ActivityIndicator size="small" color="#0000ff" />
         ) : (
-          <Button
-            title="Login"
-            onPress={signIn}
-            disabled={buttonsDisabled}
-          ></Button>
+          <Button title="Login" onPress={signIn}></Button>
         )}
       </KeyboardAvoidingView>
+      <Text style={styles.text}>
+        To Register{" "}
+        <Text
+          onPress={() => {
+            setShowLogin(false);
+          }}
+          style={styles.linkText}
+        >
+          Click Here
+        </Text>
+      </Text>
     </View>
   );
 }
@@ -118,5 +124,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 5,
     margin: 5,
+  },
+  errMsg: {
+    color: "red",
+  },
+  linkText: {
+    color: "blue",
+    textDecorationLine: "underline",
   },
 });
