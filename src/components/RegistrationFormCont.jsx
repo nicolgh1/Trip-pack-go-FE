@@ -26,8 +26,70 @@ export default function RegistrationFormCont({
   const [surnameErrMsg, setSurnameErrorMsg] = useState("");
   const [sex, setSex] = useState("");
   const [sexErrMsg, setSexErrMsg] = useState("");
+  const [countryOfResidence, setCountryOfResidence] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const countries = [
+    "Australia",
+    "Austria",
+    "Belgium",
+    "Brazil",
+    "Bulgaria",
+    "Canada",
+    "China",
+    "Croatia",
+    "Cyprus",
+    "Czech Republic",
+    "Czechia",
+    "Denmark",
+    "East Timor",
+    "Ecuador",
+    "El Salvador",
+    "Estonia",
+    "Finland",
+    "France",
+    "Germany",
+    "Greece",
+    "Hong Kong",
+    "Hungary",
+    "Iceland",
+    "India",
+    "Indonesia",
+    "Ireland",
+    "Israel",
+    "Italy",
+    "Japan",
+    "Korea",
+    "Latvia",
+    "Liechtenstein",
+    "Lithuania",
+    "Luxembourg",
+    "Malaysia",
+    "Malta",
+    "Mexico",
+    "Netherlands",
+    "New Zealand",
+    "Norway",
+    "Panama",
+    "Philippines",
+    "Poland",
+    "Portugal",
+    "Romania",
+    "Russia",
+    "Singapore",
+    "Slovakia",
+    "Slovenia",
+    "South Africa",
+    "South Korea",
+    "Spain",
+    "Sweden",
+    "Switzerland",
+    "Thailand",
+    "Turkey",
+    "United Kingdom",
+    "United States of America",
+    "Zimbabwe",
+  ];
   const usersColRef = collection(db, "users");
 
   const finishSignUp = () => {
@@ -68,6 +130,7 @@ export default function RegistrationFormCont({
             firstName,
             surname,
             sex,
+            countryOfResidence,
           };
           const userDocRef = doc(usersColRef, user.uid);
           setDoc(userDocRef, newUserDetails);
@@ -132,6 +195,19 @@ export default function RegistrationFormCont({
           <Picker.Item label="Please select..." value="" enabled={false} />
           <Picker.Item label="Male" value="male" />
           <Picker.Item label="Female" value="female" />
+        </Picker>
+        <Text>Country of Residence</Text>
+        <Picker
+          selectedValue={countryOfResidence}
+          style={styles.picker}
+          onValueChange={(itemValue) => setCountryOfResidence(itemValue)}
+        >
+          <Picker.Item label="Please select..." value="" enabled={false} />
+          {countries.map((country) => {
+            return (
+              <Picker.Item key={country} label={country} value={country} />
+            );
+          })}
         </Picker>
         {sexErrMsg ? <Text style={styles.errMsg}>{sexErrMsg}</Text> : null}
         {loading ? (
