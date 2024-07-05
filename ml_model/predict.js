@@ -76,14 +76,12 @@ const preprocessInput = (inputPreferences) => {
     return outputExpected
   }
 
-  const sampleInput = {
-    temperature: ["cold"],
-    destination_type: ["city"],
-    activities: ["Sightseeing", "Dining", "Bars"],
-    gender: "male",
+  const packingListPrediction = (inputData) => {
+    predictPackingList(inputData).then(prediction => {
+      const packingList = postprocessOutput(prediction)
+      console.log(packingList)
+      return packingList
+    })
   }
-  
-  predictPackingList(sampleInput).then(prediction => {
-    const packingList = postprocessOutput(prediction)
-    console.log('Predicted Packing List:', packingList)
-  })
+
+  module.exports = {packingListPrediction}
