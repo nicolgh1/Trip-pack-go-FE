@@ -1,20 +1,13 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import {
+  getAuth,
+  initializeAuth,
+  getReactNativePersistence,
+} from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 // import { getAnalytics } from "firebase/analytics";
 
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Optionally import the services that you want to use
-// import {...} from "firebase/auth";
-// import {...} from "firebase/database";
-// import {...} from "firebase/firestore";
-// import {...} from "firebase/functions";
-// import {...} from "firebase/storage";
-
-// Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
@@ -26,10 +19,10 @@ const firebaseConfig = {
   measurementId: process.env.EXPO_PUBLIC_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const firebaseApp = initializeApp(firebaseConfig);
-export const firebaseAuth = getAuth(firebaseApp)
+const authPersistence = initializeAuth(firebaseApp, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
+export const firebaseAuth = getAuth(firebaseApp);
 // const analytics = getAnalytics(firebaseApp);
 export const db = getFirestore();
-// For more information on how to access Firebase in your project,
-// see the Firebase documentation: https://firebase.google.com/docs/web/setup#access-firebase
