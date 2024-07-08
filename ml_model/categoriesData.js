@@ -1,8 +1,9 @@
 
-const uniqueTemperatures = ["sunny", "cold", "hot", "rainy", "warm"];
-const uniqueDestinationTypes = ["city", "beach", "mountain", "desert"];
-const uniqueActivities = ["Swimming", "Hiking", "Sightseeing", "Safary", "Relaxing", "Dining", "Bars"];
-const uniqueGender = ["male", "female", "non-binary"];
+const temperatures = ["sunny", "cold", "hot", "rainy", "warm"]
+const destinationTypes = ["city", "beach", "mountain", "desert"]
+const activities = ["Swimming", "Hiking", "Sightseeing", "Safary", "Relaxing", "Dining", "Bars"]
+const genders = ["male", "female"];
+
 
 const smart_wear =  [
     "shirt", 
@@ -13,9 +14,6 @@ const smart_wear =  [
     "dress",
     "skirt",
     "blouse",
-    "cufflinks",
-    "pocket square",
-    "scarf"
 ];
 
 const casual_wear = [
@@ -23,7 +21,6 @@ const casual_wear = [
     "jeans", 
     "shorts", 
     "loungewear", 
-    "polo shirt",
     "hoodie",
     "sweatshirt",
     "sweatpants",
@@ -32,13 +29,8 @@ const casual_wear = [
 
 const outdoor_beach = [
     "swimwear", 
-    "flip flops", 
     "beach towel", 
-    "sun hat", 
-    "snorkeling gear",
-    "sunglasses",
     "beach bag",
-    "sunscreen",
 ];
 
 const outdoor_mountain = [
@@ -46,24 +38,11 @@ const outdoor_mountain = [
     "thermal wear", 
     "hiking backpack", 
     "rain jacket", 
-    "hiking poles",
     "fleece jacket",
-    "beanie",
-    "gloves",
-    "trail map",
-    "compass"
 ];
 
 const outdoor_desert = [
     "lightweight clothing", 
-    "wide-brim hat", 
-    "hydration pack", 
-    "sunglasses", 
-    "desert boots",
-    "sunscreen",
-    "scarf",
-    "sand goggles",
-    "lip balm",
     "sweat-wicking shirts"
 ];
 
@@ -71,13 +50,8 @@ const other_clothes = [
     "underwear", 
     "socks", 
     "pyjama",
-    "sports bra",
     "thermal socks",
-    "nightgown",
-    "robe",
     "base layers",
-    "slippers",
-    "compression socks"
 ];
 
 const shoes = [
@@ -86,11 +60,10 @@ const shoes = [
     "sandals",
     "boots",
     "flip flops",
-    "loafers",
-    "running shoes",
     "hiking boots",
     "casual shoes",
-    "ballet flats"
+    "ballet flats",
+    "desert boots"
 ];
 
 const toiletries = [
@@ -98,31 +71,22 @@ const toiletries = [
     "conditioner",
     "toothpaste",
     "toothbrush",
-    "shaving kit",
     "sunscreen",
     "deodorant",
     "face wash",
     "moisturizer",
-    "razor",
     "hair brush",
-    "dental floss",
-    "mouthwash",
-    "hand sanitizer",
-    "nail clippers"
+    "lip balm"
 ];
 
 const electronics = [
     "phone charger", 
-    "laptop",
-    "tablet",
     "camera",
     "power bank",
     "headphones",
     "travel adapter",
-    "USB drive",
-    "e-reader",
     "portable speaker"
-];
+]
 
 const accessories = [
     "sunglasses", 
@@ -134,18 +98,15 @@ const accessories = [
     "wallet",
     "handbag",
     "umbrella",
-    "gloves"
+    "gloves",
+    "beanie",
+    "sand goggles",
 ];
 
 const miscellaneous = [
-    "book", 
     "travel pillow",
-    "notebook",
-    "pen",
-    "snacks",
     "water bottle",
-    "travel guide",
-    "playing cards",
     "first aid kit",
-    "portable blanket"
 ];
+
+module.exports = {temperatures,destinationTypes,activities,genders,smart_wear,casual_wear,outdoor_beach,outdoor_desert,outdoor_mountain,other_clothes,shoes,toiletries,electronics,accessories,miscellaneous}
