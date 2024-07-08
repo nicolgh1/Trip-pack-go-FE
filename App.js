@@ -15,7 +15,7 @@ import PackingOptionsPage from './src/Pages/7.PackingOptionsPage';
 import ResponsePage from './src/Pages/4.ResponsePage'
 
 import PackingListPage from './src/Pages/7.1.PackingListPage';
-
+import SavedPackingLists from './src/Pages/7.2.ViewPackingListsPage';
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +60,8 @@ export default function App() {
         <Stack.Screen name="PackingListPage" component={PackingListPage} options={{ headerShown: true }}>
         </Stack.Screen>
 
+        <Stack.Screen name="SavedPackingLists" component={SavedPackingLists} options={{ headerShown: true }}>
+        </Stack.Screen>
 
       </Stack.Navigator>
     </NavigationContainer>

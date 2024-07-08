@@ -1,20 +1,19 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, Button, TextInput } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
 
-export default function PackingListPage({ navigation }) {
-
+export default function PackingListPage({ navigation, route }) {
+  const { location, purpose, startDate, endDate } = route.params;
   const [packingList, setPackingList] = useState({
     Clothes: [{ id: 1, name: 'T-shirts', quantity: 2 }],
     Toiletries: [{ id: 1, name: 'Toothbrush', quantity: 1 }],
   });
-
+  const [newCategoryName, setNewCategoryName] = useState('');
   const [newItemName, setNewItemName] = useState('');
   const [newItemCategory, setNewItemCategory] = useState('');
-  const [newCategoryName, setNewCategoryName] = useState('');
-
 
   const handleAddItem = (category) => {
     if (!newItemName) return;
@@ -43,6 +42,15 @@ export default function PackingListPage({ navigation }) {
     });
   };
 
+  const handleItemNameChange = (category, itemId, newName) => {
+    setPackingList({
+      ...packingList,
+      [category]: packingList[category].map(item =>
+        item.id === itemId ? { ...item, name: newName } : item
+      ),
+    });
+  };
+
   const handleAddCategory = () => {
     if (!newCategoryName) return;
     setPackingList({
@@ -51,23 +59,12 @@ export default function PackingListPage({ navigation }) {
     });
     setNewCategoryName('');
   };
-  
 
   return (
     <View style={styles.screen}>
       <Header />
-      <View style={styles.content}>
+      <ScrollView style={styles.content}>
         <Text style={styles.title}>Packing List</Text>
-        <View style={styles.newCategoryContainer}>
-    <TextInput
-        style={styles.addItemInput}
-        placeholder="New Category Name"
-        value={newCategoryName}
-        onChangeText={setNewCategoryName}
-    />
-    <Button title="Add Category" onPress={handleAddCategory} />
-    </View>
-
         {Object.keys(packingList).map(category => (
           <View key={category} style={styles.category}>
             <Text style={styles.categoryTitle}>{category}</Text>
@@ -89,21 +86,32 @@ export default function PackingListPage({ navigation }) {
               </View>
             ))}
             <TextInput
-                style={styles.addItemInput}
-                placeholder={`Add item to ${category}`}
-                value={newItemCategory === category ? newItemName : ''}
-                onChangeText={(text) => {
-                  setNewItemName(text);
-                  setNewItemCategory(category);
-                }}
-              />
-              <Button
-                title="Add"
-                onPress={() => handleAddItem(category)}
-              />
+              style={styles.addItemInput}
+              placeholder={`Add item to ${category}`}
+              value={newItemCategory === category ? newItemName : ''}
+              onChangeText={(text) => {
+                setNewItemName(text);
+                setNewItemCategory(category);
+              }}
+            />
+            <Button
+              title="Add"
+              onPress={() => handleAddItem(category)}
+            />
           </View>
         ))}
-      </View>
+        <View style={styles.newCategoryContainer}>
+          <TextInput
+            style={styles.addItemInput}
+            placeholder="New Category Name"
+            value={newCategoryName}
+            onChangeText={setNewCategoryName}
+          />
+          <Button title="Add Category" onPress={handleAddCategory} />
+        </View>
+      </ScrollView>
+      <Button title="Save Packing List" />
+      <Button title="View Saved Packing Lists" onPress={() => navigation.navigate('SavedPackingLists')} />
       <Footer navigation={navigation} />
     </View>
   );
@@ -154,5 +162,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     paddingHorizontal: 10,
     color: '#007bff',
+  },
+  addItemInput: {
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 10,
+  },
+  newCategoryContainer: {
+    marginVertical: 20,
+    alignItems: 'center',
   },
 });

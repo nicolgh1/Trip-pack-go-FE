@@ -8,7 +8,7 @@ const data = [
           },
           output_expected: {
             smart_wear: ["dress", "blouse", "skirt", "scarf"],
-            casual_wear: ["tshirt", "shorts", "jeans", "sweatshirt", "hoodie","sweatpants"],
+            casual_wear: ["tshirt", "shorts", "jeans", "sweatshirt", "hoodie", "sweatpants"],
             outdoor_beach: ["swimwear", "flip flops", "beach towel", "sun hat", "snorkeling gear"],
             outdoor_mountain: [],
             outdoor_desert: [],
