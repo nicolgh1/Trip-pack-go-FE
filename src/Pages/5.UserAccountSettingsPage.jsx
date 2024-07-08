@@ -9,10 +9,11 @@ import {
 } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
-import { firebaseAuth } from "../../firebaseConfig";
+import { db, firebaseAuth } from "../../firebaseConfig";
 import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import UserInfoEditForm from "../components/UserInfoEditForm";
+import { doc, updateDoc } from "firebase/firestore";
 
 export default function UserAccountSettingsPage({ navigation }) {
   const { user, loading } = useContext(UserContext);
@@ -22,7 +23,16 @@ export default function UserAccountSettingsPage({ navigation }) {
 
   const addItem = () => {
     if (newItem.trim().length > 0) {
-      setPackingList([...packingList, newItem]);
+      const userDocRef = doc(db, "users", user.id);
+      if (user.packingMusts) {
+        updateDoc(userDocRef, {
+          packingMusts: [...user.packingMusts, newItem],
+        });
+      } else {
+        updateDoc(userDocRef, {
+          packingMusts: [newItem],
+        });
+      }
       setNewItem("");
     }
   };
