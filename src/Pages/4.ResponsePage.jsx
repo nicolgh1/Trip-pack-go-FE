@@ -14,11 +14,13 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { ResponseDaySelection } from "../components/ResponseDaySelection";
 import { Footer } from "../components/FooterNavigation";
 import { fetchAttractions, fetchLatLngOlatLngObj } from "../../googleApi";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
 
 // const Stack = createStackNavigator()
 // const ResponsePage = ({ route }) => {
 //   const { searchQuery, navigation } = route.params
-//   const {user, setUser,loading} = useContext(UserContext)
+
 //   const randomWeather = temperatures[(Math.floor(Math.random() * temperatures.length))]
 
 //   const itineraryInfoArr = []
@@ -122,9 +124,89 @@ export default function ResponsePage({ route }) {
     lng: null,
   });
   const [attractions, setAttractions] = useState([]);
+    const {user, setUser,loading} = useContext(UserContext)
+    console.log(user,'user')
+
+    const testItinerary = {
+      "user_id": user.id,
+      "has_packing_list": false,
+      "packing_list_id": null,
+      "location": "London",
+      "start_date": "09/05/2024",
+      "end_date": "11/05/2024",
+      "total_days": 3,
+      "itinerary_info": [{
+          "day_number" : 1,
+          "date" : "09/07/2024",
+          "main_activity" : {
+              "types" : ["tourist_attraction"],
+              "name" : "Tourist attraction name",
+              "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+              "rating" : 4,
+              "user_ratings_total" : 1200
+          },
+          "other_activities" : [{
+              "types" : ["restaurant"],
+              "name" : "restaurant name",
+              "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+              "rating" : 4,
+              "user_ratings_total" : 1200
+          }]
+        },
+          {
+            "day_number" : 2,
+            "date" : "10/07/2024",
+            "main_activity" : {
+                "types" : ["tourist_attraction"],
+                "name" : "Tourist attraction name",
+                "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+                "rating" : 4,
+                "user_ratings_total" : 1200
+            },
+            "other_activities" : [{
+                "types" : ["restaurant"],
+                "name" : "restaurant name",
+                "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+                "rating" : 4,
+                "user_ratings_total" : 1200
+            }]},
+            {
+              "day_number" : 3,
+              "date" : "11/07/2024",
+              "main_activity" : {
+                  "types" : ["tourist_attraction"],
+                  "name" : "Tourist attraction name",
+                  "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+                  "rating" : 4,
+                  "user_ratings_total" : 1200
+              },
+              "other_activities" : [{
+                  "types" : ["restaurant"],
+                  "name" : "restaurant name",
+                  "photos" : "<a href=\"https://maps.google.com/maps/contrib/113897228124425467256\">UNAHOTELS Decò Roma</a>",
+                  "rating" : 4,
+                  "user_ratings_total" : 1200
+              }]
+      }]
+    }
+    const testInputPack = {
+      temperature: ["sunny"],
+      destination_type: ["city"],
+      activities: ["Dining", "Relaxing"],
+      gender: "female"
+    }
+
+    const itinerariesColRef = collection(db,"itineraries")
+
+    const postObj = () => {
+      addDoc(itinerariesColRef,testItinerary)
+      console.log("object posted")
+    }
+
 
   // 1 use location to get  LAT and LNG - OK
   useEffect(() => {
+
     fetchLatLngOlatLngObj(searchQuery.location).then((data) => {
       setLatLng({
         ...latLng,
@@ -137,11 +219,13 @@ export default function ResponsePage({ route }) {
 
   // 2 use the LAT/LNG  to get Attractions - OK
   useEffect(() => {
-    fetchAttractions(latLng, 5000, "point_of_interest").then((data) => {
-      console.log(data);
-      setAttractions(data);
-    });
-    console.log("useEffect");
+    if(latLng.lat !==null) {
+      fetchAttractions(latLng, 5000, "point_of_interest").then((data) => {
+        console.log(data);
+        setAttractions(data);
+      });
+      console.log("useEffect");
+    }
     
   }, []);
 
@@ -169,6 +253,7 @@ export default function ResponsePage({ route }) {
   return (
     <SafeAreaView style={styles.container}>
       <ScrollView style={styles.scrollContainer}>
+      <Button title="Press Me MF" onPress={postObj}/>
         {attractions.map((attraction) => (
           <View style={styles.attractionCard}>
             <Text>{attraction.name}</Text>
