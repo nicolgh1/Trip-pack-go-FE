@@ -10,37 +10,44 @@ import {
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
 import { db, firebaseAuth } from "../../firebaseConfig";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
 import UserInfoEditForm from "../components/UserInfoEditForm";
-import { doc, updateDoc } from "firebase/firestore";
+import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 
 export default function UserAccountSettingsPage({ navigation }) {
   const { user, loading } = useContext(UserContext);
-  const [packingList, setPackingList] = useState([]);
-  const [newItem, setNewItem] = useState("");
+  const [newPackingMustItem, setNewPackingMustItem] = useState("");
+  const [packingMusts, setPackingMusts] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
 
+  const userDocRef = doc(db, "users", user.id);
+
+  useEffect(() => {
+    const userDocRef = doc(db, "users", user.id);
+    onSnapshot(userDocRef, (doc) => {
+      setPackingMusts(doc.data().packingMusts);
+    });
+  }, []);
+
   const addItem = () => {
-    if (newItem.trim().length > 0) {
-      const userDocRef = doc(db, "users", user.id);
+    if (newPackingMustItem.trim().length > 0) {
       if (user.packingMusts) {
         updateDoc(userDocRef, {
-          packingMusts: [...user.packingMusts, newItem],
+          packingMusts: [...user.packingMusts, newPackingMustItem],
         });
       } else {
         updateDoc(userDocRef, {
-          packingMusts: [newItem],
+          packingMusts: [newPackingMustItem],
         });
       }
-      setNewItem("");
+      setNewPackingMustItem("");
     }
   };
 
-  const deleteItem = (index) => {
-    const newList = [...packingList];
-    newList.splice(index, 1);
-    setPackingList(newList);
+  const deleteItem = (item) => {
+    const updatedMusts = packingMusts.filter((must) => must !== item);
+    updateDoc(userDocRef, { packingMusts: updatedMusts });
   };
 
   if (loading) return <Text>Loading...</Text>;
@@ -68,19 +75,19 @@ export default function UserAccountSettingsPage({ navigation }) {
             <TextInput
               style={styles.input}
               placeholder="Add Item"
-              value={newItem}
-              onChangeText={setNewItem}
+              value={newPackingMustItem}
+              onChangeText={setNewPackingMustItem}
             />
             <View style={styles.buttonAdd}>
               <Button title="+" onPress={addItem} />
             </View>
           </View>
           <FlatList
-            data={packingList}
+            data={packingMusts}
             renderItem={({ item, index }) => (
               <View style={styles.listItem}>
                 <Text>{item}</Text>
-                <Button title="Delete" onPress={() => deleteItem(index)} />
+                <Button title="Delete" onPress={() => deleteItem(item)} />
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
