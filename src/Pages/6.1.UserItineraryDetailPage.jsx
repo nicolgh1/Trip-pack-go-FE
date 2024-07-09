@@ -6,6 +6,7 @@ import ResponsePage from "./4.ResponsePage";
 import { fetchPlacePhoto } from "../../googleApi";
 
 
+
 export default function UserItineraryDetailPage({
   itineraryId,
   itineraries,
