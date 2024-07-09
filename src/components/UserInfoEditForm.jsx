@@ -3,7 +3,13 @@ import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import React, { useContext, useState } from "react";
 import { UserContext } from "../contexts/UserContext";
-import { Button, StyleSheet, Text, TextInput } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function UserInfoEditForm({ setIsModalVisible }) {
   const { user, loading } = useContext(UserContext);
@@ -118,7 +124,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
   };
 
   return (
-    <>
+    <View style={styles.container}>
       <Text>Username</Text>
       <TextInput
         style={styles.input}
@@ -149,30 +155,43 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
       {surnameErrMsg ? (
         <Text style={styles.errMsg}>{surnameErrMsg}</Text>
       ) : null}
-      <Text>Sex</Text>
-      <Picker
-        selectedValue={sex}
-        style={styles.picker}
-        onValueChange={(itemValue) => setSex(itemValue)}
-      >
-        <Picker.Item label="Please select..." value="" enabled={false} />
-        <Picker.Item label="Male" value="male" />
-        <Picker.Item label="Female" value="female" />
-      </Picker>
-      <Text>Country of Residence</Text>
-      <Picker
-        selectedValue={countryOfResidence}
-        style={styles.picker}
-        onValueChange={(itemValue) => setCountryOfResidence(itemValue)}
-      >
-        <Picker.Item label="Please select..." value="" enabled={false} />
-        {countries.map((country) => {
-          return <Picker.Item key={country} label={country} value={country} />;
-        })}
-      </Picker>
-      <Button title="Save" onPress={handleSave} />
-      <Button title="GO BACK" onPress={() => setIsModalVisible(false)}></Button>
-    </>
+      <View style={styles.section}>
+  <Text>Sex:</Text>
+  <Picker
+    selectedValue={sex}
+    style={styles.picker}
+    onValueChange={(itemValue) => setSex(itemValue)}
+  >
+    <Picker.Item label="Please select..." value="" enabled={false} />
+    <Picker.Item label="Male" value="male" />
+    <Picker.Item label="Female" value="female" />
+  </Picker>
+</View>
+<View style={styles.section}>
+  <Text>Country of Residence:</Text>
+  <Picker
+    selectedValue={countryOfResidence}
+    style={styles.picker}
+    onValueChange={(itemValue) => setCountryOfResidence(itemValue)}
+  >
+    <Picker.Item label="Please select..." value="" enabled={false} />
+    {countries.map((country) => {
+      return <Picker.Item key={country} label={country} value={country} />;
+    })}
+  </Picker>
+</View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleSave}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.buttonCancel]}
+          onPress={() => setIsModalVisible(false)}
+        >
+          <Text style={styles.buttonText}>GO BACK</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 }
 
@@ -193,7 +212,45 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     margin: 5,
   },
+  picker: {
+    width: 300,
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    margin: 5,
+  },
+  section: {
+    width: "100%",
+    padding: 10,
+    marginVertical: 10,
+    backgroundColor: "#f0f0f0",
+    borderRadius: 5,
+    borderColor: "#ccc",
+    borderWidth: 1,
+  },
   errMsg: {
     color: "red",
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "80%",
+    marginTop: 20,
+  },
+  button: {
+    height: 40,
+    width: '45%',
+    borderRadius: 20,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  buttonCancel: {
+    backgroundColor: "gray",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
