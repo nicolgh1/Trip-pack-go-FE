@@ -1,13 +1,14 @@
-import { act } from "react";
+import { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Footer from "../components/FooterNavigation";
 import { SafeAreaView } from "react-native-safe-area-context";
+import ResponsePage from "./4.ResponsePage";
 
 
 export default function UserItineraryDetailPage({
   itineraryId,
   itineraries,
-  setCurrentItineraryId
+  setCurrentItineraryId,
 }) {
   // 1 - Define current itinerary
   const currentItinerary = itineraries.find(
@@ -27,8 +28,29 @@ export default function UserItineraryDetailPage({
     }
   };
 
-  // Still to be done:
   // 3. Navigate to the ResponsePage to edit the itinerary days
+  const searchQuery = {
+    params: {
+      searchQuery: {
+        location: currentItinerary.location,
+        tripLength: currentItinerary.total_days,
+        startDate: currentItinerary.start_date,
+        endDate: currentItinerary.end_date,
+      }
+    }
+  };
+  const [isEditing, setIsEditing] = useState(false);
+  
+  if (isEditing === true ) {
+    return (
+      <ResponsePage
+        route={searchQuery}
+      />
+    );
+    
+  }
+
+  // Still to be done:
   // 4  Render packing list
   // 5  Navigate to the PackingPage to edit the packing list
   // 6  Add styling
@@ -54,7 +76,7 @@ export default function UserItineraryDetailPage({
               <Text>Total ratings: {itineraryDetail.main_activity.user_ratings_total}</Text>
 
               <TouchableOpacity>
-                <Text style={styles.editButton}>Edit</Text>
+                <Text style={styles.editButton} onPress={() => setIsEditing(true)}>Edit Itinerary</Text>
               </TouchableOpacity>
 
               <PackingButton hasPackingList={itineraryDetail.has_packing_list} />
