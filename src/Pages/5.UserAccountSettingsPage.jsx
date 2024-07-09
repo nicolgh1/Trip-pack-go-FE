@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 20,
     marginRight: 5,
   },
   listItem: {
