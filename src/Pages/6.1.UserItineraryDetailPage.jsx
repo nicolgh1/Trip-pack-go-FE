@@ -2,7 +2,7 @@ import { useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
 import Footer from "../components/FooterNavigation";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ResponsePage from "./4.ResponsePage";
+import ResponsePage from "./4.ResposePage";
 
 
 export default function UserItineraryDetailPage({
