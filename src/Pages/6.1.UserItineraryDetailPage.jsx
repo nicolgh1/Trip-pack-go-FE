@@ -1,8 +1,9 @@
-import { useState } from "react";
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
+import { useEffect, useState } from "react";
+import { View, Text, TouchableOpacity, ScrollView, Image, Linking } from "react-native";
 import Footer from "../components/FooterNavigation";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ResponsePage from "./4.ResponsePage";
+import { fetchPlacePhoto } from "../../googleApi";
 
 
 export default function UserItineraryDetailPage({
@@ -28,7 +29,7 @@ export default function UserItineraryDetailPage({
     }
   };
 
-  // 3. Navigate to the ResponsePage to edit the itinerary days
+  // 3. Navigate to the ResponsePage to edit the itinerary days // needs fixing 
   const searchQuery = {
     params: {
       searchQuery: {
@@ -49,6 +50,28 @@ export default function UserItineraryDetailPage({
     );
     
   }
+  // 4 Add an image of the attraction 
+  const [photoUrl, setPhotoUrl] = useState(null)
+  const photoReference = currentItinerary.itinerary_info[0].main_activity.photos[0].photo_reference || "AUc7tXU7ZDZnom_2ZJQKFLdaaowOMHcvBI2dtmX2gIsRH8kTSMKzWcgiiH_1Dc1RAlQaFLBNINs_A8ytZ80NYFTz22s4Uo-E1WrTmDKWPuh-98oJrGNpuOmWuAbqlutpn-xl-EHJN-LehzvUL5d6VJhkLXRcpkJA7f0eRVrE5QeQpenEZlrq"
+  
+  useEffect(() => {
+    fetchPlacePhoto(photoReference)
+    .then((photoUrl) => {
+      setPhotoUrl(photoUrl)
+    })
+    console.log('useEffect');
+  },[photoReference])
+
+  // 5 Add a URL link to google maps for the attraction
+  function GoogleMapsLink ({url, text}) {
+    return (
+      <TouchableOpacity>
+        <Text style={styles.editButton} onPress={() => Linking.openURL(url)}>{text}</Text>
+      </TouchableOpacity>
+    )
+    // console.log(currentItinerary.itinerary_info[1].main_activity.photos.split('"')[1]) ->> obj destructure url
+  }
+
 
   // Still to be done:
   // 4  Render packing list
@@ -63,6 +86,7 @@ export default function UserItineraryDetailPage({
         <Text style={styles.backToItineraries}>Back to itineraries</Text>
       </TouchableOpacity>
 
+
       <ScrollView>
         {currentItinerary.itinerary_info.map((itineraryDetail) => {
           return (
@@ -72,6 +96,10 @@ export default function UserItineraryDetailPage({
               <Text style={styles.activity}>
                 Activity: {itineraryDetail.main_activity.name}
               </Text>
+              <Image source={{uri: photoUrl}} style={{width: 200, height: 144, borderRadius: 20}} />
+
+              <View style={{marginTop: -130, marginLeft: 210}}>
+
               <Text>Rated {itineraryDetail.main_activity.rating} / 5</Text>
               <Text>Total ratings: {itineraryDetail.main_activity.user_ratings_total}</Text>
 
@@ -79,7 +107,10 @@ export default function UserItineraryDetailPage({
                 <Text style={styles.editButton} onPress={() => setIsEditing(true)}>Edit Itinerary</Text>
               </TouchableOpacity>
 
+              <GoogleMapsLink url={itineraryDetail.main_activity.photos.split('"')[1]} text={'See on GoogleMaps'}/>
               <PackingButton hasPackingList={itineraryDetail.has_packing_list} />
+
+              </View>
             </View>
           );
         })}
@@ -90,6 +121,9 @@ export default function UserItineraryDetailPage({
 }
 
 const styles = {
+  attractionImg: {
+
+  },
   header: {
     fontSize: 30,
     fontWeight: "bold",
