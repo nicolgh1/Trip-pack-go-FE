@@ -26,3 +26,10 @@ export const fetchPlaceSuggestions = (input) => {
         return data.predictions; // returns an array of place predictions
       });
   };
+
+export const fetchPlacePhoto = (photoReference) => {
+    return googleApi.get(`/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`)
+    .then((data) => {
+        return data.request.responseURL
+    })
+}
