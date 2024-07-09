@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import TripDatePicker from '../components/TripDatePicker';
 import Header from '../components/Header';
@@ -7,8 +7,12 @@ import NumberPicker from '../components/NumberPicker';
 import LocationAutocomplete from '../components/LocationAutocomplete';
 import { fetchLatLngOlatLngObj } from '../../googleApi';
 import { fetchExchangeRate } from '../../currencyApi';
+import { UserContext } from '../contexts/UserContext';
 
 const SearchPage = ({ navigation }) => {
+  const {user} = useContext(UserContext)
+  console.log(user.countryOfResidence); // a country name -- string
+
   const [searchQuery, setSearchQuery] = useState({
     place_id: '',
     location: '',
@@ -21,7 +25,7 @@ const SearchPage = ({ navigation }) => {
   });
 
   const handleLocationSelect = async (tripLocation) => {
-    console.log("location data:", tripLocation);
+    console.log("location data:", tripLocation); // an object
     const latLng = await fetchLatLngOlatLngObj(tripLocation.description);
     
     setSearchQuery(prevState => ({
@@ -31,7 +35,7 @@ const SearchPage = ({ navigation }) => {
       latLng: latLng,
     }));
 
-    const rateDataFromApi = await fetchExchangeRate(tripLocation);
+    const rateDataFromApi = await fetchExchangeRate(tripLocation, user.countryOfResidence);
     setSearchQuery(prevState => ({
       ...prevState,
       exchangeData: rateDataFromApi,
