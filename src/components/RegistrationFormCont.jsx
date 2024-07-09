@@ -27,6 +27,7 @@ export default function RegistrationFormCont({
   const [sex, setSex] = useState("");
   const [sexErrMsg, setSexErrMsg] = useState("");
   const [countryOfResidence, setCountryOfResidence] = useState("");
+  const [cntryRsdnceErrMsg, setCntryRsdnceErrMsg] = useState("");
   const [loading, setLoading] = useState(false);
 
   const countries = [
@@ -98,27 +99,38 @@ export default function RegistrationFormCont({
 
     if (!username) {
       setUsernameErrorMsg("Please Add a Username");
+      setLoading(false);
       isValid = false;
     } else {
       setUsernameErrorMsg("");
     }
     if (!firstName) {
       setFirstNameErrorMsg("Please Add a First Name");
+      setLoading(false);
       isValid = false;
     } else {
       setFirstNameErrorMsg("");
     }
     if (!surname) {
       setSurnameErrorMsg("Please Add a Surname");
+      setLoading(false);
       isValid = false;
     } else {
       setSurnameErrorMsg("");
     }
     if (!sex) {
       setSexErrMsg("Please Choose a Sex");
+      setLoading(false);
       isValid = false;
     } else {
       setSexErrMsg("");
+    }
+    if (!countryOfResidence) {
+      setCntryRsdnceErrMsg("Please Choose a Country");
+      setLoading(false);
+      isValid = false;
+    } else {
+      setCntryRsdnceErrMsg("");
     }
 
     if (isValid) {
@@ -196,6 +208,7 @@ export default function RegistrationFormCont({
           <Picker.Item label="Male" value="male" />
           <Picker.Item label="Female" value="female" />
         </Picker>
+        {sexErrMsg ? <Text style={styles.errMsg}>{sexErrMsg}</Text> : null}
         <Text>Country of Residence</Text>
         <Picker
           selectedValue={countryOfResidence}
@@ -209,7 +222,9 @@ export default function RegistrationFormCont({
             );
           })}
         </Picker>
-        {sexErrMsg ? <Text style={styles.errMsg}>{sexErrMsg}</Text> : null}
+        {cntryRsdnceErrMsg ? (
+          <Text style={styles.errMsg}>{cntryRsdnceErrMsg}</Text>
+        ) : null}
         {loading ? (
           <ActivityIndicator size="small" color="#0000ff" />
         ) : (
