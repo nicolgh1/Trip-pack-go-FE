@@ -6,41 +6,63 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function UserItineraryDetailPage({
   itineraryId,
-  userItineraries,
-  setCurrentItinerary,
-  navigation,
+  itineraries,
+  setCurrentItineraryId
 }) {
-
-  
-  const currentItinerary = userItineraries.find(
-    (itinerary) => itinerary.id === itineraryId
+  // 1 - Define current itinerary
+  const currentItinerary = itineraries.find(
+    (itinerary) => itinerary.itinerary_id === itineraryId
   );
+
+  // 2 Create a button that will navigate to PackingListPage
+  const PackingButton = ({ hasPackingList }) => {
+    if (hasPackingList) {
+      return (
+        <TouchableOpacity>
+          <Text style={styles.editButton}>See Packing List</Text>
+        </TouchableOpacity>
+      );
+    } else {
+      return <Text style={styles.editButton}>Create Packing List</Text>;
+    }
+  };
+
+  // Still to be done:
+  // 3. Navigate to the ResponsePage to edit the itinerary days
+  // 4  Render packing list
+  // 5  Navigate to the PackingPage to edit the packing list
+  // 6  Add styling
+
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <TouchableOpacity onPress={() => setCurrentItinerary(null)}>
+      <TouchableOpacity onPress={() => setCurrentItineraryId(null)}>
         <Text style={styles.header}> {currentItinerary.destination}</Text>
         <Text style={styles.backToItineraries}>Back to itineraries</Text>
       </TouchableOpacity>
 
       <ScrollView>
-        {currentItinerary.itineraryDetails.map((itineraryDetail) => {
+        {currentItinerary.itinerary_info.map((itineraryDetail) => {
           return (
-            <View key={itineraryDetail.day} style={styles.userItinerariesStyle}>
-              <Text style={styles.day}>Day: {itineraryDetail.day}</Text>
+            <View key={itineraryDetail.day_number} style={styles.userItinerariesStyle}>
+              <Text style={styles.day}>Day: {itineraryDetail.day_number}</Text>
+              <Text>{itineraryDetail.date}</Text>
               <Text style={styles.activity}>
-                Activity: {itineraryDetail.activity}
+                Activity: {itineraryDetail.main_activity.name}
               </Text>
+              <Text>Rated {itineraryDetail.main_activity.rating} / 5</Text>
+              <Text>Total ratings: {itineraryDetail.main_activity.user_ratings_total}</Text>
 
               <TouchableOpacity>
                 <Text style={styles.editButton}>Edit</Text>
               </TouchableOpacity>
+
+              <PackingButton hasPackingList={itineraryDetail.has_packing_list} />
             </View>
           );
         })}
       </ScrollView>
 
-      {/* <Footer navigation={navigation} /> */}
     </SafeAreaView>
   );
 }
@@ -83,8 +105,7 @@ const styles = {
     color: "white",
     textAlign: "center",
     borderRadius: 20,
-    top: 141,
-    width: 130,
-    height: 23,
+    marginTop: 10,
+    width: 200,
   },
 };
