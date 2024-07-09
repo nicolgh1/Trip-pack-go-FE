@@ -50,7 +50,7 @@ const SearchPage = ({ navigation }) => {
       endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() : 'Not specified',
     };
     console.log('searchQuery:', formattedSearchQuery);
-    navigation.navigate('Response', { searchQuery: formattedSearchQuery, navigation: navigation });
+    navigation.navigate('Response', { searchQuery: formattedSearchQuery });
   };
 
   const handleStartDateChange = (startDate) => {
