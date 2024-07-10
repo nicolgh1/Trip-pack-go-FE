@@ -106,9 +106,9 @@ export default function PackingListPage({ navigation, route }) {
       <Header />
       <ScrollView style={styles.content}>
         <Text style={styles.title}>Packing List</Text>
-        <Text>Location: {location}</Text>
-        <Text>Purpose: {purpose}</Text>
-        <Text>
+        <Text style={styles.infoText}>Location: {location}</Text>
+        <Text style={styles.infoText}>Purpose: {purpose}</Text>
+        <Text style={styles.infoText}>
           Dates: {formatDate(startDate)} - {formatDate(endDate)}
         </Text>
         {Object.keys(packingList).map((category) => (
@@ -160,10 +160,13 @@ export default function PackingListPage({ navigation, route }) {
         </View>
       </ScrollView>
       <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
-      <Text style={styles.buttonText} >Save Packing List</Text>
+        <Text style={styles.buttonText}>Save Packing List</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SavedPackingLists')}>
-      <Text style={styles.buttonText}>View Saved Packing Lists</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => navigation.navigate("SavedPackingLists")}
+      >
+        <Text style={styles.buttonText}>View Saved Packing Lists</Text>
       </TouchableOpacity>
       <Footer navigation={navigation} />
     </View>
@@ -180,29 +183,31 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
-  },
-  category: {
-    marginBottom: 20,
+    textAlign: "center",
+    color: "darkgreen",
   },
   infoText: {
     fontSize: 16,
     marginBottom: 15,
+  },
+  category: {
+    marginBottom: 20,
   },
   categoryTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
+    borderBottomColor: "#ddd",
     paddingBottom: 5,
+    color: "darkgreen",
   },
   item: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 15,
   },
   itemName: {
@@ -212,9 +217,9 @@ const styles = StyleSheet.create({
   },
   itemControls: {
     flex: 3,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   itemQuantity: {
     fontSize: 16,
@@ -237,28 +242,18 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     alignItems: "center",
   },
-  addCategoryInput: {
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    width: '80%',
-  },
-  buttonContainer: {
-    marginTop: 20,
-    alignItems: 'center',
-  },
   button: {
     marginVertical: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#007bff',
+    backgroundColor: "darkgreen",
     borderRadius: 5,
+    alignItems: "center",
+    alignSelf: "center",
+    width: "80%",
   },
   buttonText: {
-    color: '#fff',
+    color: "white",
     fontSize: 16,
   },
 });
