@@ -3,7 +3,7 @@ import { collection, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Button,
+  TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -160,80 +160,97 @@ export default function RegistrationFormCont({
 
   return (
     <View style={styles.container}>
-      <Text>Please Complete Sign Up Information</Text>
-      <KeyboardAvoidingView behavior="padding">
-        <Text>Username</Text>
-        <TextInput
-          value={username}
-          style={styles.input}
-          placeholder="Username"
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-        />
-        {usernameErrMsg ? (
-          <Text style={styles.errMsg}>{usernameErrMsg}</Text>
-        ) : null}
-        <Text>First Name</Text>
-        <TextInput
-          value={firstName}
-          style={styles.input}
-          placeholder="First Name"
-          onChangeText={(text) => {
-            setFirstName(text);
-          }}
-        />
-        {firstNameErrMsg ? (
-          <Text style={styles.errMsg}>{firstNameErrMsg}</Text>
-        ) : null}
-        <Text>Surname</Text>
-        <TextInput
-          value={surname}
-          style={styles.input}
-          placeholder="Surname"
-          onChangeText={(text) => {
-            setSurname(text);
-          }}
-        />
-        {surnameErrMsg ? (
-          <Text style={styles.errMsg}>{surnameErrMsg}</Text>
-        ) : null}
-        <Text>Sex</Text>
-        <Picker
-          selectedValue={sex}
-          style={styles.picker}
-          onValueChange={(itemValue) => setSex(itemValue)}
-        >
-          <Picker.Item label="Please select..." value="" enabled={false} />
-          <Picker.Item label="Male" value="male" />
-          <Picker.Item label="Female" value="female" />
-        </Picker>
-        {sexErrMsg ? <Text style={styles.errMsg}>{sexErrMsg}</Text> : null}
-        <Text>Country of Residence</Text>
-        <Picker
-          selectedValue={countryOfResidence}
-          style={styles.picker}
-          onValueChange={(itemValue) => setCountryOfResidence(itemValue)}
-        >
-          <Picker.Item label="Please select..." value="" enabled={false} />
-          {countries.map((country) => {
-            return (
-              <Picker.Item key={country} label={country} value={country} />
-            );
-          })}
-        </Picker>
-        {cntryRsdnceErrMsg ? (
-          <Text style={styles.errMsg}>{cntryRsdnceErrMsg}</Text>
-        ) : null}
+      <Text style={styles.title}>Please Complete Sign Up Information</Text>
+      <KeyboardAvoidingView behavior="padding" style={styles.form}>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Username</Text>
+          <TextInput
+            value={username}
+            style={styles.input}
+            placeholder="Username"
+            onChangeText={(text) => {
+              setUsername(text);
+            }}
+          />
+          {usernameErrMsg ? (
+            <Text style={styles.errMsg}>{usernameErrMsg}</Text>
+          ) : null}
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>First Name</Text>
+          <TextInput
+            value={firstName}
+            style={styles.input}
+            placeholder="First Name"
+            onChangeText={(text) => {
+              setFirstName(text);
+            }}
+          />
+          {firstNameErrMsg ? (
+            <Text style={styles.errMsg}>{firstNameErrMsg}</Text>
+          ) : null}
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Surname</Text>
+          <TextInput
+            value={surname}
+            style={styles.input}
+            placeholder="Surname"
+            onChangeText={(text) => {
+              setSurname(text);
+            }}
+          />
+          {surnameErrMsg ? (
+            <Text style={styles.errMsg}>{surnameErrMsg}</Text>
+          ) : null}
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Sex</Text>
+          <Picker
+            selectedValue={sex}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSex(itemValue)}
+          >
+            <Picker.Item label="Please select..." value="" enabled={false} />
+            <Picker.Item label="Male" value="male" />
+            <Picker.Item label="Female" value="female" />
+          </Picker>
+          {sexErrMsg ? <Text style={styles.errMsg}>{sexErrMsg}</Text> : null}
+        </View>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Country of Residence</Text>
+          <Picker
+            selectedValue={countryOfResidence}
+            style={styles.picker}
+            onValueChange={(itemValue) => setCountryOfResidence(itemValue)}
+          >
+            <Picker.Item label="Please select..." value="" enabled={false} />
+            {countries.map((country) => {
+              return (
+                <Picker.Item key={country} label={country} value={country} />
+              );
+            })}
+          </Picker>
+          {cntryRsdnceErrMsg ? (
+            <Text style={styles.errMsg}>{cntryRsdnceErrMsg}</Text>
+          ) : null}
+        </View>
         {loading ? (
           <ActivityIndicator size="small" color="#0000ff" />
         ) : (
-          <Button title="COMPLETE SIGN UP" onPress={finishSignUp}></Button>
+          <TouchableOpacity
+          style={styles.button}
+          onPress={finishSignUp}
+        >
+          <Text style={styles.buttonText}>Complete</Text>
+        </TouchableOpacity>
         )}
-        <Button
-          title="GO BACK"
-          onPress={() => setIsModalVisible(false)}
-        ></Button>
+        <TouchableOpacity
+              style={styles.wihteButton}
+              onPress={() =>  setIsModalVisible(false)}
+            >
+              <Text style={styles.whiteButtonText}>Go back</Text>
+            </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
@@ -244,19 +261,79 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+    paddingHorizontal: 15,
     paddingTop: 40,
+    backgroundColor: "white",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+    color: "darkgreen",
+    textAlign: "center",
+  },
+  form: {
+    width: "100%",
+    alignItems: "center",
+  },
+  inputContainer: {
+    width: "100%",
+    marginBottom: 15,
+  },
+  label: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: "#555",
   },
   input: {
-    width: 300,
+    width: "100%",
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    margin: 5,
+    backgroundColor: "#fff",
+  },
+  picker: {
+    width: "100%",
+    height: 40,
+    borderColor: "gray",
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: "#fff",
   },
   errMsg: {
     color: "red",
+    marginTop: 5,
+  },
+  whiteButton: {
+    height: 30,
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "darkgreen",
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  whiteButtonText: {
+    color: "darkgreen",
+  },
+  button: {
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: "darkgreen",
+    borderRadius: 5,
+    alignItems: "center",
+    alignSelf: "center",
+    width: "80%",
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 16,
   },
 });
