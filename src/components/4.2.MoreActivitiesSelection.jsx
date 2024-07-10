@@ -3,7 +3,12 @@ import {fetchPlacePicture} from '../../googleApi'
 import { useEffect, useState } from "react"
 import { ActivitiesTypes } from "./4.2.1.ActivitiesTypes"
 import { ActivitiesList } from "./4.2.2.ActivitiesList"
-import { fetchAttractions, fetchLatLngOlatLngObj } from "../../googleApi";
+import { fetchAttractions, fetchLatLngOlatLngObj } from "../../googleApi"
+import firebase from 'firebase/app'
+import 'firebase/firestore'
+import { db } from '../../firebaseConfig'
+import { addDoc, collection, Timestamp, updateDoc, doc } from 'firebase/firestore'
+import {UserItineraryDetailPage} from '../Pages/6.1.UserItineraryDetailPage'
 
 
 export const MoreActivitiesSelection = ({responseObj, setResponseObj}) => {
@@ -57,7 +62,44 @@ export const MoreActivitiesSelection = ({responseObj, setResponseObj}) => {
       }
 
       const handleSeeActivities = () => {
+        setSelectedTypes([])
         setHide(!hide)
+      }
+
+      const transformDateToTimestamp = (dateString) => {
+    
+        if(typeof(dateString)=== 'string'){
+            const [day, month, year] = dateString.split('/').map(Number)
+            const date = new Date(year, month - 1, day)
+            
+            const timestamp = Timestamp.fromDate(date)
+            return timestamp
+        } return dateString
+        }
+      const itinerariesColRef = collection(db,"itineraries")
+
+      const handleConfirmation = () => {
+        
+        const finalObject = {...responseObj}
+
+        finalObject.start_date = transformDateToTimestamp(finalObject.start_date)
+        finalObject.end_date = transformDateToTimestamp(finalObject.end_date)
+
+        finalObject.itinerary_info.map((item) => {
+
+            item.date = transformDateToTimestamp(item.date)
+        })
+        
+        addDoc(itinerariesColRef,finalObject).then((document) => {
+
+            return updateDoc(doc(db, 'itineraries', document.id), {
+                itinerary_id: document.id
+              }).then(() => {
+                console.log(document.id, 'document.id')
+              })
+        }).catch((e) => {
+            console.error('Error adding document: ', e);
+          })
       }
       
     return (
@@ -65,17 +107,18 @@ export const MoreActivitiesSelection = ({responseObj, setResponseObj}) => {
             <Text>Chosen Secondary activity:</Text>
             {currentDayOther > 1 ? <Button title="Previous Day" onPress={handlePreviousDay} /> : null}
             {currentDayOther < responseObj.total_days ? <Button title={`Go to day ${currentDayOther+1}`} onPress={handleNextDay} /> : null}
-            {currentDayOther === responseObj.total_days ? <View><Button title="Confirm Itinerary"/></View> : 
+            {responseObj.total_days===currentDayOther? <View><Button title="Confirm Itinerary" onPress={handleConfirmation}/></View> : null}
+            {currentDayOther > responseObj.total_days ? <View><Button title="Confirm Itinerary"/></View> : 
             <View>
             <Text>Day {currentDayOther}</Text>
             {!hide? 
             <View>
                 <Text>What else would you like to do around {dayMainActivity.name} ? Choose up to 5 activity types: </Text>
-                <ActivitiesTypes selectedTypes={selectedTypes} setSelectedTypes = {setSelectedTypes} /><Button onPress={handleSeeActivities} title="See Activities"/>
+                <ActivitiesTypes selectedTypes={selectedTypes} setSelectedTypes = {setSelectedTypes} handleSeeActivities={handleSeeActivities}/>
             </View> : 
             <View>
                 <Button title="Back to Types Choices" onPress={handleSeeActivities} />
-                <ActivitiesList detailedActivitiesList={detailedActivitiesList} setDetailedActivitiesList={setDayMainActivity}/>
+                <ActivitiesList detailedActivitiesList={detailedActivitiesList} setDetailedActivitiesList={setDayMainActivity} responseObj={responseObj} setResponseObj={setResponseObj} currentDayOther={currentDayOther} handleConfirmation = {handleConfirmation}/>
             </View> }
             
             </View>

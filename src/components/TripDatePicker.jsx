@@ -77,7 +77,7 @@ const TripDatePicker = ({ startDate, endDate, onStartDateChange, onEndDateChange
       <TouchableOpacity onPress={showStartDate} style={styles.datePicker}>
         <Text style={styles.dateText}>{startDate ? startDate.toLocaleDateString() : 'Start Date'}</Text>
       </TouchableOpacity>
-      <Text style={styles.dateSeparator}>-</Text>
+      <Text style={styles.dateSeparator}>- </Text>
       <TouchableOpacity onPress={showEndDate} style={styles.datePicker}>
         <Text style={styles.dateText}>{endDate ? endDate.toLocaleDateString() : 'End Date'}</Text>
       </TouchableOpacity>
@@ -119,10 +119,10 @@ const styles = StyleSheet.create({
   datePicker: {
     flex: 1,
     height: 30,
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'darkgreen',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 10,
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
   dateSeparator: {
     fontSize: 18,
     marginHorizontal: 10,
+    color: 'darkgreen',
   },
 });
 

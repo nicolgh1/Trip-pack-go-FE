@@ -173,10 +173,10 @@ const styles = StyleSheet.create({
   input: {
     width: 240,
     height: 40,
-    borderColor: "gray",
+    borderColor: "darkgreen",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     marginRight: 5,
   },
   listItem: {
@@ -190,19 +190,19 @@ const styles = StyleSheet.create({
   buttonAdd: {
     width: 40,
     height: 40,
-    borderRadius: 20,
-    backgroundColor: "black",
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 5,
+    marginLeft: 0,
   },
   list: {
     maxHeight: 120,
   },
   buttonDelete: {
     height: 40,
-    borderRadius: 20,
-    backgroundColor: "black",
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
     justifyContent: "center",
     alignItems: "center",
     paddingHorizontal: 10,
@@ -210,12 +210,12 @@ const styles = StyleSheet.create({
   button: {
     height: 40,
     width: '100%',
-    borderRadius: 20,
-    backgroundColor: "black",
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 5,
-    marginTop: 10
+    marginTop: 5
   },
   buttonText: {
     color: "white",

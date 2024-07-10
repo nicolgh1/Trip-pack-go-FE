@@ -1,9 +1,10 @@
 import { View, Text, TouchableOpacity} from "react-native"
 
-export const ActivitiesTypes = ({selectedTypes, setSelectedTypes}) => {
+export const ActivitiesTypes = ({selectedTypes, setSelectedTypes, handleSeeActivities}) => {
     const activities_list = ["Aquarium","Amusement park","Art gallery","Tourist attraction","Spa","Zoo","Night club","Museum","Bar","Bowling alley","Cafe","Casino","Church","City hall","Hindu temple","Mosque","Movie_theater","Park","Restaurant"]
 
     const handlePress = (item) => {
+        handleSeeActivities()
         if (selectedTypes.includes(item)) {
             setSelectedTypes(selectedTypes.filter(type => type !== item))
         } else if(selectedTypes.length < 5) {
@@ -11,7 +12,6 @@ export const ActivitiesTypes = ({selectedTypes, setSelectedTypes}) => {
         }
     }
 
-    console.log(selectedTypes,'selected types')
     return (
         <View>
             {activities_list.map((item) => {
