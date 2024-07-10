@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
   input: {
     height: 30,
     width: '100%',
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 15,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'darkgreen',
     marginBottom: 20,
     textAlign: 'left',
   },
