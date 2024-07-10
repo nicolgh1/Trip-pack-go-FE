@@ -18,7 +18,7 @@ import { db } from "../../firebaseConfig";
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
 
-  const [soonestItinerary, setSoonestItinerary] = useState([]);
+  const [soonestItinerary, setSoonestItinerary] = useState(null);
 
   useEffect(() => {
     console.log("useeffect");
@@ -68,22 +68,25 @@ export default function HomePage({ navigation }) {
   // }
 
   function workOutDaysUntilTrip() {
-    const nowTimestamp = Timestamp.now();
-    const startDateTimestamp = soonestItinerary.start_date;
+    if (soonestItinerary) {
+      const nowTimestamp = Timestamp.now();
+      const startDateTimestamp = soonestItinerary.start_date;
 
-    const nowMillis =
-      nowTimestamp.seconds * 1000 +
-      Math.round(nowTimestamp.nanoseconds / 1000000);
+      const nowMillis =
+        nowTimestamp.seconds * 1000 +
+        Math.round(nowTimestamp.nanoseconds / 1000000);
 
-    const startMillis =
-      startDateTimestamp.seconds * 1000 +
-      Math.round(startDateTimestamp.nanoseconds / 1000000);
+      const startMillis =
+        startDateTimestamp.seconds * 1000 +
+        Math.round(startDateTimestamp.nanoseconds / 1000000);
 
-    const differenceMillis = startMillis - nowMillis;
+      const differenceMillis = startMillis - nowMillis;
 
-    return Math.ceil(differenceMillis / (1000 * 60 * 60 * 24));
+      return Math.ceil(differenceMillis / (1000 * 60 * 60 * 24));
+    }
+    return "X";
   }
-  numDaysToTrip = workOutDaysUntilTrip();
+  const numDaysToTrip = workOutDaysUntilTrip();
 
   if (userCntxtLoading) return <Text>Loading...</Text>;
   return (
@@ -93,9 +96,14 @@ export default function HomePage({ navigation }) {
         <Text style={styles.welcomeMsg}>Hello {user.firstName}!</Text>
       </View>
       <View style={styles.body}>
-        <Text>
-          Next Trip to {soonestItinerary.location} in {numDaysToTrip} Days
-        </Text>
+        {soonestItinerary ? (
+          <Text>
+            Next Trip to {soonestItinerary ? soonestItinerary.location : "X"} in{" "}
+            {numDaysToTrip} Days
+          </Text>
+        ) : (
+          <Text>You Have No Upcoming Trips Planned</Text>
+        )}
         {/* <Button title="addItin" onPress={handleClick}></Button> */}
       </View>
       <Footer navigation={navigation} />
