@@ -17,13 +17,12 @@ import { db } from "../../firebaseConfig";
 
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
-
   const [soonestItinerary, setSoonestItinerary] = useState(null);
 
   useEffect(() => {
     console.log("useeffect");
     const now = Timestamp.now();
-    const itinerariesColRef = collection(db, "itineraries-playground-zvi");
+    const itinerariesColRef = collection(db, "itineraries");
     const q = query(
       itinerariesColRef,
       where("user_id", "==", user.id),
@@ -39,33 +38,6 @@ export default function HomePage({ navigation }) {
       setSoonestItinerary(userItinerariesData[0]);
     });
   }, []);
-
-  // useEffect(() => {
-  //   console.log("useeffect");
-  //   const itinerariesColRef = collection(db, "itineraries");
-  //   onSnapshot(itinerariesColRef, (snapshot) => {
-  //     const userItinerariesData = snapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     }));
-  //     setUserItineraries(userItinerariesData);
-  //   });
-  // }, []);
-
-  // const startDate = new Date(2024, 6, 10);
-  // const endDate = new Date(2024, 6, 15);
-  // function handleClick() {
-  //   const itinerary = {
-  //     end_date: Timestamp.fromDate(endDate),
-  //     has_packing_list: false,
-  //     location: "New York",
-  //     start_date: Timestamp.fromDate(startDate),
-  //     total_days: 3,
-  //     user_id: "J6kMUXYIPQYhxe04OA0Q5HTTGuH2",
-  //   };
-  //   const itinerariesColRef = collection(db, "itineraries-playground-zvi");
-  //   addDoc(itinerariesColRef, itinerary);
-  // }
 
   function workOutDaysUntilTrip() {
     if (soonestItinerary) {
