@@ -7,6 +7,7 @@ import { temperatures } from '../../ml_model/categoriesData';
 import { addDaysToDate } from '../utils/dateAdd';
 import { ResponseDaySelection } from "../components/4.1.ResponseDaySelection";
 
+
 const ResponsePage = ({route, navigation }) => {
     const {user} = useContext(UserContext)
     const { searchQuery } = route.params
@@ -28,22 +29,27 @@ const ResponsePage = ({route, navigation }) => {
                 "rating" : 0,
                 "user_ratings_total" : 0
             },
-            "other_activities" : []
+            "other_activities" : {}
         }
         itineraryInfoArr.push(dayItinerary)
     }
+
     const [responseObj, setResponseObj] = useState({
             "itinerary_id": "",
-            "user_id": user.uid,
+            "user_id": user.id,
             "has_packing_list": false,
             "packing_list_id": "",
             "location": searchQuery.location,
+            "location_id": searchQuery.place_id,
             "accomodation_address" : "",
             "start_date": searchQuery.startDate,
             "end_date": searchQuery.endDate,
             "total_days": searchQuery.tripLength,
             "itinerary_info": itineraryInfoArr,
-            "itinerary_weather": randomWeather
+            "itinerary_weather": randomWeather,
+            "exchangeData": searchQuery.exchangeData,
+            "numberOfPeople": searchQuery.numberOfPeople
+
           })
 
     useEffect(() => {
