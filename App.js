@@ -6,7 +6,6 @@ import { db, firebaseAuth } from "./firebaseConfig";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
-
 import HomePage from "./src/Pages/2.HomePage";
 import SearchPage from "./src/Pages/3.SearchPage";
 import UserAccountSettingsPage from "./src/Pages/5.UserAccountSettingsPage";
@@ -18,6 +17,7 @@ import { UserProvider } from "./src/contexts/UserContext";
 import ResponsePage from "./src/Pages/4.ResposePage";
 import PackingListPage from "./src/Pages/7.1.PackingListPage";
 import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
+import MoreActivitiesSelection from './src/components/4.2.MoreActivitiesSelection'
 
 const Stack = createNativeStackNavigator();
 
@@ -55,8 +55,18 @@ function InsideLayout() {
         component={PackingOptionsPage}
         options={{ headerShown: false }}
       ></InsideStack.Screen>
-      
-      <InsideStack.Screen name="Response" component={ResponsePage} options={{ headerShown: true }}/>
+
+      <InsideStack.Screen
+        name="Response"
+        component={ResponsePage}
+        options={{ headerShown: true }}
+      />
+
+      <InsideStack.Screen
+        name="MoreActivities"
+        component={MoreActivitiesSelection}
+        options={{ headerShown: true }}
+      />
 
       <InsideStack.Screen
         name="PackingListPage"
