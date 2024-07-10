@@ -36,18 +36,24 @@ export default function SavedPackingLists({ navigation }) {
       <ScrollView style={styles.content}>
         <Text style={styles.title}>Saved Packing Lists</Text>
         {packingLists.map((list) => (
-          <View key={list.id} style={styles.packingList}>
+          <View key={list.packingList_id} style={styles.packingList}>
             <Text style={styles.packingListTitle}>{list.location}</Text>
-            <Text>Purpose: {list.purpose}</Text>
-            <Text>Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}</Text>
+            <Text style={styles.infoText}>Purpose: {list.purpose}</Text>
+            <Text style={styles.infoText}>
+              Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}
+            </Text>
             {Object.keys(list.packingList).map(category => (
               <View key={category} style={styles.category}>
                 <Text style={styles.categoryTitle}>{category}</Text>
                 {list.packingList[category].map(item => (
                   <View key={item.id} style={styles.item}>
                     <Text style={styles.itemName}>{item.name}</Text>
-                    <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
-                    <Text>Packed: {item.packed ? 'Yes' : 'No'}</Text>
+                    <Text style={styles.itemDetail}>
+                      Quantity: {item.quantity}
+                    </Text>
+                    <Text style={styles.itemDetail}>
+                      Packed: {item.packed ? 'Yes' : 'No'}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -70,17 +76,27 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 20,
+    textAlign: 'center',
+    color: 'darkgreen',
+  },
+  infoText: {
+    fontSize: 16,
+    marginBottom: 10,
   },
   packingList: {
     marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 20,
   },
   packingListTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    color: 'darkgreen',
   },
   category: {
     marginBottom: 10,
@@ -88,6 +104,8 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginBottom: 5,
+    color: 'darkgreen',
   },
   item: {
     marginLeft: 10,
@@ -96,7 +114,8 @@ const styles = StyleSheet.create({
   itemName: {
     fontSize: 16,
   },
-  itemQuantity: {
-    fontSize: 16,
+  itemDetail: {
+    fontSize: 14,
+    color: '#555',
   },
 });

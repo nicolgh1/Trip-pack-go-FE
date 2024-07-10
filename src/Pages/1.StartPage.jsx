@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: "white",
-    borderColor: "darkgreen",
+    borderColor: "white",
   },
   signUpButtonText: {
     color: "darkgreen",
