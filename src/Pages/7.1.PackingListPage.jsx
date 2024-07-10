@@ -159,11 +159,12 @@ export default function PackingListPage({ navigation, route }) {
           <Button title="Add Category" onPress={handleAddCategory} />
         </View>
       </ScrollView>
-      <Button title="Save Packing List" onPress={handleSavePackingList} />
-      <Button
-        title="View Saved Packing Lists"
-        onPress={() => navigation.navigate("SavedPackingLists")}
-      />
+      <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
+      <Text style={styles.buttonText} >Save Packing List</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SavedPackingLists')}>
+      <Text style={styles.buttonText}>View Saved Packing Lists</Text>
+      </TouchableOpacity>
       <Footer navigation={navigation} />
     </View>
   );
@@ -182,36 +183,45 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    textAlign: 'center',
   },
   category: {
     marginBottom: 20,
+  },
+  infoText: {
+    fontSize: 16,
+    marginBottom: 15,
   },
   categoryTitle: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    paddingBottom: 5,
   },
   item: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 15,
   },
   itemName: {
     flex: 2,
     fontSize: 16,
+    marginLeft: 10,
   },
   itemControls: {
     flex: 3,
-    flexDirection: "row",
-    justifyContent: "space-around",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   itemQuantity: {
     fontSize: 16,
     marginHorizontal: 10,
   },
   controlButton: {
-    fontSize: 20,
+    fontSize: 18,
     paddingHorizontal: 10,
     color: "#007bff",
   },
@@ -220,9 +230,35 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
   },
   newCategoryContainer: {
     marginVertical: 20,
     alignItems: "center",
+  },
+  addCategoryInput: {
+    fontSize: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    width: '80%',
+  },
+  buttonContainer: {
+    marginTop: 20,
+    alignItems: 'center',
+  },
+  button: {
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#007bff',
+    borderRadius: 5,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
