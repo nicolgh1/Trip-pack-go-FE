@@ -17,7 +17,7 @@ import UserInfoEditForm from "../components/UserInfoEditForm";
 import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 
 export default function UserAccountSettingsPage({ navigation }) {
-  const { user, loading } = useContext(UserContext);
+  const { user, userCntxtLoading } = useContext(UserContext);
   const [newPackingMustItem, setNewPackingMustItem] = useState("");
   const [packingMusts, setPackingMusts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,7 +51,7 @@ export default function UserAccountSettingsPage({ navigation }) {
     updateDoc(userDocRef, { packingMusts: updatedMusts });
   };
 
-  if (loading) return <Text>Loading...</Text>;
+  if (userCntxtLoading) return <Text>Loading...</Text>;
 
   return (
     <View style={styles.screen}>

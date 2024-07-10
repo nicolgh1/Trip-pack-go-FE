@@ -7,7 +7,7 @@ import { Text } from "react-native";
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
-  const [loading, setLoading] = useState(true);
+  const [userCntxtLoading, setUserCntxtLoading] = useState(true);
   const [user, setUser] = useState({});
 
   useEffect(() => {
@@ -18,11 +18,11 @@ export const UserProvider = ({ children }) => {
           userDocRef,
           (doc) => {
             setUser({ ...doc.data(), id: doc.id });
-            setLoading(false);
+            setUserCntxtLoading(false);
           },
           (error) => {
             console.log("Error fetching user data: ", error);
-            setLoading(false);
+            setUserCntxtLoading(false);
           }
         );
       } else {
@@ -35,14 +35,14 @@ export const UserProvider = ({ children }) => {
           surname: "Loading...",
           username: "Loading...",
         });
-        setLoading(false);
+        setUserCntxtLoading(false);
       }
     });
   }, []);
 
-  if (loading) return <Text>Loading...</Text>;
+  if (userCntxtLoading) return <Text>Loading...</Text>;
   return (
-    <UserContext.Provider value={{ user, loading }}>
+    <UserContext.Provider value={{ user, userCntxtLoading }}>
       {children}
     </UserContext.Provider>
   );
