@@ -7,6 +7,7 @@ import {
   Button,
   TextInput,
   ScrollView,
+  Image
 } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
@@ -146,7 +147,9 @@ export default function PackingListPage({ navigation, route }) {
                 setNewItemCategory(category);
               }}
             />
-            <Button title="Add" onPress={() => handleAddItem(category)} />
+            <TouchableOpacity style={styles.whiteButton} onPress={() => handleAddItem(category)}>
+        <Text style={styles.whiteButtonText}>Add</Text>
+      </TouchableOpacity>
           </View>
         ))}
         <View style={styles.newCategoryContainer}>
@@ -156,18 +159,21 @@ export default function PackingListPage({ navigation, route }) {
             value={newCategoryName}
             onChangeText={setNewCategoryName}
           />
-          <Button title="Add Category" onPress={handleAddCategory} />
+          <TouchableOpacity style={styles.whiteButton} onPress={handleAddCategory}>
+        <Text style={styles.whiteButtonText}>Add Category</Text>
+      </TouchableOpacity>
         </View>
       </ScrollView>
+      
       <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
         <Text style={styles.buttonText}>Save Packing List</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate("SavedPackingLists")}
-      >
-        <Text style={styles.buttonText}>View Saved Packing Lists</Text>
-      </TouchableOpacity>
+              style={styles.iconContainer}
+              onPress={() => navigation.navigate("SavedPackingLists")}
+            >
+               <Image source={require('../../assets/icons/saveGreen.png')} style={styles.icon} />
+            </TouchableOpacity>
       <Footer navigation={navigation} />
     </View>
   );
@@ -228,7 +234,7 @@ const styles = StyleSheet.create({
   controlButton: {
     fontSize: 18,
     paddingHorizontal: 10,
-    color: "#007bff",
+    color: "darkgreen",
   },
   addItemInput: {
     fontSize: 16,
@@ -241,6 +247,21 @@ const styles = StyleSheet.create({
   newCategoryContainer: {
     marginVertical: 20,
     alignItems: "center",
+  },
+  whiteButton: {
+    height: 30,
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "darkgreen",
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  whiteButtonText: {
+    color: "darkgreen",
   },
   button: {
     marginVertical: 10,
@@ -255,5 +276,14 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 16,
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 10,
+    right: 20,
+  },
+  icon: {
+    width: 30,
+    height: 30,
   },
 });
