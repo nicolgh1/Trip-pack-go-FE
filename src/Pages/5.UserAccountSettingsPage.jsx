@@ -6,6 +6,7 @@ import {
   TextInput,
   FlatList,
   Modal,
+  TouchableOpacity,
 } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
@@ -18,7 +19,7 @@ import { doc, onSnapshot, updateDoc } from "firebase/firestore";
 export default function UserAccountSettingsPage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
   const [newPackingMustItem, setNewPackingMustItem] = useState("");
-  const [packingMusts, setPackingMusts] = useState("");
+  const [packingMusts, setPackingMusts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const userDocRef = doc(db, "users", user.id);
@@ -26,7 +27,7 @@ export default function UserAccountSettingsPage({ navigation }) {
   useEffect(() => {
     const userDocRef = doc(db, "users", user.id);
     onSnapshot(userDocRef, (doc) => {
-      setPackingMusts(doc.data().packingMusts);
+      setPackingMusts(doc.data().packingMusts || []);
     });
   }, []);
 
@@ -54,20 +55,21 @@ export default function UserAccountSettingsPage({ navigation }) {
 
   return (
     <View style={styles.screen}>
-      <Header />
       <View style={styles.body}>
         <View style={styles.userInfo}>
-          <View style={styles.editUserButton}>
-            <Button title="Edit" onPress={() => setIsModalVisible(true)} />
-          </View>
+          <View style={styles.editUserButton}></View>
           <Text style={styles.label}>User Name: {user.username}</Text>
           <Text style={styles.label}>First Name: {user.firstName}</Text>
           <Text style={styles.label}>Surname: {user.surname}</Text>
           <Text style={styles.label}>Sex: {user.sex}</Text>
-          <Text style={styles.label}>
-            Home Location: {user.countryOfResidence}
-          </Text>
+          <Text style={styles.label}>Home Location: {user.countryOfResidence}</Text>
           <Text style={styles.label}>Email Address: {user.emailAddress}</Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setIsModalVisible(true)}
+          >
+            <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
         </View>
         <View style={styles.packingList}>
           <Text style={styles.sectionTitle}>Packing List Musts</Text>
@@ -78,22 +80,33 @@ export default function UserAccountSettingsPage({ navigation }) {
               value={newPackingMustItem}
               onChangeText={setNewPackingMustItem}
             />
-            <View style={styles.buttonAdd}>
-              <Button title="+" onPress={addItem} />
-            </View>
+            <TouchableOpacity style={styles.buttonAdd} onPress={addItem}>
+              <Text style={styles.buttonText}>+</Text>
+            </TouchableOpacity>
           </View>
           <FlatList
             data={packingMusts}
             renderItem={({ item, index }) => (
               <View style={styles.listItem}>
                 <Text>{item}</Text>
-                <Button title="Delete" onPress={() => deleteItem(item)} />
+                <TouchableOpacity
+                  style={styles.buttonDelete}
+                  onPress={() => deleteItem(item)}
+                >
+                  <Text style={styles.buttonText}>Delete</Text>
+                </TouchableOpacity>
               </View>
             )}
             keyExtractor={(item, index) => index.toString()}
+            style={styles.list}
           />
         </View>
-        <Button onPress={() => firebaseAuth.signOut()} title="LOGOUT" />
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => firebaseAuth.signOut()}
+        >
+          <Text style={styles.buttonText}>LOGOUT</Text>
+        </TouchableOpacity>
       </View>
       <Modal
         visible={isModalVisible}
@@ -122,7 +135,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     width: "100%",
-    marginTop: 30,
+    marginTop: 50,
     marginBottom: 30,
     backgroundColor: "#fff",
     padding: 20,
@@ -132,14 +145,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 5,
   },
-  editUserButton: {
-    position: "absolute",
-    bottom: 10,
-    right: 10,
-  },
   label: {
     fontSize: 16,
-    marginBottom: 10,
+    marginBottom: 15,
   },
   sectionTitle: {
     fontSize: 18,
@@ -148,7 +156,7 @@ const styles = StyleSheet.create({
   },
   packingList: {
     width: "100%",
-    marginBottom: 20,
+    marginBottom: 10,
     backgroundColor: "#fff",
     padding: 20,
     borderRadius: 10,
@@ -163,13 +171,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   input: {
-    width: 250,
+    width: 240,
     height: 40,
     borderColor: "gray",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
-    margin: 5,
+    borderRadius: 20,
+    marginRight: 5,
   },
   listItem: {
     flexDirection: "row",
@@ -180,6 +188,36 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   buttonAdd: {
-    width: 60,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 5,
+  },
+  list: {
+    maxHeight: 120,
+  },
+  buttonDelete: {
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 10,
+  },
+  button: {
+    height: 40,
+    width: '100%',
+    borderRadius: 20,
+    backgroundColor: "black",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 10
+  },
+  buttonText: {
+    color: "white",
   },
 });

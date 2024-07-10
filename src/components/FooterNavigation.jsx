@@ -1,40 +1,45 @@
 import { StyleSheet, View, Text } from "react-native";
 import React from "react";
 
-import Icon from 'react-native-vector-icons/AntDesign';
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 export default function Footer({ navigation }) {
     return (
         <View style={styles.footer}>
             <Icon 
-                name="search1"
-                size={50}
+                name="search"
+                size={30}
                 color="#141414"
                 onPress={() => navigation.navigate('SearchPage')}
+                style={styles.icon}
             />
              <Icon 
                 name="user"
-                size={50}
+                size={30}
                 color="#141414"
                 onPress={() => navigation.navigate('UserAccountSettingsPage')}
+                style={styles.icon}
             />
             <Icon 
                 name="home"
-                size={50}
+                size={30}
                 color="#141414"
                 onPress={() => navigation.navigate('HomePage')}
+                style={styles.icon}
             />
             <Icon 
                 name="book"
-                size={50}
+                size={30}
                 color="#141414"
                 onPress={() => navigation.navigate('UserItinerariesPage')}
+                style={styles.icon}
             />
             <Icon 
-                name="skin"
-                size={50}
+                name="suitcase"
+                size={30}
                 color="#141414"
                 onPress={() => navigation.navigate('PackingOptionsPage')}
+                style={styles.icon}
             />
         </View>
         
@@ -62,6 +67,7 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginLeft: 20,
-        marginRight: 20
+        marginRight: 20,
+        paddingVertical: 10, 
     }
 })

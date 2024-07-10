@@ -11,7 +11,7 @@ import { UserContext } from '../contexts/UserContext';
 
 const SearchPage = ({ navigation }) => {
   const {user} = useContext(UserContext)
-  console.log(user.countryOfResidence); // a country name -- string
+  // console.log(user.countryOfResidence);
 
   const [searchQuery, setSearchQuery] = useState({
     place_id: '',
@@ -25,7 +25,7 @@ const SearchPage = ({ navigation }) => {
   });
 
   const handleLocationSelect = async (tripLocation) => {
-    console.log("location data:", tripLocation); // an object
+    // console.log("location data:", tripLocation); 
     const latLng = await fetchLatLngOlatLngObj(tripLocation.description);
     
     setSearchQuery(prevState => ({
@@ -49,8 +49,8 @@ const SearchPage = ({ navigation }) => {
       startDate: searchQuery.startDate ? searchQuery.startDate.toLocaleDateString() : 'Not specified',
       endDate: searchQuery.endDate ? searchQuery.endDate.toLocaleDateString() : 'Not specified',
     };
-    console.log('Searching for:', formattedSearchQuery);
-    navigation.navigate('Response', { searchQuery: formattedSearchQuery, navigation: navigation });
+    console.log('searchQuery:', formattedSearchQuery);
+    navigation.navigate('Response', { searchQuery: formattedSearchQuery });
   };
 
   const handleStartDateChange = (startDate) => {

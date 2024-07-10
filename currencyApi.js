@@ -5,7 +5,6 @@ const API_KEY = 'fca_live_IropyDFdmtx6LGLRrwMt76lfEgT2pRcVC0XswPXa';
 const freecurrencyapi = new Freecurrencyapi(API_KEY);
 
 export const fetchExchangeRate = async (tripLocation, countryOfResidence) => {
-    console.log(tripLocation, countryOfResidence);
     const baseCountry = countryOfResidence;
     let tripCountry = '';
 
