@@ -17,6 +17,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import { UserProvider } from "./src/contexts/UserContext";
 import ResponsePage from "./src/Pages/4.ResposePage";
 import PackingListPage from "./src/Pages/7.1.PackingListPage";
+import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -60,6 +61,12 @@ function InsideLayout() {
       <InsideStack.Screen
         name="PackingListPage"
         component={PackingListPage}
+        options={{ headerShown: true }}
+      />
+
+      <InsideStack.Screen
+        name="SavedPackingLists"
+        component={SavedPackingLists}
         options={{ headerShown: true }}
       />
     </InsideStack.Navigator>

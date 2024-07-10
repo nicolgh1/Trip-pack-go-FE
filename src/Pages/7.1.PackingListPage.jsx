@@ -1,11 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, Button, TextInput, ScrollView } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import Checkbox from 'expo-checkbox';
 import Header from '../components/Header';
 import Footer from '../components/FooterNavigation';
 
+import { addDoc, collection, getDoc, onSnapshot, query, where } from "firebase/firestore";
+import { db } from "../../firebaseConfig";
+import { UserContext } from "../contexts/UserContext";
+
 export default function PackingListPage({ navigation, route }) {
+  const { user } = useContext(UserContext);
   const { location, purpose, startDate, endDate } = route.params;
   const [packingList, setPackingList] = useState({
     Clothes: [{ id: 1, name: 'T-shirts', quantity: 2 }],
@@ -42,11 +46,12 @@ export default function PackingListPage({ navigation, route }) {
     });
   };
 
-  const handleItemNameChange = (category, itemId, newName) => {
+
+  const handlePackedChange = (category, itemId) => {
     setPackingList({
       ...packingList,
       [category]: packingList[category].map(item =>
-        item.id === itemId ? { ...item, name: newName } : item
+        item.id === itemId ? { ...item, packed: !item.packed } : item
       ),
     });
   };
@@ -60,16 +65,41 @@ export default function PackingListPage({ navigation, route }) {
     setNewCategoryName('');
   };
 
+  const formatDate = (date) => {
+    if (!(date instanceof Date)) {
+      date = new Date(date);
+    }
+    return date.toLocaleDateString();
+  };
+  
+  const handleSavePackingList = () => {
+    const dataObject = {
+      userId: user.id,
+      location,
+      purpose,
+      startDate: startDate instanceof Date ? startDate.toISOString() : startDate,
+      endDate: endDate instanceof Date ? endDate.toISOString() : endDate,
+      packingList,
+    };
+    const packingListColRef = collection(db, "packingLists");
+    addDoc(packingListColRef, dataObject);
+    alert('Packing list saved successfully!');
+  }
+
   return (
     <View style={styles.screen}>
       <Header />
       <ScrollView style={styles.content}>
         <Text style={styles.title}>Packing List</Text>
+        <Text>Location: {location}</Text>
+        <Text>Purpose: {purpose}</Text>
+        <Text>Dates: {formatDate(startDate)} - {formatDate(endDate)}</Text>
         {Object.keys(packingList).map(category => (
           <View key={category} style={styles.category}>
             <Text style={styles.categoryTitle}>{category}</Text>
             {packingList[category].map(item => (
               <View key={item.id} style={styles.item}>
+                <Checkbox value={item.packed} onValueChange={() => handlePackedChange(category, item.id)}/>
                 <Text style={styles.itemName}>{item.name}</Text>
                 <View style={styles.itemControls}>
                   <TouchableOpacity onPress={() => handleQuantityChange(category, item.id, -1)}>
@@ -110,7 +140,7 @@ export default function PackingListPage({ navigation, route }) {
           <Button title="Add Category" onPress={handleAddCategory} />
         </View>
       </ScrollView>
-      <Button title="Save Packing List" />
+      <Button title="Save Packing List" onPress={handleSavePackingList} />
       <Button title="View Saved Packing Lists" onPress={() => navigation.navigate('SavedPackingLists')} />
       <Footer navigation={navigation} />
     </View>
