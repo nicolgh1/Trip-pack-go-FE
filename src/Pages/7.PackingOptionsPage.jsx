@@ -38,9 +38,9 @@ export default function PackingOptionsPage({ navigation }) {
             selectedValue={purpose}
             style={styles.picker}
             onValueChange={(itemValue) => setPurpose(itemValue)}>
-            <Picker.Item label="Leisure" value="leisure" />
-            <Picker.Item label="Business" value="business" />
-            <Picker.Item label="Special Event" value="specialEvent" />
+            <Picker.Item label="Leisure" value="Leisure" />
+            <Picker.Item label="Business" value="Business" />
+            <Picker.Item label="Special Event" value="Special" />
             </Picker>
             <Text style={styles.label}>Start Date</Text>
             <Button onPress={() => setShowStartDatePicker(true)} title={startDate.toDateString()} />
