@@ -155,8 +155,9 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
       {surnameErrMsg ? (
         <Text style={styles.errMsg}>{surnameErrMsg}</Text>
       ) : null}
-      <View style={styles.section}>
   <Text>Sex:</Text>
+      <View style={styles.section}>
+
   <Picker
     selectedValue={sex}
     style={styles.picker}
@@ -166,9 +167,10 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
     <Picker.Item label="Male" value="male" />
     <Picker.Item label="Female" value="female" />
   </Picker>
+  
 </View>
-<View style={styles.section}>
   <Text>Country of Residence:</Text>
+<View style={styles.section}>
   <Picker
     selectedValue={countryOfResidence}
     style={styles.picker}
@@ -206,27 +208,27 @@ const styles = StyleSheet.create({
   input: {
     width: 300,
     height: 40,
-    borderColor: "gray",
+    borderColor: "darkgreen",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     margin: 5,
   },
   picker: {
-    width: 300,
+    width: 290,
     height: 40,
-    borderColor: "gray",
+    borderColor: "darkgreen",
     borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 10,
     margin: 5,
   },
   section: {
-    width: "100%",
-    padding: 10,
+    width: "95%",
+    padding: 2,
     marginVertical: 10,
     backgroundColor: "#f0f0f0",
-    borderRadius: 5,
-    borderColor: "#ccc",
+    borderRadius: 10,
+    borderColor: "darkgreen",
     borderWidth: 1,
   },
   errMsg: {
@@ -241,13 +243,13 @@ const styles = StyleSheet.create({
   button: {
     height: 40,
     width: '45%',
-    borderRadius: 20,
-    backgroundColor: "black",
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
     justifyContent: "center",
     alignItems: "center",
   },
   buttonCancel: {
-    backgroundColor: "gray",
+    backgroundColor: "darkgreen",
   },
   buttonText: {
     color: "white",
