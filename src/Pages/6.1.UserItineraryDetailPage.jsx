@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, ScrollView, Image, Linking } from "react-native";
 import Footer from "../components/FooterNavigation";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ResponsePage from "./4.ResponsePage";
 import { fetchPlacePhoto } from "../../googleApi";
 
 
@@ -83,7 +82,7 @@ export default function UserItineraryDetailPage({
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity onPress={() => setCurrentItineraryId(null)}>
-        <Text style={styles.header}> {currentItinerary.destination}</Text>
+        <Text style={styles.header}> {currentItinerary.location}</Text>
         <Text style={styles.backToItineraries}>Back to itineraries</Text>
       </TouchableOpacity>
 
