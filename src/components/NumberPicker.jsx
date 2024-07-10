@@ -22,9 +22,9 @@ const styles = StyleSheet.create({
   pickerContainer: {
     height: 30,
     width: '30%', 
-    borderRadius: 20,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: 'gray',
+    borderColor: 'darkgreen',
     marginBottom: 20,
     justifyContent: 'center',
     alignSelf: 'flex-start', 

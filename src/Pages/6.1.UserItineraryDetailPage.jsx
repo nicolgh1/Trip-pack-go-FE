@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, ScrollView, Image, Linking } from "react-
 import Footer from "../components/FooterNavigation";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { fetchPlacePhoto } from "../../googleApi";
+import { useNavigation } from "@react-navigation/native";
 
 
 
@@ -11,6 +12,8 @@ export default function UserItineraryDetailPage({
   itineraries,
   setCurrentItineraryId,
 }) {
+
+  const navigation = useNavigation()
   // 1 - Define current itinerary
   const currentItinerary = itineraries.find(
     (itinerary) => itinerary.itinerary_id === itineraryId
@@ -90,7 +93,7 @@ export default function UserItineraryDetailPage({
       <ScrollView>
         {currentItinerary.itinerary_info.map((itineraryDetail) => {
           return (
-            <View key={itineraryDetail.day_number} style={styles.userItinerariesStyle}>
+            <View key={itineraryDetail.day_number} style={styles.itineraryCard}>
               <Text style={styles.day}>Day: {itineraryDetail.day_number}</Text>
               <Text>{itineraryDetail.date}</Text>
               <Text style={styles.activity}>
@@ -115,6 +118,8 @@ export default function UserItineraryDetailPage({
           );
         })}
       </ScrollView>
+
+      <Footer navigation={navigation}/>
 
     </SafeAreaView>
   );
@@ -145,7 +150,7 @@ const styles = {
   activity: {
     fontSize: 20,
   },
-  userItinerariesStyle: {
+  itineraryCard: {
     margin: 10,
     borderColor: "black",
     borderWidth: 1,
@@ -154,7 +159,7 @@ const styles = {
     position: "relative",
     textAlign: "center",
     textAlignVertical: "center",
-    height: 220,
+    height: 320,
   },
   editButton: {
     backgroundColor: "black",
