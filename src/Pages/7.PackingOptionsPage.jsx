@@ -92,6 +92,7 @@ export default function PackingOptionsPage({ navigation }) {
             <Text style={styles.label}>
               Please Choose the Corresponding Itinerary
             </Text>
+            <View style={styles.pickerBox}>
             <Picker
               selectedValue={correspondingItinerary}
               style={styles.picker}
@@ -125,6 +126,7 @@ export default function PackingOptionsPage({ navigation }) {
                 );
               })}
             </Picker>
+            </View>
             <Text style={styles.label}>Trip Purpose:</Text>
             <View style={styles.pickerBox}>
             <Picker
@@ -137,10 +139,12 @@ export default function PackingOptionsPage({ navigation }) {
               <Picker.Item label="Special Event" value="specialEvent" />
             </Picker>
             </View>
-            <Button
-              title="Create Packing List"
-              onPress={handleRefsItineraryCreateList}
-            ></Button>
+            <TouchableOpacity
+            style={styles.button}
+            onPress={handleRefsItineraryCreateList}
+            >
+            <Text style={styles.buttonText}>Create Packing List</Text>
+           </TouchableOpacity>
           </View>
         ) : (
           <View>
