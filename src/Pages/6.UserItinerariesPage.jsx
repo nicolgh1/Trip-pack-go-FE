@@ -31,22 +31,23 @@ export default function UserItinerariesPage({ navigation }) {
   const { user } = useContext(UserContext);
 
   // 2 fetch all user itineraries from firebase
-  const [itineraries, setItineraries] = useState([]);
+  const [itineraries, setItineraries] = useState();
   const itinerariesColRef = collection(db, "itineraries");
   const q = query(itinerariesColRef, where("user_id", "==", `${user.id}`));
 
-  const [showItineraries, setShowItineraries] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     onSnapshot(q, (snapshot) => {
-       const itineraries = snapshot.docs.map((doc) => {
-        // console.log(doc.id);
-        return {...doc.data(), itinerary_id: doc.id}
+       const dbData = snapshot.docs.map((doc) => {
+        return {...doc.data()}
       });
-      setItineraries(itineraries);
+      setItineraries(dbData);
     });
     console.log("useEffect");
-  }, [showItineraries]);
+    setIsLoading(false);
+  }, []);
 
   // 3 Navigate to 6.1.UserItineraryDetailPage
     const [currentItineraryId, setCurrentItineraryId] = useState(null);
@@ -63,7 +64,7 @@ export default function UserItinerariesPage({ navigation }) {
       );
     }
   
-  // Still to be done:
+
   // 4 Delete itinerary from firebase
     function handleDeleteItinerary(itineraryId) {
       const docRef = doc(db, "itineraries", `${itineraryId}`);
@@ -72,8 +73,12 @@ export default function UserItinerariesPage({ navigation }) {
 
     }
 
-  // Still to be done:
-  // 5 Add styling
+  if (itineraries === undefined) {
+    return (
+      <View>
+        <Text>Loading...</Text>
+      </View>)
+  }
   
   return (
     <View style={{ flex: 1 }}>
@@ -84,18 +89,23 @@ export default function UserItinerariesPage({ navigation }) {
       <SafeAreaView style={styles.scrollContainer}>
         
       <ScrollView >
-        {itineraries.map((itinerary) => (
-          <View key={itinerary.itinerary_id} style={styles.itineraryCard}>
-            <Text style={styles.destination}> {itinerary.location}</Text>
-            <Text>{itinerary.itinerary_id}</Text>
-            <Text style={styles.startDate}>From: {itinerary.start_date}</Text>
-            <Text style={styles.endDate}>To: {itinerary.end_date}</Text>
-            <Text style={styles.startDate}>
+        {itineraries.map((itinerary) => {
+          return (
+            <View style={styles.itineraryCard} key={itinerary.itinerary_id}>
+              <Text style={styles.destination}> {itinerary.location}</Text>
+              {/* start date has a different format */}
+              <Text style={styles.startDate}> Start Date: {itinerary.start_date.toDate().toDateString()}</Text>
+              <Text style={styles.endDate}> End Date: {itinerary.end_date.toDate().toDateString()}</Text>
+              <Text style={styles.startDate}>
               Total Days: {itinerary.total_days}
-            </Text>
-            <Text style={styles.startDate}>
+              </Text>
+              <Text style={styles.startDate}>
               Total Activities: {itinerary.itinerary_info.length}
             </Text>
+            <Text style={styles.startDate}> {itinerary.exchangeData}</Text>
+
+            <Text style={styles.startDate}> Weather prediction: {itinerary.itinerary_weather}</Text>
+            <Text style={styles.startDate}> Total Travelers: {itinerary.numberOfPeople}</Text>
 
             <TouchableOpacity
               onPress={() => handleSeeDetails(itinerary.itinerary_id)}
@@ -103,15 +113,17 @@ export default function UserItinerariesPage({ navigation }) {
               <Text style={styles.detailsButton}>See Details</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               onPress={() => handleDeleteItinerary(itinerary.itinerary_id)}
             >
               <Text style={styles.deleteButton}>Delete Itinerary</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
-            
-          </View>
-        ))}
+            </View>
+          );
+        }
+        )}
+        
       </ScrollView>
       </SafeAreaView>
       <Footer navigation={navigation} />
@@ -156,7 +168,7 @@ const styles = StyleSheet.create({
     position: "relative",
     textAlign: "center",
     textAlignVertical: "center",
-    width: 'auto'
+    width: 'auto',
   },
 
   destination: {
@@ -176,8 +188,11 @@ const styles = StyleSheet.create({
     color: "white",
     textAlign: "center",
     borderRadius: 20,
-    width: 200,
+    width: 115,
     marginTop: 10,
+    height: 23,
+    textAlignVertical: "center",
+    top: 33,
   },
 
   deleteButton: {
