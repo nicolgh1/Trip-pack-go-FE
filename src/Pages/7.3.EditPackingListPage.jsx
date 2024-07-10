@@ -10,21 +10,22 @@ import {
 } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
-import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { FontAwesome } from '@expo/vector-icons';
+import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
 
-export default function PackingListPage({ navigation, route }) {
+export default function EditPackingListPage({ navigation, route }) {
   const { user } = useContext(UserContext);
-  const { location, purpose, startDate, endDate, id } = route.params;
+  const { list } = route.params;
+
+  const [location, setLocation] = useState(list.location);
+  const [purpose, setPurpose] = useState(list.purpose);
+  const [startDate, setStartDate] = useState(new Date(list.startDate));
+  const [endDate, setEndDate] = useState(new Date(list.endDate));
+  const [packingList, setPackingList] = useState(list.packingList);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newItemName, setNewItemName] = useState("");
   const [newItemCategory, setNewItemCategory] = useState("");
-  const [packingList, setPackingList] = useState({
-    Clothes: [{ id: 1, name: "T-shirts", quantity: 2 }],
-    Toiletries: [{ id: 1, name: "Toothbrush", quantity: 1 }],
-  });
 
   const handleAddItem = (category) => {
     if (!newItemName) return;
@@ -80,8 +81,8 @@ export default function PackingListPage({ navigation, route }) {
     return date.toLocaleDateString();
   };
 
-  const handleSavePackingList = () => {
-    const dataObject = {
+  const handleSavePackingList = async () => {
+    const updatedPackingList = {
       userId: user.id,
       location,
       purpose,
@@ -90,34 +91,47 @@ export default function PackingListPage({ navigation, route }) {
       endDate: endDate instanceof Date ? endDate.toISOString() : endDate,
       packingList,
     };
-    const packingListColRef = collection(db, "packingLists");
-    addDoc(packingListColRef, dataObject).then((document) => {
-      if (id) {
-        const itineraryDocRef = doc(db, "itineraries", id);
-        updateDoc(itineraryDocRef, {
-          packing_list_id: document.id,
-        });
-      }
-    });
-    alert("Packing list saved successfully!");
+
+    try {
+      await updateDoc(doc(db, 'packingLists', list.packingList_id), updatedPackingList);
+      alert("Packing list updated successfully!");
+      navigation.navigate('SavedPackingLists');
+    } catch (error) {
+      console.error('Error updating document: ', error);
+    }
   };
 
   return (
     <View style={styles.screen}>
       <Header />
       <ScrollView style={styles.content}>
-        <Text style={styles.title}>Packing List</Text>
-        <Text>Location: {location}</Text>
-        <Text>Purpose: {purpose}</Text>
-        <Text>
-          Dates: {formatDate(startDate)} - {formatDate(endDate)}
-        </Text>
+        <Text style={styles.title}>Edit Packing List</Text>
+        <TextInput value={location} onChangeText={setLocation} placeholder="Location" style={styles.input} />
+        <TextInput value={purpose} onChangeText={setPurpose} placeholder="Purpose" style={styles.input} />
+        <TextInput
+          value={startDate.toISOString().substring(0, 10)}
+          onChangeText={text => setStartDate(new Date(text))}
+          placeholder="Start Date"
+          style={styles.input}
+        />
+        <TextInput
+          value={endDate.toISOString().substring(0, 10)}
+          onChangeText={text => setEndDate(new Date(text))}
+          placeholder="End Date"
+          style={styles.input}
+        />
+
         {Object.keys(packingList).map((category) => (
           <View key={category} style={styles.category}>
             <Text style={styles.categoryTitle}>{category}</Text>
             {packingList[category].map((item) => (
               <View key={item.id} style={styles.item}>
-                <Text style={styles.itemName}>{item.name}</Text>
+                <TextInput
+                  value={item.name}
+                  onChangeText={(text) => handleItemChange(category, item.id, 'name', text)}
+                  placeholder="Item Name"
+                  style={styles.input}
+                />
                 <View style={styles.itemControls}>
                   <TouchableOpacity
                     onPress={() => handleQuantityChange(category, item.id, -1)}
@@ -133,7 +147,7 @@ export default function PackingListPage({ navigation, route }) {
                   <TouchableOpacity
                     onPress={() => handleDeleteItem(category, item.id)}
                   >
-                    <FontAwesome name="trash" size={24} color="#007bff" />
+                    <Text style={styles.controlButton}>Delete</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -147,7 +161,7 @@ export default function PackingListPage({ navigation, route }) {
                 setNewItemCategory(category);
               }}
             />
-            <Button title="Add Item" onPress={() => handleAddItem(category)} />
+            <Button title="Add" onPress={() => handleAddItem(category)} />
           </View>
         ))}
         <View style={styles.newCategoryContainer}>
@@ -161,10 +175,10 @@ export default function PackingListPage({ navigation, route }) {
         </View>
       </ScrollView>
       <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
-      <Text style={styles.buttonText} >Save Packing List</Text>
+        <Text style={styles.buttonText}>Save Packing List</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SavedPackingLists')}>
-      <Text style={styles.buttonText}>View Saved Packing Lists</Text>
+        <Text style={styles.buttonText}>View Saved Packing Lists</Text>
       </TouchableOpacity>
       <Footer navigation={navigation} />
     </View>
@@ -186,36 +200,34 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  category: {
-    marginTop: 20,
-  },
-  infoText: {
+  input: {
     fontSize: 16,
-    marginBottom: 15,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+  },
+  category: {
+    marginBottom: 20,
   },
   categoryTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 15, 
+    marginBottom: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-    paddingBottom: 10,
+    paddingBottom: 5,
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 15,
   },
-  itemName: {
-    flex: 2,
-    fontSize: 16,
-    marginLeft: 10,
-  },
   itemControls: {
-    flex: 3,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
   },
   itemQuantity: {
     fontSize: 16,
@@ -235,21 +247,8 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   newCategoryContainer: {
-    marginVertical: 30, 
+    marginVertical: 20,
     alignItems: "center",
-  },
-  addCategoryInput: {
-    fontSize: 16,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    marginBottom: 10,
-    paddingHorizontal: 10,
-    paddingVertical: 5,
-    width: '80%',
-  },
-  buttonContainer: {
-    marginTop: 20,
-    alignItems: 'center',
   },
   button: {
     marginVertical: 10,
@@ -263,4 +262,3 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 });
-

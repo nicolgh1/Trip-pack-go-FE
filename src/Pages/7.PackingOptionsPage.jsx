@@ -213,12 +213,13 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    margin: 10,
+    marginVertical: 10, // Adjusted margin for better spacing
+    marginHorizontal: 10,
   },
   input: {
-    height: 30,
+    height: 40, // Increased height for better input field visibility
     width: "100%",
-    borderRadius: 1,
+    borderRadius: 5, // Rounded corners for input fields
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: "gray",
@@ -229,6 +230,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     alignSelf: "center",
+    marginBottom: 150, 
   },
   button: {
     backgroundColor: "#007bff",
