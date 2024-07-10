@@ -1,16 +1,16 @@
 import { useState } from "react";
 import {
-  Button,
   KeyboardAvoidingView,
   Modal,
   StyleSheet,
   Text,
   TextInput,
   View,
+  TouchableOpacity
 } from "react-native";
 import RegistrationFormCont from "./RegistrationFormCont";
 
-export default function RegistrationForm({ setShowLogin }) {
+export default function RegistrationForm({ setView }) {
   const [email, setEmail] = useState("");
   const [emailErrMsg, setEmailErrMsg] = useState("");
   const [password, setPassword] = useState("");
@@ -60,10 +60,9 @@ export default function RegistrationForm({ setShowLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome!</Text>
-      <Text>Please Create an Account to Continue</Text>
+      <Text style={styles.welcome}>Get started</Text>
       <KeyboardAvoidingView behavior="padding">
-      <Text>Email Address</Text>
+        <Text style={styles.inputLabel}>Email Address</Text>
         <TextInput
           value={email}
           style={styles.input}
@@ -74,7 +73,7 @@ export default function RegistrationForm({ setShowLogin }) {
           }}
         ></TextInput>
         {emailErrMsg ? <Text style={styles.errMsg}>{emailErrMsg}</Text> : null}
-        <Text>Password</Text>
+        <Text style={styles.inputLabel}>Password</Text>
         <TextInput
           secureTextEntry={true}
           value={password}
@@ -88,7 +87,7 @@ export default function RegistrationForm({ setShowLogin }) {
         {passwordErrMsg ? (
           <Text style={styles.errMsg}>{passwordErrMsg}</Text>
         ) : null}
-        <Text>Confirm Password</Text>
+        <Text style={styles.inputLabel}>Confirm Password</Text>
         <TextInput
           secureTextEntry={true}
           value={passwordCheck}
@@ -102,7 +101,9 @@ export default function RegistrationForm({ setShowLogin }) {
         {passwordCheckErrMsg ? (
           <Text style={styles.errMsg}>{passwordCheckErrMsg}</Text>
         ) : null}
-        <Button title="Create Account" onPress={createAccount}></Button>
+        <TouchableOpacity style={styles.createButton} onPress={createAccount}>
+          <Text style={styles.buttonText}>         Create Account        </Text>
+        </TouchableOpacity>
       </KeyboardAvoidingView>
       <Modal
         visible={isModalVisible}
@@ -119,7 +120,7 @@ export default function RegistrationForm({ setShowLogin }) {
         Already Have an Account?{" "}
         <Text
           onPress={() => {
-            setShowLogin(true);
+            setView("login");
           }}
           style={styles.linkText}
         >
@@ -136,21 +137,30 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+    paddingHorizontal: 10,
     paddingTop: 40,
+    backgroundColor: "white",
   },
   welcome: {
     fontSize: 50,
     fontWeight: "bold",
+    color: "darkgreen",
+    marginBottom: 100,
   },
+  inputLabel: {
+    marginLeft: 10, 
+  },
+  
   input: {
     width: 300,
     height: 40,
-    borderColor: "gray",
+    borderColor: "darkgreen",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
+    borderRadius: 10,
     margin: 5,
+    marginBottom: 10, 
   },
   errMsg: {
     color: "red",
@@ -158,5 +168,22 @@ const styles = StyleSheet.create({
   linkText: {
     color: "blue",
     textDecorationLine: "underline",
+  },
+  createButton: {
+    height: 40,
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: "white",
+  },
+  text: {
+    marginTop: 20,
   },
 });
