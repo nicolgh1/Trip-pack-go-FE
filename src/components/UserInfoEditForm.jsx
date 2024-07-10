@@ -6,7 +6,7 @@ import { UserContext } from "../contexts/UserContext";
 import { Button, StyleSheet, Text, TextInput } from "react-native";
 
 export default function UserInfoEditForm({ setIsModalVisible }) {
-  const { user, loading } = useContext(UserContext);
+  const { user, userCntxtLoading } = useContext(UserContext);
 
   const [username, setUsername] = useState(user.username || "");
   const [usernameErrMsg, setUsernameErrorMsg] = useState("");
