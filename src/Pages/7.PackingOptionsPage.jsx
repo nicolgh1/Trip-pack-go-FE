@@ -14,14 +14,7 @@ export default function PackingOptionsPage({ navigation }) {
   const [endDate, setEndDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-    
   const handleCreateList = () => {
-    // console.log({
-    //   location,
-    //   purpose,
-    //   startDate,
-    //   endDate
-    // });
     navigation.navigate('PackingListPage', {
         location,
         purpose,
@@ -79,7 +72,10 @@ export default function PackingOptionsPage({ navigation }) {
             <TouchableOpacity style={styles.button} onPress={handleCreateList}>
             <Text style={styles.buttonText}>Create Packing List</Text>
             </TouchableOpacity>
-            
+            <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('SavedPackingLists')}>
+            <Text style={styles.buttonText}>View Saved Packing Lists</Text>
+            </TouchableOpacity>
+
             <Footer navigation={navigation} />
         </View>
     )
@@ -100,7 +96,7 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        marginVertical: 8,
+        marginVertical: 50,
         marginBottom: 10,
       },
       input: {
@@ -116,7 +112,7 @@ const styles = StyleSheet.create({
       picker: {
         height: 50,
         width: '100%',
-        marginBottom: 16,
+        marginBottom: 150,
       },
       button: {
         backgroundColor: '#007bff',

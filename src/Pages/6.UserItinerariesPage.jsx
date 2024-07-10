@@ -64,11 +64,13 @@ export default function UserItinerariesPage({ navigation }) {
   
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <Text style={{ fontSize: 24, top: 40 }}>
+      <Text style={{ fontSize: 24, top: 50 }}>
         {" "}
         Your Upcoming itineraries:{" "}
       </Text>
-      <ScrollView style={styles.scrollContainer}>
+      <SafeAreaView style={styles.scrollContainer}>
+        
+      <ScrollView >
         {itineraries.map((itinerary) => (
           <View key={itinerary.itinerary_id} style={styles.itineraryCard}>
             <Text style={styles.destination}> {itinerary.location}</Text>
@@ -91,6 +93,7 @@ export default function UserItinerariesPage({ navigation }) {
           </View>
         ))}
       </ScrollView>
+      </SafeAreaView>
       <Footer navigation={navigation} />
     </SafeAreaView>
   );
@@ -98,8 +101,9 @@ export default function UserItinerariesPage({ navigation }) {
 
 const styles = StyleSheet.create({
   scrollContainer: {
-    flexGrow: 1,
-    top: 40,
+    flex: 1,
+    marginTop: 50,
+    marginBottom: 10,
   },
   itineraryCard: {
     margin: 10,
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
     position: "relative",
     textAlign: "center",
     textAlignVertical: "center",
-    height: 250,
+    height: 150,
   },
 
   destination: {
