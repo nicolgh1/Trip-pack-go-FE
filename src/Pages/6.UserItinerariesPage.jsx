@@ -25,7 +25,7 @@ import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
 
 export default function UserItinerariesPage({ navigation, route }) {
-
+  const currentPage ="UserItinerariesPage"
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const { user } = useContext(UserContext);
@@ -90,7 +90,9 @@ export default function UserItinerariesPage({ navigation, route }) {
           })}
         </ScrollView>
       </SafeAreaView>
-      <Footer navigation={navigation} />
+      <View style={styles.footer}>
+        <Footer navigation={navigation} currentPage={currentPage}/>
+      </View>
       <Modal visible={modalVisible}>
         <View style={styles.deleteModal}>
           <Text style={styles.modalText}>Are you sure you want to delete this itinerary?</Text>
@@ -181,5 +183,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingVertical: 10,
     paddingHorizontal: 20,
+  },
+  footer: {
+    width: '115%',
   },
 });

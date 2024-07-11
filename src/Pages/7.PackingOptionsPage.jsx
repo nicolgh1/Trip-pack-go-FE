@@ -308,7 +308,8 @@ const styles = StyleSheet.create({
     height: 50,
   },
   footer: {
-    width: '100%',
+    width: '110%',
+    right: 20,
   },
 });
 

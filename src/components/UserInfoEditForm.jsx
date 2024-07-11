@@ -125,7 +125,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
 
   return (
     <View style={styles.container}>
-      <Text>Username</Text>
+      <Text>USERNAME</Text>
       <TextInput
         style={styles.input}
         value={username}
@@ -135,7 +135,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
       {usernameErrMsg ? (
         <Text style={styles.errMsg}>{usernameErrMsg}</Text>
       ) : null}
-      <Text>First Name</Text>
+      <Text>FIRST NAME</Text>
       <TextInput
         style={styles.input}
         value={firstName}
@@ -145,7 +145,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
       {firstNameErrMsg ? (
         <Text style={styles.errMsg}>{firstNameErrMsg}</Text>
       ) : null}
-      <Text>Surname</Text>
+      <Text>SURNAME</Text>
       <TextInput
         style={styles.input}
         value={surname}
@@ -155,7 +155,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
       {surnameErrMsg ? (
         <Text style={styles.errMsg}>{surnameErrMsg}</Text>
       ) : null}
-  <Text>Sex:</Text>
+  <Text>SEX:</Text>
       <View style={styles.section}>
 
   <Picker
@@ -169,7 +169,7 @@ export default function UserInfoEditForm({ setIsModalVisible }) {
   </Picker>
   
 </View>
-  <Text>Country of Residence:</Text>
+  <Text>COUNTRY of RESIDENCE:</Text>
 <View style={styles.section}>
   <Picker
     selectedValue={countryOfResidence}

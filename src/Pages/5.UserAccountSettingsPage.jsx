@@ -58,12 +58,12 @@ export default function UserAccountSettingsPage({ navigation }) {
       <View style={styles.body}>
         <View style={styles.userInfo}>
           <View style={styles.editUserButton}></View>
-          <Text style={styles.label}>User Name: {user.username}</Text>
-          <Text style={styles.label}>First Name: {user.firstName}</Text>
-          <Text style={styles.label}>Surname: {user.surname}</Text>
-          <Text style={styles.label}>Sex: {user.sex}</Text>
-          <Text style={styles.label}>Home Location: {user.countryOfResidence}</Text>
-          <Text style={styles.label}>Email Address: {user.emailAddress}</Text>
+          <Text style={styles.label}>USER NAME: {user.username}</Text>
+          <Text style={styles.label}>FIRST NAME: {user.firstName}</Text>
+          <Text style={styles.label}>SURNAME: {user.surname}</Text>
+          <Text style={styles.label}>SEX: {user.sex}</Text>
+          <Text style={styles.label}>HOME LOCATION: {user.countryOfResidence}</Text>
+          <Text style={styles.label}>EMAIL ADDRESS: {user.emailAddress}</Text>
           <TouchableOpacity
             style={styles.button}
             onPress={() => setIsModalVisible(true)}
