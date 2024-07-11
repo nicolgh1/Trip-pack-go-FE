@@ -31,6 +31,7 @@ export default function UserItinerariesPage({ navigation }) {
   const [itineraries, setItineraries] = useState();
   const itinerariesColRef = collection(db, "itineraries");
   const q = query(itinerariesColRef, where("user_id", "==", `${user.id}`));
+  const currentPage ="UserItinerariesPage"
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -96,7 +97,7 @@ export default function UserItinerariesPage({ navigation }) {
           })}
         </ScrollView>
       </SafeAreaView>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} currentPage={currentPage}/>
       <Modal visible={modalVisible}>
         <View style={styles.deleteModal}>
           <Text style={styles.modalText}>Are you sure you want to delete this itinerary?</Text>

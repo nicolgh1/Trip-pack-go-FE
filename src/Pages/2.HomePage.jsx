@@ -18,6 +18,7 @@ import { db } from "../../firebaseConfig";
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
   const [soonestItinerary, setSoonestItinerary] = useState(null);
+  const currentPage ="HomePage"
 
   useEffect(() => {
     console.log("useeffect");
@@ -78,7 +79,7 @@ export default function HomePage({ navigation }) {
         )}
         {/* <Button title="addItin" onPress={handleClick}></Button> */}
       </View>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} currentPage={currentPage}/>
     </View>
   );
 }

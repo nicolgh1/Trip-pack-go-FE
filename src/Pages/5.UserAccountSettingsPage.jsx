@@ -21,7 +21,7 @@ export default function UserAccountSettingsPage({ navigation }) {
   const [newPackingMustItem, setNewPackingMustItem] = useState("");
   const [packingMusts, setPackingMusts] = useState([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-
+  const currentPage ="UserAccountSettingsPage"
   const userDocRef = doc(db, "users", user.id);
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function UserAccountSettingsPage({ navigation }) {
       >
         <UserInfoEditForm setIsModalVisible={setIsModalVisible} />
       </Modal>
-      <Footer navigation={navigation} />
+      <Footer navigation={navigation} currentPage={currentPage}/>
     </View>
   );
 }
