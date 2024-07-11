@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
+  Image
 } from "react-native";
 
 export const ActivitiesList = ({
@@ -64,6 +65,11 @@ export const ActivitiesList = ({
     setResponseObj(newRsponseObj);
   };
 
+
+  function photoUrl(photoReference) {
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+  }
+
   if (Object.keys(detailedActivitiesList).length === 0) {
     return <Text>Loading</Text>;
   } else if (
@@ -92,15 +98,30 @@ export const ActivitiesList = ({
                 <View style={styles.body}>
                   {detailedActivitiesList[type].map((activity) => {
                     return (
-                      <TouchableOpacity
-                        key={activity.place_id}
-                        onPress={() => {
-                          handleSecondActivityChoice(type, activity);
-                        }}
-                      >
-                        <Text style={styles.itemText}>{activity.name}</Text>
-                      </TouchableOpacity>
-                    );
+                      <View>
+                      {activity.photos !==undefined ? (
+                        <TouchableOpacity
+                          key={activity.place_id}
+                          onPress={() => {
+                            handleSecondActivityChoice(type, activity);
+                          }}
+                        >
+                          <Text style={styles.itemText}>{activity.name}</Text>
+                          {photoUrl(activity.photos[0].photo_reference) ? (
+                            <View style={styles.imageContainer}>
+                              <Image
+                                  source={{ uri: photoUrl(activity.photos[0].photo_reference) }}
+                                  style={styles.image}
+                                  onError={(e) => console.log(e.nativeEvent.error)}
+                              />
+                            </View>
+                  ) : (
+                      <Text style={styles.itemText}>Loading image...</Text>
+                  )}
+                        </TouchableOpacity>)
+                        :null}
+                        </View>
+                    )
                   })}
                 </View>
               </ScrollView>
@@ -142,9 +163,21 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   itemText: {
-    padding: 10,
+    padding: 20,
     textAlign: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    fontWeight: "bold",
+    fontSize: 18,
   },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+  image: {
+    width: 300,
+    height: 200,
+    padding: 10
+  }
 });
