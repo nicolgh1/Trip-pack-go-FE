@@ -228,10 +228,11 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    margin: 10,
+    marginVertical: 10, // Adjusted margin for better spacing
+    marginHorizontal: 10,
   },
   input: {
-    height: 30,
+    height: 40, // Increased height for better input field visibility
     width: "100%",
     borderRadius: 10,
     paddingHorizontal: 15,
@@ -254,6 +255,7 @@ const styles = StyleSheet.create({
     height: 50,
     width: "100%",
     alignSelf: "center",
+    marginBottom: 150, 
   },
   button: {
     height: 40,

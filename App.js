@@ -17,6 +17,8 @@ import { UserProvider } from "./src/contexts/UserContext";
 import ResponsePage from "./src/Pages/4.ResposePage";
 import PackingListPage from "./src/Pages/7.1.PackingListPage";
 import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
+import EditPackingListPage from "./src/Pages/7.3.EditPackingListPage";
+import ViewPackingListPage from "./src/Pages/7.4.ViewPackingListPage";
 import MoreActivitiesSelection from './src/components/4.2.MoreActivitiesSelection'
 
 const Stack = createNativeStackNavigator();
@@ -77,6 +79,18 @@ function InsideLayout() {
       <InsideStack.Screen
         name="SavedPackingLists"
         component={SavedPackingLists}
+        options={{ headerShown: true }}
+      />
+
+      <InsideStack.Screen
+        name="EditPackingListPage"
+        component={EditPackingListPage}
+        options={{ headerShown: true }}
+      />
+
+      <InsideStack.Screen
+        name="ViewPackingListPage"
+        component={ViewPackingListPage}
         options={{ headerShown: true }}
       />
     </InsideStack.Navigator>
