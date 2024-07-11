@@ -78,9 +78,9 @@ const handleEdit = (list) => {
             <Text style={styles.infoText}>
               Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}
             </Text>
-                {/* <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewPackingListPage', { list })}>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewPackingListPage', { list })}>
                 <Text style={styles.buttonText}>View Packing List</Text>
-                </TouchableOpacity> */}
+                </TouchableOpacity>
             {Object.keys(list.packingList).map(category => (
               <View key={category} style={styles.category}>
                 <Text style={styles.categoryTitle}>{category}</Text>

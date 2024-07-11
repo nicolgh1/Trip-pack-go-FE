@@ -19,6 +19,8 @@ import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
 import MoreActivitiesSelection from './src/Pages/4.2.MoreActivitiesSelection'
 import ConfirmItinerary from './src/Pages/4.2.3.ConfirmItinerary'
 import UserItineraryDetailPage from './src/Pages/6.1.UserItineraryDetailPage'
+import EditPackingListPage from "./src/Pages/7.3.EditPackingListPage";
+import ViewPackingListPage from "./src/Pages/7.4.ViewPackingListPage";
 
 const Stack = createNativeStackNavigator();
 
@@ -115,6 +117,20 @@ function InsideLayout() {
         component={SavedPackingLists}
         options={{ headerShown: true,
           title: 'My Lists'
+        }}
+      />
+      <InsideStack.Screen
+        name="EditPackingListPage"
+        component={EditPackingListPage}
+        options={{ headerShown: true,
+          title: 'Edit Packing List'
+        }}
+      />
+      <InsideStack.Screen
+        name="ViewPackingListPage"
+        component={ViewPackingListPage}
+        options={{ headerShown: true,
+          title: 'View Packing List'
         }}
       />
     </InsideStack.Navigator>
