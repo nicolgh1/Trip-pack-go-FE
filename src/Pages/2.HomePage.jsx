@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontWeight: "bold",
     color: "darkgreen",
-    marginTop: 10,
+    marginTop: 0,
   },
   appName: {
     fontSize: 40,
@@ -211,6 +211,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
+    top: 50
   },
   body: {
     flex: 8,
