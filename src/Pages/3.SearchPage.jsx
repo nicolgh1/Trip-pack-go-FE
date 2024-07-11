@@ -12,6 +12,7 @@ import { UserContext } from '../contexts/UserContext';
 const SearchPage = ({ navigation }) => {
   const {user} = useContext(UserContext)
   // console.log(user.countryOfResidence);
+  const currentPage ="SearchPage"
 
   const [searchQuery, setSearchQuery] = useState({
     place_id: '',
@@ -115,7 +116,7 @@ const SearchPage = ({ navigation }) => {
         ) :null}
       </View>
       <View style={styles.footer}>
-        <Footer navigation={navigation} />
+        <Footer navigation={navigation} currentPage={currentPage}/>
       </View>
     </View>
   );
