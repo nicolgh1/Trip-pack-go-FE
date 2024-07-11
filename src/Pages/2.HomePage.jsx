@@ -1,5 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, Image , Dimensions} from "react-native";
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
 import { UserContext } from "../contexts/UserContext";
@@ -16,7 +23,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 
-const { width, height } = Dimensions.get('window');
+const { width, height } = Dimensions.get("window");
 
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
@@ -97,7 +104,7 @@ export default function HomePage({ navigation }) {
   }
   const numDaysToTrip = workOutDaysUntilTrip();
 
-  function calculatePackingCompletion() {
+  useEffect(() => {
     if (soonestItineraryPackingList) {
       const allItems = [
         ...soonestItineraryPackingList.packingList.Clothes,
@@ -108,8 +115,7 @@ export default function HomePage({ navigation }) {
       const numPackedItems = packedItems.length;
       setPackingUpdate(numPackedItems + " of " + numItems);
     }
-  }
-  calculatePackingCompletion();
+  }, [soonestItineraryPackingList]);
 
   const handleCreatePackingList = () => {
     navigation.navigate("PackingListPage", {
@@ -126,14 +132,12 @@ export default function HomePage({ navigation }) {
     <View style={styles.screen}>
       {/* <Header /> */}
       <View style={styles.imageContainer}>
-      <Image
-          source={require('../../assets/logo.png')}
-          style={styles.image} />
-          <Text style={styles.appName}>Trip Pack Go</Text>
+        <Image source={require("../../assets/logo.png")} style={styles.image} />
+        <Text style={styles.appName}>Trip Pack Go</Text>
       </View>
       <View style={styles.body}>
         <View style={styles.sectionSubTitle}>
-        <Text style={styles.welcomeMsg}>Hello {user.firstName}!</Text>
+          <Text style={styles.welcomeMsg}>Hello {user.firstName}!</Text>
         </View>
       </View>
       <View style={styles.body}>
@@ -211,7 +215,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
-    top: 50
+    top: 50,
   },
   body: {
     flex: 8,
@@ -247,16 +251,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   imageContainer: {
-    width: '100%',
+    width: "100%",
     height: height * 0.2, // 50% of screen height
-    justifyContent: 'flex-start',
-    alignItems: 'center',
+    justifyContent: "flex-start",
+    alignItems: "center",
     marginTop: 20, // Adjust margin as needed
     backgroundColor: "#14141410",
   },
   image: {
-    width: width * 0.30, // 50% of screen width
-    height: '100%', // Full height of the container
-    resizeMode: 'contain', // Ensures the image scales correctly
-  }
+    width: width * 0.3, // 50% of screen width
+    height: "100%", // Full height of the container
+    resizeMode: "contain", // Ensures the image scales correctly
+  },
 });
