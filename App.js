@@ -1,11 +1,9 @@
-//import { StatusBar } from 'expo-status-bar';
-import { collection, onSnapshot } from "firebase/firestore";
+
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { db, firebaseAuth } from "./firebaseConfig";
+import { StyleSheet } from "react-native";
+import { firebaseAuth } from "./firebaseConfig";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-
 
 import HomePage from "./src/Pages/2.HomePage";
 import SearchPage from "./src/Pages/3.SearchPage";
@@ -18,6 +16,9 @@ import { UserProvider } from "./src/contexts/UserContext";
 import ResponsePage from "./src/Pages/4.ResposePage";
 import PackingListPage from "./src/Pages/7.1.PackingListPage";
 import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
+import MoreActivitiesSelection from './src/Pages/4.2.MoreActivitiesSelection'
+import ConfirmItinerary from './src/Pages/4.2.3.ConfirmItinerary'
+import UserItineraryDetailPage from './src/Pages/6.1.UserItineraryDetailPage'
 
 const Stack = createNativeStackNavigator();
 
@@ -26,68 +27,102 @@ const InsideStack = createNativeStackNavigator();
 function InsideLayout() {
   return (
     <InsideStack.Navigator>
-      <InsideStack.Screen
+
+    <InsideStack.Screen
         name="HomePage"
         component={HomePage}
-        options={{ headerShown: false }}
+        options={{ 
+          headerShown: false,
+          title: 'Home'
+        }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="SearchPage"
         component={SearchPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true,
+          title: 'Search'
+        }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="UserAccountSettingsPage"
         component={UserAccountSettingsPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true,
+          title: 'Settings'
+         }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="UserItinerariesPage"
         component={UserItinerariesPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true,
+          title: 'Itineraries'
+         }}
+      ></InsideStack.Screen>
+
+
+      <InsideStack.Screen
+        name="UserItineraryDetailPage"
+        component={UserItineraryDetailPage}
+        options={{ headerShown: true,
+          title: 'Itinerary'
+         }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="PackingOptionsPage"
         component={PackingOptionsPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true,
+          title: 'Create List'
+         }}
       ></InsideStack.Screen>
+
+      <InsideStack.Screen
+        name="Response"
+        component={ResponsePage}
+        options={{ headerShown: true,
+          title: 'Main Choices'
+         }}
+      />
+
+      <InsideStack.Screen
+        name="MoreActivities"
+        component={MoreActivitiesSelection}
+        options={{ headerShown: true,
+          title: 'Activities'
+         }}
+      />
       
-      <InsideStack.Screen name="Response" component={ResponsePage} options={{ headerShown: true }}/>
+      <InsideStack.Screen
+        name="ConfirmationItinerary"
+        component={ConfirmItinerary}
+        options={{ headerShown: true,
+          title: 'Confirmation'
+         }}
+      />
 
       <InsideStack.Screen
         name="PackingListPage"
         component={PackingListPage}
-        options={{ headerShown: true }}
+        options={{ headerShown: true,
+          title: 'Packing List'
+        }}
       />
 
       <InsideStack.Screen
         name="SavedPackingLists"
         component={SavedPackingLists}
-        options={{ headerShown: true }}
+        options={{ headerShown: true,
+          title: 'My Lists'
+        }}
       />
     </InsideStack.Navigator>
   );
 }
 
 export default function App() {
-  // const [data, setData] = useState([]);
-  // const colRef = collection(db, "test-collection");
 
-  // useEffect(() => {
-  //   const unsubscribe = onSnapshot(colRef, (snapshot) => {
-  //     const dbData = snapshot.docs.map((doc) => ({
-  //       ...doc.data(),
-  //       id: doc.id,
-  //     }));
-  //     console.log('useEffect');
-  //     setData(dbData);
-  //   });
-  //   return () => unsubscribe();
-  // }, []);
   const [user, setUser] = useState(null);
 
   useEffect(() => {

@@ -24,13 +24,11 @@ import {
 import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
 
-export default function UserItinerariesPage({ navigation }) {
+export default function UserItinerariesPage({ navigation, route }) {
+
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  // 1 fetch the user details from firebase
   const { user } = useContext(UserContext);
-
-  // 2 fetch all user itineraries from firebase
   const [itineraries, setItineraries] = useState();
   const itinerariesColRef = collection(db, "itineraries");
   const q = query(itinerariesColRef, where("user_id", "==", `${user.id}`));
@@ -49,28 +47,16 @@ export default function UserItinerariesPage({ navigation }) {
     setIsLoading(false);
   }, []);
 
-  // 3 Navigate to 6.1.UserItineraryDetailPage
-    const [currentItineraryId, setCurrentItineraryId] = useState(null);
+
+
     function handleSeeDetails(itineraryId) {
-      setCurrentItineraryId(itineraryId);
-    }
-    if (currentItineraryId !== null) {
-      return (
-        <UserItineraryDetailPage
-          itineraryId={currentItineraryId}
-          itineraries={itineraries}
-          setCurrentItineraryId={setCurrentItineraryId}
-        />
-      );
+      navigation.navigate('UserItineraryDetailPage', {itineraryId : itineraryId, route:route, navigation:navigation})
     }
   
-
-  // 4 Delete itinerary from firebase
     function handleDeleteItinerary(itineraryId) {
       const docRef = doc(db, "itineraries", `${itineraryId}`);
       deleteDoc(docRef);
       setShowItineraries(!showItineraries);
-
     }
 
   if (itineraries === undefined) {
@@ -81,63 +67,39 @@ export default function UserItinerariesPage({ navigation }) {
   }
   
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={{ fontSize: 24, top: 50 }}>
-        {" "}
-        Your Upcoming itineraries:{" "}
-      </Text>
+    <View style={styles.container}>
+      <Text style={styles.header}>Your Upcoming Itineraries</Text>
       <SafeAreaView style={styles.scrollContainer}>
-        
-      <ScrollView >
-        {itineraries.map((itinerary) => {
-          return (
-            <View style={styles.itineraryCard} key={itinerary.itinerary_id}>
-              <Text style={styles.destination}> {itinerary.location}</Text>
-              {/* start date has a different format */}
-              <Text style={styles.startDate}> Start Date: {itinerary.start_date.toDate().toDateString()}</Text>
-              <Text style={styles.endDate}> End Date: {itinerary.end_date.toDate().toDateString()}</Text>
-              <Text style={styles.startDate}>
-              Total Days: {itinerary.total_days}
-              </Text>
-              <Text style={styles.startDate}>
-              Total Activities: {itinerary.itinerary_info.length}
-            </Text>
-            <Text style={styles.startDate}> {itinerary.exchangeData}</Text>
-
-            <Text style={styles.startDate}> Weather prediction: {itinerary.itinerary_weather}</Text>
-            <Text style={styles.startDate}> Total Travelers: {itinerary.numberOfPeople}</Text>
-
-            <TouchableOpacity
-              onPress={() => handleSeeDetails(itinerary.itinerary_id)}
-            >
-              <Text style={styles.detailsButton}>See Details</Text>
-            </TouchableOpacity>
-
-            {/* <TouchableOpacity
-              onPress={() => handleDeleteItinerary(itinerary.itinerary_id)}
-            >
-              <Text style={styles.deleteButton}>Delete Itinerary</Text>
-            </TouchableOpacity> */}
-
-            </View>
-          );
-        }
-        )}
-        
-      </ScrollView>
+        <ScrollView>
+          {itineraries.map((itinerary) => {
+            return (
+              <View style={styles.itineraryCard} key={itinerary.itinerary_id}>
+                <Text style={styles.destination}>{itinerary.location}</Text>
+                <Text style={styles.dateText}>Start Date: {itinerary.start_date.toDate().toDateString()}</Text>
+                <Text style={styles.dateText}>End Date: {itinerary.end_date.toDate().toDateString()}</Text>
+                <Text style={styles.dateText}>Total Days: {itinerary.total_days}</Text>
+                <Text style={styles.dateText}>Total Activities: {itinerary.itinerary_info.length}</Text>
+                <Text style={styles.dateText}>{itinerary.exchangeData}</Text>
+                <Text style={styles.dateText}>Weather Prediction: {itinerary.itinerary_weather}</Text>
+                <Text style={styles.dateText}>Total Travelers: {itinerary.numberOfPeople}</Text>
+                <TouchableOpacity onPress={() => handleSeeDetails(itinerary.itinerary_id)}>
+                  <Text style={styles.detailsButton}>See Details</Text>
+                </TouchableOpacity>
+              </View>
+            );
+          })}
+        </ScrollView>
       </SafeAreaView>
       <Footer navigation={navigation} />
-    {/* modal needs to be setup  */}
       <Modal visible={modalVisible}>
         <View style={styles.deleteModal}>
-        <Text style={{ fontSize: 20 }}>Are you sure you want to delete itinerary? </Text>
-        <TouchableOpacity onPress={() => setDeleteConfirm(true)} >
-              <Text style={styles.yesButton}> Yes </Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity onPress={() => setModalVisible(false)} >
-              <Text style={styles.noButton}> No </Text>
-        </TouchableOpacity>       
+          <Text style={styles.modalText}>Are you sure you want to delete this itinerary?</Text>
+          <TouchableOpacity onPress={() => setDeleteConfirm(true)}>
+            <Text style={styles.yesButton}>Yes</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(false)}>
+            <Text style={styles.noButton}>No</Text>
+          </TouchableOpacity>
         </View>
       </Modal>
     </View>
@@ -145,93 +107,79 @@ export default function UserItinerariesPage({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 20,
+  },
+  header: {
+    fontSize: 24,
+    marginTop: 50,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "darkgreen",
+  },
+  scrollContainer: {
+    flex: 1,
+    width: '100%',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 10,
+  },
+  itineraryCard: {
+    margin: 10,
+    padding: 15,
+    borderColor: "#ddd",
+    borderWidth: 1,
+    borderRadius: 10,
+    backgroundColor: "#fff",
+  },
+  destination: {
+    fontSize: 22,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "darkgreen",
+  },
+  dateText: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: "#555",
+  },
+  detailsButton: {
+    backgroundColor: "darkgreen",
+    color: "white",
+    textAlign: "center",
+    borderRadius: 10,
+    paddingVertical: 8,
+    marginTop: 10,
+  },
   deleteModal: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 20,
-    marginTop: 40,
-    marginBottom: 40,
+    padding: 20,
   },
-  scrollContainer: {
-    flex: 1,
-    marginTop: 50,
-    marginBottom: 10,
-  },
-  itineraryCard: {
-    flex: 1,
-    margin: 10,
-    borderColor: "black",
-    borderWidth: 1,
-    borderRadius: 20,
-    backgroundColor: "#ffffff",
-    position: "relative",
+  modalText: {
+    fontSize: 20,
     textAlign: "center",
-    textAlignVertical: "center",
-    width: 'auto',
+    marginBottom: 20,
   },
-
-  destination: {
-    fontSize: 25,
-  },
-  startDate: {
-    fontSize: 14,
-    left: 15,
-  },
-  endDate: {
-    fontSize: 14,
-    left: 15,
-  },
-
-  detailsButton: {
-    backgroundColor: "black",
+  yesButton: {
+    backgroundColor: "#499b12",
     color: "white",
     textAlign: "center",
-    borderRadius: 20,
-    width: 115,
-    marginTop: 10,
-    height: 23,
-    textAlignVertical: "center",
-    top: 33,
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginBottom: 10,
   },
-
-  deleteButton: {
-    marginLeft: 'auto',
-    backgroundColor: "#ff2600a7",
-    color: "black",
-    textAlign: "center",
-    borderRadius: 20,
-    marginTop: 10,
-    width: 115,
-    height: 23,
-    textAlignVertical: "center",
-    fontWeight: "bold",
-  },
-
-  yesButton: {
-    marginLeft: 'auto',
-    backgroundColor: "#499b12a7",
-    color: "black",
-    textAlign: "center",
-    borderRadius: 20,
-    marginTop: 30,
-    width: 115,
-    height: 23,
-    textAlignVertical: "center",
-    fontWeight: "bold",
-  },
-
   noButton: {
-    marginLeft: 'auto',
-    backgroundColor: "#ff2600a7",
-    color: "black",
+    backgroundColor: "#ff2600",
+    color: "white",
     textAlign: "center",
-    borderRadius: 20,
-    marginTop: 30,
-    width: 115,
-    height: 23,
-    textAlignVertical: "center",
-    fontWeight: "bold",
+    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
   },
-  
 });

@@ -6,6 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
+  Image,
+  SafeAreaView
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -28,6 +30,7 @@ export default function PackingOptionsPage({ navigation }) {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [userItineraries, setUserItineraries] = useState([]);
   const [correspondingItinerary, setCorrespondingItinerary] = useState(null);
+  const currentPage ="PackingOptionsPage"
 
   const handleCreateList = () => {
     navigation.navigate("PackingListPage", {
@@ -65,9 +68,16 @@ export default function PackingOptionsPage({ navigation }) {
   }, []);
 
   return (
+
     <View style={styles.screen}>
       <Header />
-      <View style={styles.screen}>
+      <TouchableOpacity
+              style={styles.iconContainer}
+              onPress={() => navigation.navigate("SavedPackingLists")}
+            >
+               <Image source={require('../../assets/icons/saveGreen.png')} style={styles.icon} />
+            </TouchableOpacity>
+      <View style={styles.content}>
         {userItineraries.length ? (
           <>
             <Text style={styles.label}>
@@ -76,7 +86,8 @@ export default function PackingOptionsPage({ navigation }) {
             <Checkbox
               value={refsItinerary}
               onValueChange={() => setRefsItinerary(!refsItinerary)}
-            />
+              style={styles.checkbox}
+             />
           </>
         ) : null}
         {refsItinerary ? (
@@ -84,6 +95,7 @@ export default function PackingOptionsPage({ navigation }) {
             <Text style={styles.label}>
               Please Choose the Corresponding Itinerary
             </Text>
+            <View style={styles.pickerBox}>
             <Picker
               selectedValue={correspondingItinerary}
               style={styles.picker}
@@ -117,7 +129,9 @@ export default function PackingOptionsPage({ navigation }) {
                 );
               })}
             </Picker>
+            </View>
             <Text style={styles.label}>Trip Purpose:</Text>
+            <View style={styles.pickerBox}>
             <Picker
               selectedValue={purpose}
               style={styles.picker}
@@ -127,10 +141,13 @@ export default function PackingOptionsPage({ navigation }) {
               <Picker.Item label="Business" value="business" />
               <Picker.Item label="Special Event" value="specialEvent" />
             </Picker>
-            <Button
-              title="Create Packing List"
-              onPress={handleRefsItineraryCreateList}
-            ></Button>
+            </View>
+            <TouchableOpacity
+            style={styles.button}
+            onPress={handleRefsItineraryCreateList}
+            >
+            <Text style={styles.buttonText}>Create Packing List</Text>
+           </TouchableOpacity>
           </View>
         ) : (
           <View>
@@ -142,6 +159,7 @@ export default function PackingOptionsPage({ navigation }) {
               onChangeText={setLocation}
             />
             <Text style={styles.label}>Trip Purpose:</Text>
+            <View style={styles.pickerBox}>
             <Picker
               selectedValue={purpose}
               style={styles.picker}
@@ -151,95 +169,147 @@ export default function PackingOptionsPage({ navigation }) {
               <Picker.Item label="Business" value="business" />
               <Picker.Item label="Special Event" value="specialEvent" />
             </Picker>
-            <Text style={styles.label}>Start Date</Text>
-            <Button
-              onPress={() => setShowStartDatePicker(true)}
-              title={startDate.toDateString()}
-            />
-            {showStartDatePicker && (
-              <DateTimePicker
-                value={startDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  const currentDate = selectedDate || startDate;
-                  setShowStartDatePicker(false);
-                  setStartDate(currentDate);
-                }}
-              />
-            )}
-            <Text style={styles.label}>End Date</Text>
-            <Button
-              onPress={() => setShowEndDatePicker(true)}
-              title={endDate.toDateString()}
-            />
-            {showEndDatePicker && (
-              <DateTimePicker
-                value={endDate}
-                mode="date"
-                display="default"
-                onChange={(event, selectedDate) => {
-                  const currentDate = selectedDate || endDate;
-                  setShowEndDatePicker(false);
-                  setEndDate(currentDate);
-                }}
-              />
-            )}
-            <TouchableOpacity style={styles.button} onPress={handleCreateList}>
-              <Text style={styles.buttonText}>Create Packing List</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={styles.button}
-              onPress={() => navigation.navigate("SavedPackingLists")}
-            >
-              <Text style={styles.buttonText}>View Saved Packing Lists</Text>
-            </TouchableOpacity>
+            </View>
+            <Text style={styles.label}>Start Date:</Text>
+<TouchableOpacity
+  style={styles.dateButton}
+  onPress={() => setShowStartDatePicker(true)}
+>
+  <Text style={styles.dateButtonText}>{startDate.toDateString()}</Text>
+</TouchableOpacity>
+{showStartDatePicker && (
+  <DateTimePicker
+    value={startDate}
+    mode="date"
+    display="default"
+    onChange={(event, selectedDate) => {
+      const currentDate = selectedDate || startDate;
+      setShowStartDatePicker(false);
+      setStartDate(currentDate);
+    }}
+  />
+)}
+<Text style={styles.label}>End Date:</Text>
+<TouchableOpacity
+  style={styles.dateButton}
+  onPress={() => setShowEndDatePicker(true)}
+>
+  <Text style={styles.dateButtonText}>{endDate.toDateString()}</Text>
+</TouchableOpacity>
+{showEndDatePicker && (
+  <DateTimePicker
+    value={endDate}
+    mode="date"
+    display="default"
+    onChange={(event, selectedDate) => {
+      const currentDate = selectedDate || endDate;
+      setShowEndDatePicker(false);
+      setEndDate(currentDate);
+    }}
+  />
+)}
+<TouchableOpacity style={styles.button} onPress={handleCreateList}>
+  <Text style={styles.buttonText}>Create Packing List</Text>
+</TouchableOpacity>
+
           </View>
         )}
-      </View>
+      </View >
 
-      <Footer navigation={navigation} />
+      <View style={styles.footer}>
+        <Footer navigation={navigation} currentPage={currentPage}/>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   screen: {
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
     paddingTop: 60,
-    marginHorizontal: 10,
+    paddingHorizontal: 10
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 10, // Adjusted padding for content area
   },
   label: {
     fontSize: 16,
-    margin: 10,
+    marginVertical: 10, // Adjusted margin for better spacing
+    marginHorizontal: 10,
   },
   input: {
-    height: 30,
+    height: 40, // Increased height for better input field visibility
     width: "100%",
-    borderRadius: 1,
+
+    borderRadius: 10,
     paddingHorizontal: 15,
     borderWidth: 1,
     borderColor: "gray",
     marginBottom: 20,
     alignSelf: "center",
   },
+  checkbox: {
+    marginLeft: 10, 
+  },
+  pickerBox: {
+    borderWidth: 1,
+    borderColor: "gray",
+    borderRadius: 10,
+    padding: 0,
+    marginBottom: 10, 
+  },
   picker: {
     height: 50,
     width: "100%",
     alignSelf: "center",
+    marginBottom: 150, 
   },
   button: {
-    backgroundColor: "#007bff",
-    padding: 15,
-    borderRadius: 5,
+    height: 40,
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
+    justifyContent: "center",
     alignItems: "center",
-    marginVertical: 10,
+    marginBottom: 5,
+    marginTop: 5
   },
   buttonText: {
-    color: "#fff",
-    fontSize: 16,
+    color: "white",
     fontWeight: "bold",
   },
+  dateButton: {
+    height: 30,
+    width: '100%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "darkgreen",
+    backgroundColor: "white",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  dateButtonText: {
+    color: "darkgreen",
+  },
+  iconContainer: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+  },
+  icon: {
+    width: 150,
+    height: 50,
+  },
+  footer: {
+    width: '100%',
+  },
 });
+
+
