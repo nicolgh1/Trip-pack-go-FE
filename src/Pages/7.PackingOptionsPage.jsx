@@ -6,7 +6,8 @@ import {
   TextInput,
   TouchableOpacity,
   Button,
-  Image
+  Image,
+  SafeAreaView
 } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -29,6 +30,7 @@ export default function PackingOptionsPage({ navigation }) {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [userItineraries, setUserItineraries] = useState([]);
   const [correspondingItinerary, setCorrespondingItinerary] = useState(null);
+  const currentPage ="PackingOptionsPage"
 
   const handleCreateList = () => {
     navigation.navigate("PackingListPage", {
@@ -66,9 +68,10 @@ export default function PackingOptionsPage({ navigation }) {
   }, []);
 
   return (
+
     <View style={styles.screen}>
       <Header />
-      <View style={styles.screen}>
+      <View style={styles.content}>
       <TouchableOpacity
               style={styles.iconContainer}
               onPress={() => navigation.navigate("SavedPackingLists")}
@@ -211,20 +214,28 @@ export default function PackingOptionsPage({ navigation }) {
 
           </View>
         )}
-      </View>
+      </View >
 
-      <Footer navigation={navigation} />
+      <View style={styles.footer}>
+        <Footer navigation={navigation} currentPage={currentPage}/>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+
   screen: {
     flex: 1,
     backgroundColor: "#fff",
     justifyContent: "center",
     paddingTop: 60,
-    marginHorizontal: 10,
+    paddingHorizontal: 10
+  },
+  content: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 10, // Adjusted padding for content area
   },
   label: {
     fontSize: 16,
@@ -234,6 +245,7 @@ const styles = StyleSheet.create({
   input: {
     height: 40, // Increased height for better input field visibility
     width: "100%",
+
     borderRadius: 10,
     paddingHorizontal: 15,
     borderWidth: 1,
@@ -289,11 +301,14 @@ const styles = StyleSheet.create({
   iconContainer: {
     position: "absolute",
     top: 10,
-    right: 20,
+    right: 0,
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 150,
+    height: 50,
+  },
+  footer: {
+    width: '100%',
   },
 });
 
