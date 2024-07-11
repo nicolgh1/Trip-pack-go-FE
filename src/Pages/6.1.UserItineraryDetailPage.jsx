@@ -36,22 +36,30 @@ export default function UserItineraryDetailPage({route, navigation}) {
     console.log("useEffect");
   }, []);
 
+  function photoUrl(photoReference) {
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
 
       <ScrollView>
         {currentItinerary.itinerary_info &&
           currentItinerary.itinerary_info.map((day) => {
-            return (
-              <View style={styles.itineraryCard} key={day.day_number}>
-                <Text style={styles.day}>Day {day.day_number}</Text>
-                <Text style={styles.activity}>
-                  Main Activity: {day.main_activity.name}
-                </Text>
-                <Text style={styles.activity}>{day.main_activity.rating} / 5</Text>
-                <Text style={styles.activity}>Total Ratings: {day.main_activity.user_ratings_total}</Text>
-              </View>
-            );
+            if (day.main_activity.name) {
+              
+              return (
+                <View style={styles.itineraryCard} key={day.day_number}>
+                  <Text style={styles.day}>Day {day.day_number}</Text>
+                  <Text style={styles.activity}>
+                    Main Activity: {day.main_activity.name}
+                  </Text>
+                  <Text style={styles.activity}>{day.main_activity.rating} / 5</Text>
+                  <Text style={styles.activity}>Total Ratings: {day.main_activity.user_ratings_total}</Text>
+                  <Image source={{uri: photoUrl(day.main_activity.photos)}} style={{width: 200, height: 200, borderRadius: 20, marginTop: 10}}/>
+                </View>
+              );
+            }
           })}
       </ScrollView>
       <Footer navigation={navigation} />
