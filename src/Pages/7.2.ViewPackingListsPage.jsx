@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { collection, query, where, getDocs, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { auth, db } from '../../firebaseConfig';
 import Header from '../components/Header';
@@ -25,11 +25,26 @@ export default function SavedPackingLists({ navigation }) {
  }, [showPackingLists]);
 
  const handleDelete = async (id) => {
-  try {
-    await deleteDoc(doc(db, 'packingLists', id));
-  } catch (error) {
-    console.error("Error deleting document: ", error);
-  }
+  Alert.alert(
+    "Confirm Deletion",
+    "Are you sure you want to delete this packing list?",
+    [
+      {
+        text: "Cancel",
+        onPress: () => {},
+        style: "cancel",
+      },
+      {
+        text: "Delete",
+        onPress: async () => {
+          await deleteDoc(doc(db, "packingLists", id));
+          setPackingLists(packingLists.filter((list) => list.id !== id));
+        },
+        style: "destructive",
+      },
+    ],
+    { cancelable: false }
+  );
 };
 
 const handleEdit = (list) => {
@@ -51,10 +66,21 @@ const handleEdit = (list) => {
         {packingLists.map((list) => (
           <View key={list.packingList_id} style={styles.packingList}>
             <Text style={styles.packingListTitle}>{list.location}</Text>
+            <View style={styles.listActions}>
+                    <TouchableOpacity onPress={() => handleEdit(list)}>
+                      <Ionicons name="pencil" size={24} color="darkgreen" style={styles.icon}/>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => handleDelete(list.packingList_id)}>
+                      <Ionicons name="trash-outline" size={24} color="black" style={styles.icon}/>
+                    </TouchableOpacity>
+                  </View>
             <Text style={styles.infoText}>Purpose: {list.purpose}</Text>
             <Text style={styles.infoText}>
               Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}
             </Text>
+                <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('ViewPackingListPage', { list })}>
+                <Text style={styles.buttonText}>View Packing List</Text>
+                </TouchableOpacity>
             {Object.keys(list.packingList).map(category => (
               <View key={category} style={styles.category}>
                 <Text style={styles.categoryTitle}>{category}</Text>
@@ -110,6 +136,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     color: 'darkgreen',
+    textAlign: 'center',
   },
   category: {
     marginBottom: 15,
@@ -131,5 +158,29 @@ const styles = StyleSheet.create({
   itemDetail: {
     fontSize: 14,
     color: '#555',
+  },
+  listActions: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    width: 60,
+    marginBottom: 20,
+    marginLeft: 15,
+    marginRight: 15,
+  },
+  button: {
+    marginVertical: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: 'darkgreen',
+    borderRadius: 5,
+    textAlign: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  icon: {
+    marginHorizontal: 10,
   },
 });

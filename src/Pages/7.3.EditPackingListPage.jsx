@@ -13,6 +13,7 @@ import Footer from "../components/FooterNavigation";
 import { doc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
+import { Ionicons } from '@expo/vector-icons';
 
 export default function EditPackingListPage({ navigation, route }) {
   const { user } = useContext(UserContext);
@@ -147,11 +148,12 @@ export default function EditPackingListPage({ navigation, route }) {
                   <TouchableOpacity
                     onPress={() => handleDeleteItem(category, item.id)}
                   >
-                    <Text style={styles.controlButton}>Delete</Text>
+                    <Ionicons name="trash-outline" size={20} color="darkgreen"/>
                   </TouchableOpacity>
                 </View>
               </View>
             ))}
+            <View style={styles.addItemContainer}>
             <TextInput
               style={styles.addItemInput}
               placeholder={`Add item to ${category}`}
@@ -161,18 +163,23 @@ export default function EditPackingListPage({ navigation, route }) {
                 setNewItemCategory(category);
               }}
             />
-            <Button title="Add" onPress={() => handleAddItem(category)} />
+            <TouchableOpacity onPress={() => handleAddItem(category)} style={styles.addButton}>
+            <Ionicons name="add-circle-outline" size={24} color="darkgreen" />
+            </TouchableOpacity>
+            </View>
           </View>
         ))}
-        <View style={styles.newCategoryContainer}>
-          <TextInput
-            style={styles.addItemInput}
-            placeholder="New Category Name"
-            value={newCategoryName}
-            onChangeText={setNewCategoryName}
-          />
-          <Button title="Add Category" onPress={handleAddCategory} />
-        </View>
+              <View style={styles.newCategoryContainer}>
+        <TextInput
+          style={styles.addItemInput}
+          placeholder="New Category Name"
+          value={newCategoryName}
+          onChangeText={setNewCategoryName}
+        />
+        <TouchableOpacity style={styles.icon} onPress={handleAddCategory}>
+          <Ionicons name="add-circle-outline" size={30} color="green" />
+        </TouchableOpacity>
+      </View>
       </ScrollView>
       <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
         <Text style={styles.buttonText}>Save Packing List</Text>
@@ -195,10 +202,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: "bold",
     marginBottom: 20,
     textAlign: 'center',
+    color: 'darkgreen',
   },
   input: {
     fontSize: 16,
@@ -209,20 +217,21 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   category: {
-    marginBottom: 20,
+    marginBottom: 15,
+    marginTop: 20,
   },
   categoryTitle: {
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    paddingBottom: 5,
+    marginBottom: 5,
+    color: 'darkgreen',
   },
   item: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: 5,
+    marginTop: 20,
+    marginLeft: 10,
   },
   itemControls: {
     flexDirection: 'row',
@@ -235,30 +244,51 @@ const styles = StyleSheet.create({
   },
   controlButton: {
     fontSize: 18,
-    paddingHorizontal: 10,
-    color: "#007bff",
+    paddingHorizontal: 20,
+    color: "darkgreen",
   },
   addItemInput: {
     fontSize: 16,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
     marginBottom: 10,
+    marginTop: 30,
     paddingHorizontal: 10,
     paddingVertical: 5,
   },
   newCategoryContainer: {
     marginVertical: 20,
     alignItems: "center",
+    flexDirection: 'row',
   },
   button: {
     marginVertical: 10,
     paddingHorizontal: 20,
     paddingVertical: 10,
-    backgroundColor: '#007bff',
+    backgroundColor: 'darkgreen',
     borderRadius: 5,
+    textAlign: 'center',
   },
   buttonText: {
     color: '#fff',
     fontSize: 16,
   },
+  icon: {
+    marginHorizontal: 10,
+  },
+  actionText: {
+    color: 'darkgreen',
+    fontSize: 16,
+  },
+  addButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  addItemContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10, 
+  },
 });
+
