@@ -104,6 +104,7 @@ const MoreActivitiesSelection = ({ route, navigation }) => {
         console.error("Error adding document: ", e);
       });
   };
+  
 
   return (
 

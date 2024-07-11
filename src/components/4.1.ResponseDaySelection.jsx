@@ -37,9 +37,9 @@ export const ResponseDaySelection = ({
       setCurrentDay(currentDay - 1);
     }
   };
-  console.log(responseObj, 'resp obj in resp day')
+
   const handleNextStep = () => {
-    console.log(responseObj, 'resp obj in handle nexy')
+
     navigation.navigate('MoreActivities', {responseObj : responseObj, setResponseObj: setResponseObj,route:route, navigation:navigation})
   }
 
@@ -58,6 +58,10 @@ export const ResponseDaySelection = ({
     newRsponseObj.itinerary_info[currentDay - 1].main_activity = activityObj;
     setResponseObj(newRsponseObj);
   };
+
+  function photoUrl(photoReference) {
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+  }
 
   return (
     <View style={styles.screen}>
@@ -123,7 +127,18 @@ export const ResponseDaySelection = ({
                         <Text style={styles.itemText}>
                           {attraction.item.name}
                         </Text>
-                        {/* { attraction.item.photos!== undefined ? <Image source = {{ uri: fetchPlacePicture(attraction.item.photos[0].photo_reference,400)}} /> : null} */}
+
+                        {photoUrl(attraction.item.photos[0].photo_reference) ? (
+                          <View style={styles.imageContainer}>
+                    <Image
+                        source={{ uri: photoUrl(attraction.item.photos[0].photo_reference) }}
+                        style={styles.image}
+                        onError={(e) => console.log(e.nativeEvent.error)}
+                    /></View>
+                ) : (
+                    <Text style={styles.itemText}>Loading image...</Text>
+                )}
+
                       </TouchableOpacity>
                     );
                 }}
@@ -209,10 +224,22 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   itemText: {
-    padding: 10,
+    padding: 20,
     textAlign: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
+    fontWeight: "bold",
+    fontSize: 18,
   },
+  imageContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center', 
+  },
+  image: {
+    width: 300,
+    height: 200,
+    padding: 10
+  }
 })
 
