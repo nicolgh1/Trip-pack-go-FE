@@ -192,8 +192,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    marginTop: 20,
-    textAlign: "center",
+    marginBottom: 15,
+    textAlign: "left",
     color: "darkgreen",
   },
   infoText: {
@@ -269,10 +269,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     backgroundColor: "darkgreen",
-    borderRadius: 5,
+    borderRadius: 10,
     alignItems: "center",
     alignSelf: "center",
-    width: "80%",
+    width: "90%",
   },
   buttonText: {
     color: "white",
