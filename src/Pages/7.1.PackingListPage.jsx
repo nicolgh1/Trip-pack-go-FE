@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 30,
     fontWeight: "bold",
-    marginBottom: 20,
+    marginTop: 20,
     textAlign: "center",
     color: "darkgreen",
   },
@@ -280,12 +280,12 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
-    top: 10,
-    right: 20,
+    top: 0,
+    right: 0,
   },
   icon: {
-    width: 30,
-    height: 30,
+    width: 120,
+    height: 40,
   },
 });
 
