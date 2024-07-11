@@ -17,9 +17,9 @@ import { UserProvider } from "./src/contexts/UserContext";
 import ResponsePage from "./src/Pages/4.ResposePage";
 import PackingListPage from "./src/Pages/7.1.PackingListPage";
 import SavedPackingLists from "./src/Pages/7.2.ViewPackingListsPage";
-import EditPackingListPage from "./src/Pages/7.3.EditPackingListPage";
-import ViewPackingListPage from "./src/Pages/7.4.ViewPackingListPage";
-import MoreActivitiesSelection from './src/components/4.2.MoreActivitiesSelection'
+import MoreActivitiesSelection from './src/Pages/4.2.MoreActivitiesSelection'
+import ConfirmItinerary from './src/Pages/4.2.3.ConfirmItinerary'
+import UserItineraryDetailPage from './src/Pages/6.1.UserItineraryDetailPage'
 
 const Stack = createNativeStackNavigator();
 
@@ -37,25 +37,32 @@ function InsideLayout() {
       <InsideStack.Screen
         name="SearchPage"
         component={SearchPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="UserAccountSettingsPage"
         component={UserAccountSettingsPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="UserItinerariesPage"
         component={UserItinerariesPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
+      ></InsideStack.Screen>
+
+
+      <InsideStack.Screen
+        name="UserItineraryDetailPage"
+        component={UserItineraryDetailPage}
+        options={{ headerShown: true }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
         name="PackingOptionsPage"
         component={PackingOptionsPage}
-        options={{ headerShown: false }}
+        options={{ headerShown: true }}
       ></InsideStack.Screen>
 
       <InsideStack.Screen
@@ -69,6 +76,12 @@ function InsideLayout() {
         component={MoreActivitiesSelection}
         options={{ headerShown: true }}
       />
+      
+      <InsideStack.Screen
+        name="ConfirmationItinerary"
+        component={ConfirmItinerary}
+        options={{ headerShown: true }}
+      />
 
       <InsideStack.Screen
         name="PackingListPage"
@@ -79,18 +92,6 @@ function InsideLayout() {
       <InsideStack.Screen
         name="SavedPackingLists"
         component={SavedPackingLists}
-        options={{ headerShown: true }}
-      />
-
-      <InsideStack.Screen
-        name="EditPackingListPage"
-        component={EditPackingListPage}
-        options={{ headerShown: true }}
-      />
-
-      <InsideStack.Screen
-        name="ViewPackingListPage"
-        component={ViewPackingListPage}
         options={{ headerShown: true }}
       />
     </InsideStack.Navigator>

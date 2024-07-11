@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 import { useEffect, useState } from "react";
-import { ActivitiesTypes } from "./4.2.1.ActivitiesTypes";
-import { ActivitiesList } from "./4.2.2.ActivitiesList";
+import { ActivitiesTypes } from "../components/4.2.1.ActivitiesTypes";
+import { ActivitiesList } from "../components/4.2.2.ActivitiesList";
 import { fetchAttractions } from "../../googleApi";
 import "firebase/firestore";
 import { db } from "../../firebaseConfig";
@@ -13,8 +13,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import Footer from "./FooterNavigation";
-import { UserItineraryDetailPage } from "../Pages/6.1.UserItineraryDetailPage";
+import Footer from "../components/FooterNavigation";
 
 const MoreActivitiesSelection = ({ route, navigation }) => {
   const { responseObj, setResponseObj } = route.params;
@@ -26,7 +25,6 @@ const MoreActivitiesSelection = ({ route, navigation }) => {
   const [loading, setLoading] = useState(null);
   const [detailedActivitiesList, setDetailedActivitiesList] = useState({});
   const [hide, setHide] = useState(false);
-  const [postedItinerary, setPostedItinerary] = useState({});
 
   useEffect(() => {
     if (selectedTypes.length === 0) return;
@@ -99,8 +97,7 @@ const MoreActivitiesSelection = ({ route, navigation }) => {
         return updateDoc(doc(db, "itineraries", document.id), {
           itinerary_id: document.id,
         }).then(() => {
-          console.log(document.id, "document.id");
-          setPostedItinerary(document);
+          navigation.navigate('ConfirmationItinerary', {itinerary_id : document.id,route:route, navigation:navigation})
         });
       })
       .catch((e) => {
@@ -108,103 +105,73 @@ const MoreActivitiesSelection = ({ route, navigation }) => {
       });
   };
 
-  const handleSeeItinerary = () => {
-
-  }
-
-  const handleCreatePackingList = () => {
-    
-  }
-
   return (
+
     <View style={styles.screen}>
-      {Object.keys(postedItinerary).length > 0 ? (
-        <View>
-          <Text style={styles.sectionTitle}>Itinerary Has Been Submited</Text>
-          <TouchableOpacity style={styles.button} onPress={handleSeeItinerary}>
-            <Text style={styles.buttonText}>See Itinerary In Detail</Text>
+      <View style={styles.buttonsContainer}>
+        {currentDayOther > 1 ? (
+          <TouchableOpacity style={styles.button} onPress={handlePreviousDay}>
+            <Text style={styles.buttonText}>Previous Day</Text>
           </TouchableOpacity>
-          <Text style={styles.sectionSubTitle}>To Get You Ready for the Trip Let's Make a Packing List</Text>
-          <TouchableOpacity style={styles.button} onPress={handleCreatePackingList}>
-            <Text style={styles.buttonText}>Create Packing List</Text>
-          </TouchableOpacity>
-        </View>
-      ) : (
-        <View>
-          <View style={styles.buttonsContainer}>
-            {currentDayOther > 1 ? (
-              <TouchableOpacity
-                style={styles.button}
-                onPress={handlePreviousDay}
-              >
-                <Text style={styles.buttonText}>Previous Day</Text>
-              </TouchableOpacity>
-            ) : (
-              <View style={styles.placeholder} />
-            )}
+        ) : (
+          <View style={styles.placeholder} />
+        )}
 
-            {currentDayOther < responseObj.total_days ? (
-              <TouchableOpacity style={styles.button} onPress={handleNextDay}>
-                <Text style={styles.buttonText}>
-                  Go to day {currentDayOther + 1}
-                </Text>
-              </TouchableOpacity>
+        {currentDayOther < responseObj.total_days ? (
+          <TouchableOpacity style={styles.button} onPress={handleNextDay}>
+            <Text style={styles.buttonText}>
+              Go to day {currentDayOther + 1}
+            </Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={handleConfirmation} style={styles.button}>
+            <Text style={styles.buttonText}>Confirm Itinerary</Text>
+          </TouchableOpacity>
+        )}
+      </View>
+
+      <View style={styles.body}>
+        <View style={styles.textContainer}>
+          <Text style={styles.sectionTitle}>
+            Choose Some More Activities for Day {currentDayOther} Near{" "}
+            {responseObj.itinerary_info[currentDayOther - 1].main_activity.name}
+          </Text>
+        </View>
+
+          <View>
+            {!hide ? (
+              <View>
+                <ActivitiesTypes
+                  selectedTypes={selectedTypes}
+                  setSelectedTypes={setSelectedTypes}
+                  handleSeeActivities={handleSeeActivities}
+                />
+              </View>
             ) : (
-              <TouchableOpacity
-                onPress={handleConfirmation}
-                style={styles.button}
-              >
-                <Text style={styles.buttonText}>Confirm Itinerary</Text>
-              </TouchableOpacity>
+              <View>
+                <TouchableOpacity
+                  onPress={handleSeeActivities}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>Back to Types Choices</Text>
+                </TouchableOpacity>
+                <ActivitiesList
+                  detailedActivitiesList={detailedActivitiesList}
+                  setDetailedActivitiesList={setDayMainActivity}
+                  responseObj={responseObj}
+                  setResponseObj={setResponseObj}
+                  currentDayOther={currentDayOther}
+                  handleConfirmation={handleConfirmation}
+                />
+              </View>
             )}
           </View>
-
-          <View style={styles.body}>
-            <View style={styles.textContainer}>
-              <Text style={styles.sectionTitle}>
-                Choose Some More Activities for Day {currentDayOther} Near{" "}
-                {
-                  responseObj.itinerary_info[currentDayOther - 1].main_activity
-                    .name
-                }
-              </Text>
-            </View>
-
-            <View>
-              {!hide ? (
-                <View>
-                  <ActivitiesTypes
-                    selectedTypes={selectedTypes}
-                    setSelectedTypes={setSelectedTypes}
-                    handleSeeActivities={handleSeeActivities}
-                  />
-                </View>
-              ) : (
-                <View>
-                  <TouchableOpacity
-                    onPress={handleSeeActivities}
-                    style={styles.button}
-                  >
-                    <Text style={styles.buttonText}>Back to Types Choices</Text>
-                  </TouchableOpacity>
-                  <ActivitiesList
-                    detailedActivitiesList={detailedActivitiesList}
-                    setDetailedActivitiesList={setDayMainActivity}
-                    responseObj={responseObj}
-                    setResponseObj={setResponseObj}
-                    currentDayOther={currentDayOther}
-                    handleConfirmation={handleConfirmation}
-                  />
-                </View>
-              )}
-            </View>
-          </View>
-        </View>
-      )}
+      </View>
       <View style={styles.footer}>
         <Footer navigation={navigation} />
       </View>
     </View>
+
   );
 };
 

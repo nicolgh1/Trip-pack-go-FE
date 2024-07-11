@@ -24,14 +24,14 @@ import {
 import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
 
-export default function UserItinerariesPage({ navigation }) {
+export default function UserItinerariesPage({ navigation, route }) {
+
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const { user } = useContext(UserContext);
   const [itineraries, setItineraries] = useState();
   const itinerariesColRef = collection(db, "itineraries");
   const q = query(itinerariesColRef, where("user_id", "==", `${user.id}`));
-  const currentPage ="UserItinerariesPage"
 
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,17 +47,10 @@ export default function UserItinerariesPage({ navigation }) {
     setIsLoading(false);
   }, []);
 
-    const [currentItineraryId, setCurrentItineraryId] = useState(null);
+
+
     function handleSeeDetails(itineraryId) {
-      setCurrentItineraryId(itineraryId);
-    }
-    if (currentItineraryId !== null) {
-      return (
-        <UserItineraryDetailPage
-          itineraryId={currentItineraryId}
-          setCurrentItineraryId={setCurrentItineraryId}
-        />
-      );
+      navigation.navigate('UserItineraryDetailPage', {itineraryId : itineraryId, route:route, navigation:navigation})
     }
   
     function handleDeleteItinerary(itineraryId) {
@@ -97,7 +90,7 @@ export default function UserItinerariesPage({ navigation }) {
           })}
         </ScrollView>
       </SafeAreaView>
-      <Footer navigation={navigation} currentPage={currentPage}/>
+      <Footer navigation={navigation} />
       <Modal visible={modalVisible}>
         <View style={styles.deleteModal}>
           <Text style={styles.modalText}>Are you sure you want to delete this itinerary?</Text>
