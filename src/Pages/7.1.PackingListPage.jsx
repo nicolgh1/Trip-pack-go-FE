@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -7,12 +7,12 @@ import {
   Button,
   TextInput,
   ScrollView,
-  Image
+  Image,
 } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
 import { addDoc, collection, doc, updateDoc } from "firebase/firestore";
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome } from "@expo/vector-icons";
 import { db } from "../../firebaseConfig";
 import { UserContext } from "../contexts/UserContext";
 
@@ -26,6 +26,20 @@ export default function PackingListPage({ navigation, route }) {
     Clothes: [{ id: 1, name: "T-shirts", quantity: 2 }],
     Toiletries: [{ id: 1, name: "Toothbrush", quantity: 1 }],
   });
+
+  function addPackingMusts() {
+    let counter = 0;
+    const packingMusts = [];
+    for (must of user.packingMusts) {
+      const newMust = { id: Date.now() + counter, name: must, quantity: 1 };
+      packingMusts.push(newMust);
+      counter++;
+    }
+    return packingMusts;
+  }
+  useEffect(() => {
+    setPackingList({ ...packingList, "Packing Musts": addPackingMusts() });
+  }, []);
 
   const handleAddItem = (category) => {
     if (!newItemName) return;
@@ -148,9 +162,12 @@ export default function PackingListPage({ navigation, route }) {
                 setNewItemCategory(category);
               }}
             />
-            <TouchableOpacity style={styles.whiteButton} onPress={() => handleAddItem(category)}>
-        <Text style={styles.whiteButtonText}>Add</Text>
-      </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.whiteButton}
+              onPress={() => handleAddItem(category)}
+            >
+              <Text style={styles.whiteButtonText}>Add</Text>
+            </TouchableOpacity>
           </View>
         ))}
         <View style={styles.newCategoryContainer}>
@@ -160,21 +177,27 @@ export default function PackingListPage({ navigation, route }) {
             value={newCategoryName}
             onChangeText={setNewCategoryName}
           />
-          <TouchableOpacity style={styles.whiteButton} onPress={handleAddCategory}>
-        <Text style={styles.whiteButtonText}>Add Category</Text>
-      </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.whiteButton}
+            onPress={handleAddCategory}
+          >
+            <Text style={styles.whiteButtonText}>Add Category</Text>
+          </TouchableOpacity>
         </View>
       </ScrollView>
-      
+
       <TouchableOpacity style={styles.button} onPress={handleSavePackingList}>
         <Text style={styles.buttonText}>Save Packing List</Text>
       </TouchableOpacity>
       <TouchableOpacity
-              style={styles.iconContainer}
-              onPress={() => navigation.navigate("SavedPackingLists")}
-            >
-               <Image source={require('../../assets/icons/saveGreen.png')} style={styles.icon} />
-            </TouchableOpacity>
+        style={styles.iconContainer}
+        onPress={() => navigation.navigate("SavedPackingLists")}
+      >
+        <Image
+          source={require("../../assets/icons/saveGreen.png")}
+          style={styles.icon}
+        />
+      </TouchableOpacity>
       <Footer navigation={navigation} />
     </View>
   );
@@ -206,7 +229,7 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 15, 
+    marginBottom: 15,
     borderBottomWidth: 1,
     borderBottomColor: "#ddd",
     paddingBottom: 5,
@@ -246,12 +269,12 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
   newCategoryContainer: {
-    marginVertical: 30, 
+    marginVertical: 30,
     alignItems: "center",
   },
   whiteButton: {
     height: 30,
-    width: '100%',
+    width: "100%",
     borderRadius: 10,
     borderWidth: 1,
     borderColor: "darkgreen",
@@ -288,4 +311,3 @@ const styles = StyleSheet.create({
     height: 40,
   },
 });
-
