@@ -143,12 +143,14 @@ export default function HomePage({ navigation }) {
       <View style={styles.body}>
         {soonestItinerary ? (
           <>
-            <Text>
+          <View >
+            <Text style={styles.subTitleText}>
               Next Trip to {soonestItinerary ? soonestItinerary.location : "X"}{" "}
-              in {numDaysToTrip} Days
+              is in {numDaysToTrip} Days
             </Text>
+          </View>
             {soonestItineraryPackingList ? (
-              <Text>You Have Packed {packingUpdate} Items for this Trip</Text>
+              <Text style={styles.text1}>You Have Packed {packingUpdate} Items for this Trip</Text>
             ) : (
               <>
                 <Text>You Have No Packing List for this Trip</Text>
@@ -263,4 +265,16 @@ const styles = StyleSheet.create({
     height: "100%", // Full height of the container
     resizeMode: "contain", // Ensures the image scales correctly
   },
+  subTitleText: {
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 30,
+    backgroundColor:"#fff",
+    fontSize: 18,
+  },
+  text1: {
+    fontWeight: "bold",
+    textAlign: "center",
+    padding: 20
+  }
 });
