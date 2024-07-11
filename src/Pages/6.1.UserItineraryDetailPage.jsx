@@ -42,7 +42,7 @@ export default function UserItineraryDetailPage({route, navigation}) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-
+      <Text style={styles.header}>{currentItinerary.location}</Text>
       <ScrollView>
         {currentItinerary.itinerary_info &&
           currentItinerary.itinerary_info.map((day) => {
@@ -69,6 +69,7 @@ export default function UserItineraryDetailPage({route, navigation}) {
 
 const styles = {
   header: {
+    color: 'darkgreen',
     fontSize: 30,
     fontWeight: "bold",
     textAlign: "center",
