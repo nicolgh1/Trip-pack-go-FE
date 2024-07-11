@@ -37,6 +37,10 @@ export default function UserItineraryDetailPage({
     console.log("useEffect");
   }, []);
 
+  function photoUrl(photoReference) {
+    return `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${process.env.EXPO_PUBLIC_GOOGLE_MAPS_API_KEY}`
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <TouchableOpacity onPress={() => setCurrentItineraryId(null)}>
@@ -55,6 +59,7 @@ export default function UserItineraryDetailPage({
                 </Text>
                 <Text style={styles.activity}>{day.main_activity.rating} / 5</Text>
                 <Text style={styles.activity}>Total Ratings: {day.main_activity.user_ratings_total}</Text>
+                <Image source={{uri: photoUrl(day.main_activity.photos)}} style={{width: 200, height: 200, borderRadius: 20, marginTop: 10}}/>
               </View>
             );
           })}
