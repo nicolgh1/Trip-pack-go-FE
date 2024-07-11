@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, Image , Dimensions} from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
 import { UserContext } from "../contexts/UserContext";
@@ -15,6 +15,8 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
+
+const { width, height } = Dimensions.get('window');
 
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
@@ -122,9 +124,17 @@ export default function HomePage({ navigation }) {
   if (userCntxtLoading) return <Text>Loading...</Text>;
   return (
     <View style={styles.screen}>
-      <Header />
+      {/* <Header /> */}
+      <View style={styles.imageContainer}>
+      <Image
+          source={require('../../assets/logo.png')}
+          style={styles.image} />
+          <Text style={styles.appName}>Trip Pack Go</Text>
+      </View>
       <View style={styles.body}>
+        <View style={styles.sectionSubTitle}>
         <Text style={styles.welcomeMsg}>Hello {user.firstName}!</Text>
+        </View>
       </View>
       <View style={styles.body}>
         {soonestItinerary ? (
@@ -178,10 +188,29 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   welcomeMsg: {
-    fontSize: 50,
+    fontSize: 30,
     fontWeight: "bold",
     color: "darkgreen",
-    marginTop: 20,
+    marginTop: 10,
+  },
+  appName: {
+    fontSize: 40,
+    fontWeight: "bold",
+    color: "darkgreen",
+    marginTop: 0,
+  },
+  sectionSubTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
   },
   body: {
     flex: 8,
@@ -216,4 +245,17 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "bold",
   },
+  imageContainer: {
+    width: '100%',
+    height: height * 0.2, // 50% of screen height
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    marginTop: 20, // Adjust margin as needed
+    backgroundColor: "#14141410",
+  },
+  image: {
+    width: width * 0.30, // 50% of screen width
+    height: '100%', // Full height of the container
+    resizeMode: 'contain', // Ensures the image scales correctly
+  }
 });
