@@ -27,10 +27,7 @@ import { UserContext } from "../contexts/UserContext";
 export default function UserItinerariesPage({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  // 1 fetch the user details from firebase
   const { user } = useContext(UserContext);
-
-  // 2 fetch all user itineraries from firebase
   const [itineraries, setItineraries] = useState();
   const itinerariesColRef = collection(db, "itineraries");
   const q = query(itinerariesColRef, where("user_id", "==", `${user.id}`));
@@ -49,7 +46,6 @@ export default function UserItinerariesPage({ navigation }) {
     setIsLoading(false);
   }, []);
 
-  // 3 Navigate to 6.1.UserItineraryDetailPage
     const [currentItineraryId, setCurrentItineraryId] = useState(null);
     function handleSeeDetails(itineraryId) {
       setCurrentItineraryId(itineraryId);
@@ -58,19 +54,15 @@ export default function UserItinerariesPage({ navigation }) {
       return (
         <UserItineraryDetailPage
           itineraryId={currentItineraryId}
-          itineraries={itineraries}
           setCurrentItineraryId={setCurrentItineraryId}
         />
       );
     }
   
-
-  // 4 Delete itinerary from firebase
     function handleDeleteItinerary(itineraryId) {
       const docRef = doc(db, "itineraries", `${itineraryId}`);
       deleteDoc(docRef);
       setShowItineraries(!showItineraries);
-
     }
 
   if (itineraries === undefined) {
