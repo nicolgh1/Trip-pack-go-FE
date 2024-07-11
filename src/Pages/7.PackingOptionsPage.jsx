@@ -71,13 +71,13 @@ export default function PackingOptionsPage({ navigation }) {
 
     <View style={styles.screen}>
       <Header />
-      <View style={styles.content}>
       <TouchableOpacity
               style={styles.iconContainer}
               onPress={() => navigation.navigate("SavedPackingLists")}
             >
                <Image source={require('../../assets/icons/saveGreen.png')} style={styles.icon} />
             </TouchableOpacity>
+      <View style={styles.content}>
         {userItineraries.length ? (
           <>
             <Text style={styles.label}>
@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     position: "absolute",
-    top: 10,
+    top: 0,
     right: 0,
   },
   icon: {
