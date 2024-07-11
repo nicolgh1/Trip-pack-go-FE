@@ -49,31 +49,24 @@ const handleEdit = (list) => {
       <ScrollView style={styles.content}>
         <Text style={styles.title}>Saved Packing Lists</Text>
         {packingLists.map((list) => (
-          <View key={list.id} style={styles.packingList}>
+          <View key={list.packingList_id} style={styles.packingList}>
             <Text style={styles.packingListTitle}>{list.location}</Text>
-            <View style={styles.iconContainer}>
-                <TouchableOpacity onPress={() => handleEdit(list)}>
-                  <Ionicons name="pencil" size={24} color="black" />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete(list.packingList_id)}>
-                  <Ionicons name="trash" size={24} color="black" />
-                </TouchableOpacity>
-            </View>
-            <TouchableOpacity
-                style={styles.button}
-                onPress={() => navigation.navigate('ViewPackingListPage', { list })}>
-                <Text style={styles.buttonText}>View</Text>
-              </TouchableOpacity>
-            <Text>Purpose: {list.purpose}</Text>
-            <Text>Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}</Text>
+            <Text style={styles.infoText}>Purpose: {list.purpose}</Text>
+            <Text style={styles.infoText}>
+              Dates: {formatDate(list.startDate)} - {formatDate(list.endDate)}
+            </Text>
             {Object.keys(list.packingList).map(category => (
               <View key={category} style={styles.category}>
                 <Text style={styles.categoryTitle}>{category}</Text>
                 {list.packingList[category].map(item => (
                   <View key={item.id} style={styles.item}>
                     <Text style={styles.itemName}>{item.name}</Text>
-                    <Text style={styles.itemQuantity}>Quantity: {item.quantity}</Text>
-                    <Text>Packed: {item.packed ? 'Yes' : 'No'}</Text>
+                    <Text style={styles.itemDetail}>
+                      Quantity: {item.quantity}
+                    </Text>
+                    <Text style={styles.itemDetail}>
+                      Packed: {item.packed ? 'Yes' : 'No'}
+                    </Text>
                   </View>
                 ))}
               </View>
@@ -96,32 +89,27 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 30,
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
+    color: 'darkgreen',
   },
-  packingList: {
-    marginBottom: 30,
-    padding: 20,
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  packingListTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  purposeDates: {
+  infoText: {
     fontSize: 16,
     marginBottom: 10,
-    textAlign: 'center',
+  },
+  packingList: {
+    marginBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingBottom: 20,
+  },
+  packingListTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: 'darkgreen',
   },
   category: {
     marginBottom: 15,
@@ -129,7 +117,8 @@ const styles = StyleSheet.create({
   categoryTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: 10,
+    marginBottom: 5,
+    color: 'darkgreen',
   },
   item: {
     marginLeft: 10,
@@ -139,15 +128,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
     flexDirection: 'row',
   },
-  button: {
-    marginVertical: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    backgroundColor: '#007bff',
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
+  itemDetail: {
+    fontSize: 14,
+    color: '#555',
   },
 });

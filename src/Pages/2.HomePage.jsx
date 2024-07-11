@@ -99,6 +99,8 @@ const styles = StyleSheet.create({
   welcomeMsg: {
     fontSize: 50,
     fontWeight: "bold",
+    color: "darkgreen",
+    marginTop: 20,
   },
   body: {
     flex: 8,

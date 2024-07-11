@@ -81,10 +81,10 @@ const styles = StyleSheet.create({
         borderTopColor: '#14141410'
     },
     iconContainer: {
-        padding: 4, // Adjust the padding value to add space around the icons
+        padding: 4,
     },
     icon: {
-        width: 50, // Ensure consistent icon size
-        height: 50, // Ensure consistent icon size
+        width: 50, 
+        height: 50, 
     }
 });

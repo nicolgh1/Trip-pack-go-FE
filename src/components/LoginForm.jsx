@@ -1,7 +1,7 @@
 import { useState } from "react";
 import {
   ActivityIndicator,
-  Button,
+  TouchableOpacity,
   KeyboardAvoidingView,
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import {
 import { firebaseAuth } from "../../firebaseConfig";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
-export default function LoginForm({ setShowLogin }) {
+export default function LoginForm({ setView }) {
   const [email, setEmail] = useState("");
   const [emailErrMsg, setEmailErrMsg] = useState("");
   const [password, setPassword] = useState("");
@@ -58,8 +58,8 @@ export default function LoginForm({ setShowLogin }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.welcome}>Welcome!</Text>
-      <Text>Please Log In to Continue</Text>
+      <Text style={styles.welcome}>Welcome back!</Text>
+    
       <KeyboardAvoidingView behavior="padding">
         <TextInput
           value={email}
@@ -69,7 +69,7 @@ export default function LoginForm({ setShowLogin }) {
           onChangeText={(text) => {
             setEmail(text);
           }}
-        ></TextInput>
+        />
         {emailErrMsg ? <Text style={styles.errMsg}>{emailErrMsg}</Text> : null}
         <TextInput
           secureTextEntry={true}
@@ -80,21 +80,23 @@ export default function LoginForm({ setShowLogin }) {
           onChangeText={(text) => {
             setPassword(text);
           }}
-        ></TextInput>
+        />
         {passwordErrMsg ? (
           <Text style={styles.errMsg}>{passwordErrMsg}</Text>
         ) : null}
         {loading ? (
           <ActivityIndicator size="small" color="#0000ff" />
         ) : (
-          <Button title="Login" onPress={signIn}></Button>
+          <TouchableOpacity style={styles.createButton} onPress={signIn}>
+          <Text style={styles.buttonText}>              Login              </Text>
+        </TouchableOpacity>
         )}
       </KeyboardAvoidingView>
       <Text style={styles.text}>
         To Register{" "}
         <Text
           onPress={() => {
-            setShowLogin(false);
+            setView("signup");
           }}
           style={styles.linkText}
         >
@@ -110,26 +112,50 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginHorizontal: 20,
+    marginHorizontal: 10,
+    paddingHorizontal: 15,
+    paddingTop: 40,
+    backgroundColor: "white",
   },
   welcome: {
-    fontSize: 50,
+    fontSize: 45,
     fontWeight: "bold",
+    marginBottom: 100,
+    color: "darkgreen",
   },
   input: {
     width: 300,
     height: 40,
-    borderColor: "gray",
+    borderColor: "darkgreen",
     borderWidth: 1,
     padding: 10,
-    borderRadius: 5,
-    margin: 5,
+    borderRadius: 10,
+    marginVertical: 10,
+    marginBottom: 20, 
   },
   errMsg: {
     color: "red",
+    marginBottom: 10,
   },
   linkText: {
     color: "blue",
     textDecorationLine: "underline",
+  },
+  text: {
+    marginTop: 20,
+  },
+  createButton: {
+    height: 40,
+    width: '100%',
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 20,
+    marginTop: 20,
+    alignSelf: 'center',
+  },
+  buttonText: {
+    color: "white",
   },
 });

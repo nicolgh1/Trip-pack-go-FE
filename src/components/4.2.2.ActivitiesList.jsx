@@ -1,85 +1,150 @@
-import React from 'react';
-import { View, Text, StyleSheet,Button, TouchableOpacity, ScrollView , StatusBar, SafeAreaView} from "react-native";
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  SafeAreaView,
+} from "react-native";
 
-export const ActivitiesList = ({ detailedActivitiesList, responseObj, setResponseObj, currentDayOther, handleConfirmation }) => {
-  
-    const handleSecondActivityChoice = (type, activity) => {
-        const activityObj = {
-            name: activity.name ? activity.name :null,
-            location: activity.geometry.location ? activity.geometry.location :null,
-            photos: activity.photos? activity.photos[0].photo_reference : null,
-            rating: activity.rating ? activity.rating : null,
-            types: activity.types ? activity.types : null,
-            user_ratings_total: activity.user_ratings_total ? activity.user_ratings_total : null,
-          }
-          const newRsponseObj = {...responseObj}
+export const ActivitiesList = ({
+  detailedActivitiesList,
+  responseObj,
+  setResponseObj,
+  currentDayOther,
+  handleConfirmation,
+}) => {
+  const [totalChosenActivities, setTotalChosenActivities] = useState(0);
 
-          if(Object.keys(newRsponseObj.itinerary_info[currentDayOther-1].other_activities).includes(type))
-            {
-            const otherActivitiesArr = newRsponseObj.itinerary_info[currentDayOther-1].other_activities[type]
-            const activityCheck = otherActivitiesArr.findIndex((item) => item.name ===  activityObj.name)
-                if (activityCheck >=0 ){
-                    newRsponseObj.itinerary_info[currentDayOther-1].other_activities[type].splice(activityCheck,1)
-                } else 
-                newRsponseObj.itinerary_info[currentDayOther-1].other_activities[type].push(activityObj)
-          } else newRsponseObj.itinerary_info[currentDayOther-1].other_activities[type] = [activityObj]
-          setResponseObj(newRsponseObj)
+  const handleSecondActivityChoice = (type, activity) => {
+    const activityObj = {
+      name: activity.name ? activity.name : null,
+      location: activity.geometry.location ? activity.geometry.location : null,
+      photos: activity.photos ? activity.photos[0].photo_reference : null,
+      rating: activity.rating ? activity.rating : null,
+      types: activity.types ? activity.types : null,
+      user_ratings_total: activity.user_ratings_total
+        ? activity.user_ratings_total
+        : null,
+    };
+    const newRsponseObj = { ...responseObj };
+
+    if (
+      Object.keys(
+        newRsponseObj.itinerary_info[currentDayOther - 1].other_activities
+      ).includes(type)
+    ) {
+      const typeActivitiesArr =
+        newRsponseObj.itinerary_info[currentDayOther - 1].other_activities[
+          type
+        ];
+      setTotalChosenActivities(typeActivitiesArr.length);
+      const activityCheck = typeActivitiesArr.findIndex(
+        (item) => item.name === activityObj.name
+      );
+      if (activityCheck >= 0) {
+        newRsponseObj.itinerary_info[currentDayOther - 1].other_activities[
+          type
+        ].splice(activityCheck, 1);
+
+        setTotalChosenActivities(totalChosenActivities - 1);
+      } else {
+        newRsponseObj.itinerary_info[currentDayOther - 1].other_activities[
+          type
+        ].push(activityObj);
+
+        setTotalChosenActivities(totalChosenActivities + 1);
+      }
+    } else {
+      newRsponseObj.itinerary_info[currentDayOther - 1].other_activities[type] =
+        [activityObj];
+      setTotalChosenActivities(totalChosenActivities + 1);
     }
-    
-    if(Object.keys(detailedActivitiesList).length === 0){
-        return(
-            <Text>Loading</Text>
-        )
-    } else 
-    if(detailedActivitiesList[Object.keys(detailedActivitiesList)[0]].length === 0){
-        return (
-            <Text>No {Object.keys(detailedActivitiesList)[0]} in the area. Go back and choose another activity type</Text>
-        )
-    } 
-    else 
+    setResponseObj(newRsponseObj);
+  };
+
+  if (Object.keys(detailedActivitiesList).length === 0) {
+    return <Text>Loading</Text>;
+  } else if (
+    detailedActivitiesList[Object.keys(detailedActivitiesList)[0]].length === 0
+  ) {
     return (
-        <SafeAreaView style={styles.container}>
-        <ScrollView contentContainerStyle={styles.scrollContainer}>
-            {Object.keys(detailedActivitiesList).map((type) => {
-                return (
-                    <View key={type} style={styles.typeContainer}>
-                        <Text style={styles.typeText}>{type}</Text>
-                        {detailedActivitiesList[type].map((activity) => {
-                            return (
-                                <TouchableOpacity key={activity.place_id} onPress={() => {handleSecondActivityChoice(type, activity)}}>
-                                    <Text style={styles.itemText}>{activity.name}</Text>
-                                </TouchableOpacity>
-                            )
-                        })}
-                    </View>
-                )
-            })}
-        </ScrollView>
-        {responseObj.total_days===currentDayOther? <View><Button title="Confirm Itinerary" onPress={handleConfirmation}/></View> : null}
-        </SafeAreaView>
+      <Text style={styles.sectionTitle}>
+        No {Object.keys(detailedActivitiesList)[0]} in the area. Go back and
+        choose another activity type
+      </Text>
     );
-}
+  } else
+    return (
+      <SafeAreaView>
+        <View>
+          <Text style={styles.subTitleText}>
+            You have {totalChosenActivities} locations selected
+          </Text>
+        </View>
+        {Object.keys(detailedActivitiesList).map((type) => {
+          return (
+            <View key={type} style={styles.typeContainer}>
+              <Text style={styles.sectionTitle}>{type}s</Text>
+
+              <ScrollView contentContainerStyle={styles.scrollContainer}>
+                <View style={styles.body}>
+                  {detailedActivitiesList[type].map((activity) => {
+                    return (
+                      <TouchableOpacity
+                        key={activity.place_id}
+                        onPress={() => {
+                          handleSecondActivityChoice(type, activity);
+                        }}
+                      >
+                        <Text style={styles.itemText}>{activity.name}</Text>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              </ScrollView>
+            </View>
+          );
+        })}
+      </SafeAreaView>
+    );
+};
 
 const styles = StyleSheet.create({
-    container: {
-        // flex: 1,
-        paddingTop: StatusBar.currentHeight,
-    },
-    scrollContainer: {
-        padding: 10,
-        marginBottom: 20,
-    },
-    typeContainer: {
-        marginBottom: 20,
-    },
-    typeText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-        marginBottom: 10,
-    },
-    itemText: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ddd',
-    }
+  body: {
+    width: "100%",
+    paddingTop: 10,
+    paddingBottom: 10,
+    paddingHorizontal: 20,
+    backgroundColor: "#14141410",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+    textAlign: "center",
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+  },
+  subTitleText: {
+    padding: 10,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  list: {
+    maxHeight: 400,
+    marginBottom: 30,
+  },
+  itemText: {
+    padding: 10,
+    textAlign: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
 });
