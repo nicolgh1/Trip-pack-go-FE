@@ -1,12 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { StyleSheet, View, Text, Button } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
 import Header from "../components/Header";
 import Footer from "../components/FooterNavigation";
 import { UserContext } from "../contexts/UserContext";
 import {
   Timestamp,
-  addDoc,
   collection,
+  doc,
+  getDoc,
   limit,
   onSnapshot,
   orderBy,
@@ -18,10 +19,12 @@ import { db } from "../../firebaseConfig";
 export default function HomePage({ navigation }) {
   const { user, userCntxtLoading } = useContext(UserContext);
   const [soonestItinerary, setSoonestItinerary] = useState(null);
-  const currentPage ="HomePage"
+  const [soonestItineraryPackingList, setSoonestItineraryPackingList] =
+    useState(null);
+  const [packingUpdate, setPackingUpdate] = useState("");
+  const currentPage = "HomePage";
 
   useEffect(() => {
-    console.log("useeffect");
     const now = Timestamp.now();
     const itinerariesColRef = collection(db, "itineraries");
     const q = query(
@@ -31,14 +34,45 @@ export default function HomePage({ navigation }) {
       orderBy("start_date"),
       limit(1)
     );
-    onSnapshot(q, (snapshot) => {
-      const userItinerariesData = snapshot.docs.map((doc) => ({
-        ...doc.data(),
-        id: doc.id,
-      }));
-      setSoonestItinerary(userItinerariesData[0]);
-    });
-  }, []);
+    const unsubscribe = onSnapshot(
+      q,
+      (snapshot) => {
+        const userItinerariesData = snapshot.docs.map((doc) => ({
+          ...doc.data(),
+          id: doc.id,
+        }));
+        if (userItinerariesData.length) {
+          setSoonestItinerary(userItinerariesData[0]);
+        } else {
+          setSoonestItinerary(null);
+        }
+      },
+      (error) => {
+        console.error("Error fetching itineraries:", error);
+      }
+    );
+    return () => unsubscribe();
+  }, [user]);
+
+  useEffect(() => {
+    if (soonestItinerary && soonestItinerary.packing_list_id) {
+      const packingListDocRef = doc(
+        db,
+        "packingLists",
+        soonestItinerary.packing_list_id
+      );
+      getDoc(packingListDocRef)
+        .then((doc) => {
+          setSoonestItineraryPackingList({
+            ...doc.data(),
+            id: doc.id,
+          });
+        })
+        .catch((error) => {
+          console.error("Error fetching packing list:", error);
+        });
+    }
+  }, [soonestItinerary]);
 
   function workOutDaysUntilTrip() {
     if (soonestItinerary) {
@@ -61,6 +95,30 @@ export default function HomePage({ navigation }) {
   }
   const numDaysToTrip = workOutDaysUntilTrip();
 
+  function calculatePackingCompletion() {
+    if (soonestItineraryPackingList) {
+      const allItems = [
+        ...soonestItineraryPackingList.packingList.Clothes,
+        ...soonestItineraryPackingList.packingList.Toiletries,
+      ];
+      const packedItems = allItems.filter((item) => item.packed === true);
+      const numItems = allItems.length;
+      const numPackedItems = packedItems.length;
+      setPackingUpdate(numPackedItems + " of " + numItems);
+    }
+  }
+  calculatePackingCompletion();
+
+  const handleCreatePackingList = () => {
+    navigation.navigate("PackingListPage", {
+      location: soonestItinerary.location,
+      purpose: "Undefined",
+      startDate: soonestItinerary.start_date.toDate(),
+      endDate: soonestItinerary.end_date.toDate(),
+      id: soonestItinerary.id,
+    });
+  };
+
   if (userCntxtLoading) return <Text>Loading...</Text>;
   return (
     <View style={styles.screen}>
@@ -70,16 +128,38 @@ export default function HomePage({ navigation }) {
       </View>
       <View style={styles.body}>
         {soonestItinerary ? (
-          <Text>
-            Next Trip to {soonestItinerary ? soonestItinerary.location : "X"} in{" "}
-            {numDaysToTrip} Days
-          </Text>
+          <>
+            <Text>
+              Next Trip to {soonestItinerary ? soonestItinerary.location : "X"}{" "}
+              in {numDaysToTrip} Days
+            </Text>
+            {soonestItineraryPackingList ? (
+              <Text>You Have Packed {packingUpdate} Items for this Trip</Text>
+            ) : (
+              <>
+                <Text>You Have No Packing List for this Trip</Text>
+                <TouchableOpacity
+                  style={styles.button}
+                  onPress={handleCreatePackingList}
+                >
+                  <Text style={styles.buttonText}>Create Packing List</Text>
+                </TouchableOpacity>
+              </>
+            )}
+          </>
         ) : (
-          <Text>You Have No Upcoming Trips Planned</Text>
+          <>
+            <Text>You Have No Upcoming Trips Planned</Text>
+            <TouchableOpacity
+              style={styles.button}
+              onPress={() => navigation.navigate("SearchPage")}
+            >
+              <Text style={styles.buttonText}>Plan A Trip</Text>
+            </TouchableOpacity>
+          </>
         )}
-        {/* <Button title="addItin" onPress={handleClick}></Button> */}
       </View>
-      <Footer navigation={navigation} currentPage={currentPage}/>
+      <Footer navigation={navigation} currentPage={currentPage} />
     </View>
   );
 }
@@ -121,5 +201,19 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 5,
+  },
+  button: {
+    height: 40,
+    width: "100%",
+    borderRadius: 10,
+    backgroundColor: "darkgreen",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 5,
+    marginTop: 5,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
